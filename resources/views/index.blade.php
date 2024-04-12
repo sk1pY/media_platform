@@ -1,34 +1,45 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-@foreach($posts as $post)
-    <table>
+@extends('base.base')
+@section('title','todo app')
+@section('content')
+    <nav class="nav navbar  navbar-light bg-light">
+        <form action="{{ route('create') }}" method="post">
+            @csrf
+            <input type="text" name="title">
+            <input type="text" name="description">
+            <input class="btn btn-info" type="submit">
+        </form>
+    </nav>
+    <table class="table">
+        <thead>
         <tr>
-            {{ $post->title }}
+            <th scope="col">id</th>
+            <th scope="col">title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Author</th>
+            <th scope="col">Delete</th>
         </tr>
-        <tr>
-            <form action="{{ route('tasks.delete',$post->id) }}" method="post">
-                @csrf
-                @method('DELETE')
-                {{--   // <input type="text" name="text">--}}
-                <input type="submit" value="delete">
-            </form>
-        </tr>
+        </thead>
+        <tbody>
+        @foreach($posts as $post)
+            <tr>
+                <th scope="row">{{$post -> id}}</th>
+                <td>{{$post -> title}}</td>
+                <td>{{$post -> description}}</td>
+                <td>{{$post -> user -> name}}</td>
+                <td>
+                    <form action = "{{ route('delete',$post->id) }}" method = "post" >
+                        @csrf
+                        @method('DELETE')
+                        <input class="btn btn-danger" type="submit" value="delete">
+                    </form>
+                    <form action = "{{ route('update',$post->id) }}" method = "post" >
+                        @csrf
+                        @method('put')
+                        <input class="btn btn-warning" type="submit" value="update">
+                    </form>
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
     </table>
-@endforeach
-<form action="{{ route('tasks.create') }}" method="post">
-    @csrf
-    <input type="text" name="title">
-    <input type="text" name="description">
-    <input type="submit">
-
-</form>
-</body>
-</html>
+@endsection
