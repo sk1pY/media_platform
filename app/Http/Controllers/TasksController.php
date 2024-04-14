@@ -43,9 +43,13 @@ class TasksController extends Controller
 
     public function test()
     {
-        $posts = Task::first();
-        //   dd($posts);
-        return view('delete', compact('posts'));
+        $posts = Task::get();
+        //dd($posts);
+        return view('test', compact('posts'));
+
+    }public function error()
+    {
+        return 'eror';
 
     }
 

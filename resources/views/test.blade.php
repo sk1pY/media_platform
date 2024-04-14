@@ -8,9 +8,19 @@
     <title>Document</title>
 </head>
 <body>
-{{$posts -> title}}
-{{$posts -> description}}
-{{$posts -> created_at}}
+<h1>test</h1>
 
+<table>
+    @foreach($posts as $post)
+        <tr>
+            <td> {{$post -> id}}</td>
+            <td> {{$post -> title}}</td>
+            <td>{{$post -> description}}</td>
+            <td>{{$post -> name}}</td>
+            <td>{{$post -> user -> name}}</td>
+        </tr>
+        {{--     {{$post -> created_at}}--}}
+    @endforeach
+</table>
 </body>
 </html>
