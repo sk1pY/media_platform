@@ -2,6 +2,11 @@
 @section('title','todo app')
 @section('content')
     <nav class="nav navbar  navbar-light bg-light">
+        <form action="{{ route('destroy_all') }}" method="post">
+            @csrf
+            @method('DELETE')
+            <input class="btn btn-danger" type="submit" value="DELETE ALL">
+        </form>
         <form action="{{ route('create') }}" method="post">
             @csrf
             <input type="text" name="title">
@@ -23,7 +28,7 @@
         @foreach($posts as $post)
             <tr>
                 <th scope="row">{{$post -> id}}</th>
-                <td>{{$post -> title}}</td>
+                <td><a href="/task/{{$post -> id}}">{{$post -> title}}</a></td>
                 <td>{{$post -> description}}</td>
                 <td>{{$post -> user -> name}}</td>
                 <td>
