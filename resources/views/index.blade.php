@@ -1,7 +1,8 @@
-@extends('base.base')
+@extends('layouts.app')
 @section('title','todo app')
 @section('content')
     <nav class="nav navbar  navbar-light bg-light">
+        <a href="{{ route('home') }}">HOME</a>
         <form action="{{ route('destroy_all') }}" method="post">
             @csrf
             @method('DELETE')
@@ -14,6 +15,7 @@
             <input class="btn btn-info" type="submit">
         </form>
     </nav>
+
     <div class="card-body">
         @if ($errors->any())
     <div class="alert alert-danger">
@@ -42,19 +44,19 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($posts as $post)
+        @foreach($tasks as $task)
             <tr>
-                <th scope="row">{{$post -> id}}</th>
-                <td><a href="/task/{{$post -> id}}">{{$post -> title}}</a></td>
-                <td>{{$post -> description}}</td>
-                <td>{{$post -> user -> name}}</td>
+                <th scope="row">{{$task -> id}}</th>
+                <td><a href="/task/{{$task -> id}}">{{$task -> title}}</a></td>
+                <td>{{$task -> description}}</td>
+                <td>{{$task -> user -> name}}</td>
                 <td>
-                    <form action = "{{ route('delete',$post->id) }}" method = "post" >
+                    <form action = "{{ route('delete',$task->id) }}" method = "post" >
                         @csrf
                         @method('DELETE')
                         <input class="btn btn-danger" type="submit" value="delete">
                     </form>
-                    <form action = "{{ route('update',$post->id) }}" method = "post" >
+                    <form action = "{{ route('update',$task->id) }}" method = "post" >
                         @csrf
                         @method('put')
                         <input class="btn btn-warning" type="submit" value="update">
