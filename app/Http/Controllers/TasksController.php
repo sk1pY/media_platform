@@ -11,9 +11,10 @@ use Illuminate\Http\Request;
 
 class TasksController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        return view('index',['tasks' => Task::orderBy('created_at', 'desc')->get()]);
+        $data = ['tasks' => Task::latest()->get()];
+        return view('index',$data);
     }
 
     public function task($id)
@@ -27,12 +28,20 @@ class TasksController extends Controller
     private const BB_VALIDATOR = [
         'title' => 'required|max:50',
         'description' => 'required',
+        'image' => 'required',
     ];
     public function create(Request $request)
     {
+        $filePath = $request->file('image')->store('public/images');
+     //   dd($filePath);
         $validated = $request->validate(self::BB_VALIDATOR);
        $data =  Auth::user()->tasks()->create(['title'=>$validated['title'],
-            'description'=>$validated['description']]);
+            'description'=>$validated['description'],
+            'image'=>$filePath]);
+        $file = $request->file('image');
+
+
+
         return redirect()->route('index');
     }
 
@@ -40,13 +49,6 @@ class TasksController extends Controller
     public function delete($id)
     {
         Task::find($id)->delete();
-        // Task::truncate(); удаляет все записи с таблицы и обнуляет автоинкремен в 0
-        return redirect()->route('index');
-    }
-
-    public function destroy_all()
-    {
-        Task::truncate();
         // Task::truncate(); удаляет все записи с таблицы и обнуляет автоинкремен в 0
         return redirect()->route('index');
     }

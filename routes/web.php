@@ -10,7 +10,6 @@ Route::controller(TasksController::class)->group(function () {
     Route::get('/task/{id}', 'task')->name('about_task');
     Route::post('/store','create')->name('create');
     Route::delete('/delete/{id}', 'delete')->name('delete')->where('id', '[0-9]+');
-    Route::delete('/destroy_all', 'destroy_all')->name('destroy_all');
     Route::put('/update/{id}', 'update')->name('update');
 
 });

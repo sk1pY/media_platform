@@ -13,6 +13,7 @@ class Task extends Model
     protected $fillable = [
         'title',
         'description',
+        'image'
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
