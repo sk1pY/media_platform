@@ -44,9 +44,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function tasks()
+    public function tasks(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Task::class);
     }
 
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -16,15 +17,23 @@ class TasksController extends Controller
         $data = ['tasks' => Task::latest()->get()];
         return view('index',$data);
     }
+    public function category()
+    {
 
+    }
     public function task($id)
     {
         $task = Task::find($id);
         if ($task == null) {
             abort(404, 'error');
         }
-        return view('about_task', compact('task'));
+
+        $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
+
+
+        return view('about_task', compact('task','comments'));
     }
+
     private const BB_VALIDATOR = [
         'title' => 'required|max:50',
         'description' => 'required',
@@ -33,7 +42,9 @@ class TasksController extends Controller
     public function create(Request $request)
     {
         $filePath = $request->file('image')->store('public/images');
-     //   dd($filePath);
+      //  dd($filePath);
+
+        //  dd($pic);
         $validated = $request->validate(self::BB_VALIDATOR);
        $data =  Auth::user()->tasks()->create(['title'=>$validated['title'],
             'description'=>$validated['description'],
@@ -53,7 +64,7 @@ class TasksController extends Controller
         return redirect()->route('index');
     }
 
-    public function update(Request $request, $id)
+    public function update($id)
     {
         $task = Task::findOrFail($id);
 
@@ -61,6 +72,7 @@ class TasksController extends Controller
         return redirect()->route('index', $task->id);
 
     }
+
 
     public function error()
     {

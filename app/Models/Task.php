@@ -20,6 +20,9 @@ class Task extends Model
     {
         return $this->belongsto(User::class);
     }
-
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
 
 }

@@ -16,9 +16,12 @@
     {{--    @vite(['resources/sass/app.scss', 'resources/js/app.js'])--}}
 </head>
 <body>
+
 <div class="container ">
-    <nav class="nav navbar  navbar-light bg-light">
+
+    <nav class="nav navbar text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
         <div class="container-fluid">
+
             <a href="{{ route('index') }}" class="navbar-brand me-auto">Main</a>
             @guest
                 <a href="{{ route('register') }}" class="nav-item nav-link ">Register</a>
@@ -70,12 +73,22 @@
                     @csrf
                     <input type="submit" class="btn btn-danger" value="exit">
                 </form>
-        @endauth
+            @endauth
         </div>
     </nav>
-
-        @yield('content')
-
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1 ">
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="#">Мемы</a>
+                    <a class="nav-link active" href="#">Игры</a>
+                </nav>
+            </div>
+            <div class="col-md-11 ">
+                @yield('content')
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
