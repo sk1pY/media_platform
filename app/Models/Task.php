@@ -13,6 +13,7 @@ class Task extends Model
     protected $fillable = [
         'title',
         'description',
+        'category_id',
         'image'
     ];
 
@@ -23,6 +24,10 @@ class Task extends Model
     public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsto(Category::class);
     }
 
 }

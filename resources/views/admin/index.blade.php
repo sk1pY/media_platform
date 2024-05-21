@@ -8,6 +8,11 @@
     <title>Document</title>
 </head>
 <body>
-<h1>text</h1>
+<h1>ADMNI PANLE</h1>
+<form action="{{ route('admin.create.category') }}" method="post">
+    @csrf
+    <input type="text" name="name">
+    <input type="submit">
+</form>
 </body>
 </html>
