@@ -29,5 +29,13 @@ class Task extends Model
     {
         return $this->belongsto(Category::class);
     }
+    public function likes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Like::class);
+    }
+    public function isLikedBy(User $user)
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
 
 }

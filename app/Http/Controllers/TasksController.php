@@ -15,8 +15,11 @@ class TasksController extends Controller
 {
     public function index()
     {
-        $tasks = Task::latest()->get();
+      //  $tasks = Task::latest()->get();
         $categories = Category::get();
+        $tasks = Task::withCount('comments')->orderBy('created_at','DESC')->get();
+      //  dd($tasks);
+
         return view('index', compact('tasks','categories'));
     }
     public function category_tasks($slug){
