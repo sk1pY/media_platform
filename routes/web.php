@@ -21,12 +21,16 @@ Route::post('/store_comment',[CommentController::class,'store'])->name('comment.
 Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
 Route::post('/admin/create_category',[AdminController::class,'store'])->name('admin.create.category');
 
-Route::post('/like', [LikeController::class, 'store'])->name('like.store');
-Route::delete('/like', [LikeController::class, 'destroy'])->name('like.destroy');
-
-
+Route::post('/like-task', [LikeController::class, 'like'])->name('like-task');
+//Route::post('/dislike-task', [LikeController::class, 'dislike'])->name('dislike-task');
 
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::put('/home/update/{id}', [HomeController::class, 'update'])->name('home.update');
+
+//ADMIN_PANEL
+Route::get('/admin/posts', [AdminController::class, 'all_posts_users'])->name('all.posts.users');
+Route::get('/admin/cat', [AdminController::class, 'add_cat_index'])->name('cat.index');
+Route::get('/admin/users', [AdminController::class, 'admin_users'])->name('users_admin');
+Route::post('/admin/cat/add', [AdminController::class, 'store_cat'])->name('cat.add');

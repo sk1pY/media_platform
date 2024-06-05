@@ -7,40 +7,38 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Like;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Task; // Добавлено для использования модели Task
+use App\Models\Task;
+use Illuminate\Support\Facades\DB;
+
+// Добавлено для использования модели Task
 
 class LikeController extends Controller
 {
-    public function store(Request $request)
+    /**
+     * @throws \Throwable
+     */
+    public function like(Request $request)
     {
-        $validated = $request->validate([
-            'task_id' => 'required|exists:tasks,id', // Используем поле task_id для лайков
-        ]);
+        $taskId = $request->input('task_id');
+        $userId = auth()->id();
+        $task = Task::find($taskId);
+        $like = Like::where(['task_id' => $taskId, 'user_id' => $userId])->first();
 
-        $like = Like::firstOrCreate([
-            'task_id' => $validated['task_id'], // Используем поле task_id для сохранения лайков
-            'user_id' => Auth::id(),
-        ]);
-
-        return response()->json(['message' => 'Liked successfully!', 'like' => $like]);
-    }
-
-    public function destroy(Request $request)
-    {
-        $validated = $request->validate([
-            'task_id' => 'required|exists:tasks,id', // Используем поле task_id для лайков
-        ]);
-
-        $like = Like::where('task_id', $validated['task_id']) // Используем поле task_id для поиска лайков
-        ->where('user_id', Auth::id())
-            ->first();
-
+        // $like_sum = Like::where(["task_id" => $taskId])->first();
         if ($like) {
             $like->delete();
-            return response()->json(['message' => 'Unliked successfully!']);
+            $task->decrement('likes');
+            return response()->json(['success' => true, 'likes' => $task->likes, 'liked' => false]);
+        } else {
+            Like::create([
+                'task_id' => $taskId,
+                'user_id' => $userId,
+            ]);
+            $task->increment('likes');
+
+            return response()->json(['success' => true, 'likes' => $task->likes, 'liked' => true]);
         }
 
-        return response()->json(['message' => 'Like not found!'], 404);
     }
 }
 

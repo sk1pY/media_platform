@@ -14,7 +14,8 @@ class Task extends Model
         'title',
         'description',
         'category_id',
-        'image'
+        'image',
+        'likes'
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

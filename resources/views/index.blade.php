@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'todo app')
 @section('content')
+
     {{-- MODAL WINDOW --}}
     <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -45,38 +46,39 @@
         </div>
     </div>
     {{-- END MODAL WINDOW --}}
-
+    <div id="message"></div>
     <div class="container">
         <div class="row">
             <div class="col-3 bg-light mt-4" style="border-right: 1px solid #ddd;">
                 <div class="position-sticky">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active fs-5 text-dark" aria-current="page" href="#">
-                            <i class="fa-solid fa-fire"></i> Популярное
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active fs-5 text-dark" aria-current="page" href="#">
-                            <i class="fa-regular fa-clock"></i> Новое
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active fs-5 text-dark" aria-current="page" href="#">
-                            <i class="fa-regular fa-clipboard"></i> Моя лента
-                        </a>
-                    </li>
-                </ul>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active fs-5 text-dark" aria-current="page" href="#">
+                                <i class="fa-solid fa-fire"></i> Популярное
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active fs-5 text-dark" aria-current="page" href="#">
+                                <i class="fa-regular fa-clock"></i> Новое
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active fs-5 text-dark" aria-current="page" href="#">
+                                <i class="fa-regular fa-clipboard"></i> Моя лента
+                            </a>
+                        </li>
+                    </ul>
 
                     <h1 class="nav-link fs-5 text-dark">Категории</h1>
-                @if(count($categories) > 0)
-                    @foreach($categories as $cat)
-                        <li class="nav-item">
-                            <a class="nav-link active fw-bold fs-5 text-dark"
-                               href="/cat/{{ $cat->name }}">{{ $cat->name }}</a>
-                        </li>
-                    @endforeach
-                @endif
+                    @if(count($categories) > 0)
+                        @foreach($categories as $cat)
+                            <li class="list-unstyled">
+                                <a class="active fs-5 text-dark text-decoration-none"
+                                   href="/cat/{{ $cat->name }}">{{ $cat->name }}</a>
+                            </li>
+
+                        @endforeach
+                    @endif
                 </div>
             </div>
             {{-- Task Cards --}}
@@ -87,30 +89,83 @@
                             <div class="col-md-8 mb-4">
                                 <div class="card">
                                     <div class="card-body">
+                                        <img src="https://media.baamboozle.com/uploads/images/225682/1623103591_163416_url.jpeg" class="rounded-circle" style="width: 45px;height:45px " alt="...">
+                                        {{ $task -> user -> name }}
+                                        {{ $task -> created_at     }}
                                         <h5 class="card-title">
-                                            <a href="/task/{{ $task->id }}" class="text-decoration-none text-dark hover-effect">{{ $task->title }}</a>
+                                            <a href="/task/{{ $task->id }}"
+                                               class="text-decoration-none text-dark hover-effect">{{ $task->title }}</a>
                                         </h5>
                                         <p class="card-text">{{ substr($task->description, 0, 100) }}...</p>
                                     </div>
                                     <div class="card-img-container" style="padding: 20px;">
-                                        <img src="{{ Storage::url($task->image) }}" style="width: 100%; height: 290px;" class="card-img-top rounded-3" alt="...">
+                                        <img src="{{ Storage::url($task->image) }}" style="width: 100%; height: 290px;"
+                                             class="card-img-top rounded-3" alt="...">
                                     </div>
-                                    <div class="card-footer">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <small class="text-muted">{{ $task->updated_at }}</small>
-                                            <div>
-                                                <a href="#" class="btn btn-sm btn-outline-primary me-1"><i class="fa-regular fa-heart me-1"></i> Like</a>
-                                                <a href="#" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-comment me-1"></i> Comment</a>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        {{--                                            <small class="text-muted">{{ $task->updated_at }}</small>--}}
+                                        <div>
+                                            <div id="task-{{ $task->id }}" class="task">
+                                                <button class="like-button" data-task-id="{{ $task->id }}">
+                                                    <i class="fa-solid fa-heart "></i>
+                                                    <span class="like-count">{{ $task->likes }}</span>
+                                                </button>
+                                                <a href="task/{{ $task->id }}" class=""><i
+                                                        class="fa-regular fa-comment me-1"></i> </a>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-                        @endforeach
-                    @endif
+
                 </div>
+                @endforeach
+                @endif
             </div>
         </div>
     </div>
+    <script>
+        // public/js/like.js
+        $(document).ready(function () {
+            $('.like-button').on('click', function () {
+                var taskId = $(this).data('task-id');
+                var button = $(this);
+                var likeCountSpan = button.closest('.task').find('.like-count');
+                var heartIcon = button.find('.fa-heart'); // Иконка сердца
+
+
+                $.ajax({
+                    url: '/like-task',
+                    method: 'POST',
+                    data: {
+                        task_id: taskId,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            likeCountSpan.text(response.likes);
+
+                            if (response.liked) {
+                                //  button.text('Unlike');
+                                // $('#message').text('Task liked successfully!').css('color', 'green');
+                                heartIcon.addClass('red-heart'); // Добавляем класс красного сердца
+
+                            } else {
+                                //  button.text('Like');
+                                //  $('#message').text('Task unliked successfully!').css('color', 'green');
+                                heartIcon.removeClass('red-heart');
+                            }
+                        } else {
+                            $('#message').text(response.message).css('color', 'red');
+                        }
+                    },
+                    error: function () {
+                        $('#message').text('An error occurred. Please try again later.').css('color', 'red');
+                    }
+                });
+            });
+        });
+
+    </script>
 @endsection
