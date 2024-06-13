@@ -49,7 +49,8 @@
     <div id="message"></div>
     <div class="container">
         <div class="row">
-            <div class="col-3 bg-light mt-4" style="border-right: 1px solid #ddd;">
+            {{-- Столбец с категориями --}}
+            <div class="col-3  mt-4" style="border-right: 1px solid #ddd; background-color: #f2f2f2">
                 <div class="position-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
@@ -81,17 +82,18 @@
                     @endif
                 </div>
             </div>
-            {{-- Task Cards --}}
             <div class="col-9 mt-4">
                 <div class="row">
                     @if(count($tasks) > 0)
                         @foreach($tasks as $task)
                             <div class="col-md-8 mb-4">
-                                <div class="card">
+                                <div class="card border-0">
                                     <div class="card-body">
-                                        <img src="https://media.baamboozle.com/uploads/images/225682/1623103591_163416_url.jpeg" class="rounded-circle" style="width: 45px;height:45px " alt="...">
+                                        <img
+                                                src="{{ Storage::url($task -> user -> image) }}"
+                                                class="rounded-circle" style="width: 45px;height:45px " alt="...">
                                         {{ $task -> user -> name }}
-                                        {{ $task -> created_at     }}
+                                        {{ $task -> created_at }}
                                         <h5 class="card-title">
                                             <a href="/task/{{ $task->id }}"
                                                class="text-decoration-none text-dark hover-effect">{{ $task->title }}</a>
@@ -103,25 +105,28 @@
                                              class="card-img-top rounded-3" alt="...">
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        {{--                                            <small class="text-muted">{{ $task->updated_at }}</small>--}}
-                                        <div>
-                                            <div id="task-{{ $task->id }}" class="task">
-                                                <button class="like-button" data-task-id="{{ $task->id }}">
-                                                    <i class="fa-solid fa-heart "></i>
-                                                    <span class="like-count">{{ $task->likes }}</span>
-                                                </button>
-                                                <a href="task/{{ $task->id }}" class=""><i
-                                                        class="fa-regular fa-comment me-1"></i> </a>
-                                            </div>
+                                        <div class="m-3">
+                                            <div class="row">
+                                                <div id="task-{{ $task->id }}" class="task d-flex align-items-center">
+                                                    <div class="like-button me-3" data-task-id="{{ $task->id }}">
+                                                        <i class=" fa-regular fa-heart red-heart{{  in_array($task->id, $likedTaskIds)? ' fa-solid red-heart' : '' }}"></i>
 
+                                                        <span class="like-count">{{ $task->likes_count }}</span>
+                                                    </div>
+                                                    <a href="task/{{ $task->id }}" class="text-decoration-none">
+                                                        <i class="fa-regular fa-comment me-1"></i>
+                                                    </a>
+                                                    <span class="">{{ $task->comments_count }}</span>
+
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                        @endforeach
+                    @endif
                 </div>
-                @endforeach
-                @endif
             </div>
         </div>
     </div>
@@ -134,7 +139,6 @@
                 var likeCountSpan = button.closest('.task').find('.like-count');
                 var heartIcon = button.find('.fa-heart'); // Иконка сердца
 
-
                 $.ajax({
                     url: '/like-task',
                     method: 'POST',
@@ -145,16 +149,10 @@
                     success: function (response) {
                         if (response.success) {
                             likeCountSpan.text(response.likes);
-
                             if (response.liked) {
-                                //  button.text('Unlike');
-                                // $('#message').text('Task liked successfully!').css('color', 'green');
-                                heartIcon.addClass('red-heart'); // Добавляем класс красного сердца
-
+                                heartIcon.addClass('fa-solid red-heart');
                             } else {
-                                //  button.text('Like');
-                                //  $('#message').text('Task unliked successfully!').css('color', 'green');
-                                heartIcon.removeClass('red-heart');
+                                heartIcon.removeClass('fa-solid ');
                             }
                         } else {
                             $('#message').text(response.message).css('color', 'red');
@@ -166,6 +164,7 @@
                 });
             });
         });
+
 
     </script>
 @endsection

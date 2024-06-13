@@ -34,3 +34,7 @@ Route::get('/admin/posts', [AdminController::class, 'all_posts_users'])->name('a
 Route::get('/admin/cat', [AdminController::class, 'add_cat_index'])->name('cat.index');
 Route::get('/admin/users', [AdminController::class, 'admin_users'])->name('users_admin');
 Route::post('/admin/cat/add', [AdminController::class, 'store_cat'])->name('cat.add');
+
+Route::group(['middleware' => 'useradmin'], function () {
+    Route::get('/admin',[AdminController::class,'index']);
+});

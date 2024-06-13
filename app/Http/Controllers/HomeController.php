@@ -25,7 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home',['tasks' => Auth::user()->tasks()->latest()->get()]);
+
+        return view('home',['user'=> Auth::user(),'tasks' => Auth::user()->tasks()->latest()->get()]);
 
     }
 

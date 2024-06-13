@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\Like;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -13,21 +14,20 @@ use Illuminate\Http\Request;
 
 class TasksController extends Controller
 {
-    public function index()
-    {
-      //  $tasks = Task::latest()->get();
-        $categories = Category::get();
-        $tasks = Task::withCount('comments')->orderBy('created_at','DESC')->get();
-      //  dd($tasks);
+        public function index()
+        {
+          //  $tasks = Task::latest()->get();
+            $categories = Category::get();
+            $tasks = Task::withCount(['comments','likes'])->orderBy('created_at','DESC')->get();
+            $likedTaskIds = Like::where('user_id', Auth::id())->pluck('task_id')->toArray();
+         //   dd($likedTaskIds);
 
-        return view('index', compact('tasks','categories'));
-    }
+            return view('index', compact('tasks','categories','likedTaskIds'));
+        }
     public function category_tasks($slug){
         $tasks = Task::whereHas('category', function ($query) use ($slug) {
             $query->where('name', $slug);
         })->orderBy('created_at', 'DESC')->get();
-
-
         return view('category_tasks',compact('tasks'));
     }
     public function task($id)

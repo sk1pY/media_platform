@@ -42,7 +42,7 @@
                         <hr>
                     </div>
                 </div>
-                <div class="col-5">
+                <div class="col-9">
                     @yield('content_admin')
                 </div>
 

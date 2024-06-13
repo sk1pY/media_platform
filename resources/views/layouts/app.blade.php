@@ -20,34 +20,47 @@
             color: red; /* Красный цвет */
         }
 
-
+        .custom-navbar {
+            padding-left: 50px;
+            padding-right: 50px;
+        }
     </style>
-    <!-- Scripts -->
-    {{--    @vite(['resources/sass/app.scss', 'resources/js/app.js'])--}}
 </head>
-<body class="bg-light ">
+<body style="background-color: #f2f2f2">
 
-<nav style="background-color:#D9F0FF" class="navbar navbar-expand-lg navbar-light fixed-top">
+
+<nav style="background-color:#D9F0FF;" class="navbar navbar-expand-lg navbar-light fixed-top custom-navbar">
     <div class="container-fluid">
-
-        <a href="{{ route('index') }}" class="navbar-brand me-auto ">POSTS</a>
-        <a href="{{ route('admin.index') }}" class="nav-item nav-link ms-3">ADMIN</a>
+        <a href="{{ route('index') }}" class="navbar-brand me-auto">POSTS</a>
+        <a href="#" class="nav-item nav-link me-3">ADMIN</a>
 
         @guest
-
-            <a href="{{ route('register') }}" class="nav-item nav-link ms-3">Register</a>
-            <a href="{{ route('login') }}" class="nav-item nav-link ms-3">Login</a>
+            <a href="{{ route('register') }}" class="nav-item nav-link me-3">Register</a>
+            <a href="{{ route('login') }}" class="nav-item nav-link me-3">Login</a>
         @endguest
         @auth
-            <button type="button" class="btn btn-outline-success ms-3" data-bs-toggle="modal" data-bs-target="#Modal">
+            <button type="button" class="btn btn-outline-success me-3" data-bs-toggle="modal" data-bs-target="#Modal">
                 Write Post
             </button>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle me-5" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                   {{ Auth::user() -> name }}
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{{ route('home') }}" class="text-decoration-none text-dark ms-3 ">Мой профиль</a>
+                    </li>
+                    <li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="post" class="d-inline ms-3">
+                            @csrf
+                            <a href="#" class="text-decoration-none text-dark" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выйти</a>
+                        </form>
 
-            <a href="{{ route('home') }}" class="nav-item nav-link ms-3">Home page</a>
-            <form action="{{ route('logout') }}" method="post" class="d-inline ms-3">
-                @csrf
-                <input type="submit" class="btn btn-danger" value="exit">
-            </form>
+
+                    </li>
+                </ul>
+            </div>
         @endauth
     </div>
 </nav>
