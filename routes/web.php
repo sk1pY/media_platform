@@ -22,12 +22,13 @@ Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
 Route::post('/admin/create_category',[AdminController::class,'store'])->name('admin.create.category');
 
 Route::post('/like-task', [LikeController::class, 'like'])->name('like-task');
-//Route::post('/dislike-task', [LikeController::class, 'dislike'])->name('dislike-task');
+
 
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::put('/home/update/{id}', [HomeController::class, 'update'])->name('home.update');
+Route::put('/home/update_profile/{id}', [HomeController::class, 'update_profile'])->name('home.update.profile');
+Route::put('/home/update_task/{id}', [HomeController::class, 'update_task'])->name('home.update.task');
 
 //ADMIN_PANEL
 Route::get('/admin/posts', [AdminController::class, 'all_posts_users'])->name('all.posts.users');
