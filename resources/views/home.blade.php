@@ -60,8 +60,12 @@
                             <div class="card h-100">
                                 <img src="{{ Storage::url($task->image) }}" class="card-img-top" alt="Task Image">
                                 <div class="card-body" style="max-height: 200px; overflow: hidden;">
-                                    <h5 class="card-title"><a href="/task/{{ $task->id }}">{{ $task->title }}</a></h5>
-                                    <p class="card-text">{{ substr($task->description, 0, 100) }}...</p>
+                                    <h5 class="card-title"><a href="/task/{{ $task->id }}">
+                                            {{ implode(" ",array_slice(explode(" ",$task->title),0,3)) }}
+                                        </a></h5>
+                                    <p class="card-text">
+                                        {{ implode(" ",array_slice(explode(" ",$task->description),0,10)) }}
+                                    </p>
                                 </div>
                                 <div class="card-footer">
                                     <form action="{{ route('delete', $task->id) }}" method="POST" class="d-inline">

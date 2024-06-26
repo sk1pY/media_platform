@@ -42,9 +42,9 @@ class TasksController extends Controller
     }
 
     private const BB_VALIDATOR = [
-        'title' => 'required|max:50',
+        'title' => 'required|max:250',
         'description' => 'required',
-        'image' => 'required',
+        'image' => 'nullable',
         'cat_name' => 'nullable'
     ];
 

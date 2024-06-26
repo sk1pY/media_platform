@@ -54,17 +54,17 @@
                 <div class="position-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active fs-5 text-dark" aria-current="page" href="#">
+                            <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="#">
                                 <i class="fa-solid fa-fire"></i> Популярное
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active fs-5 text-dark" aria-current="page" href="#">
+                            <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="#">
                                 <i class="fa-regular fa-clock"></i> Новое
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active fs-5 text-dark" aria-current="page" href="#">
+                            <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="#">
                                 <i class="fa-regular fa-clipboard"></i> Моя лента
                             </a>
                         </li>
@@ -74,7 +74,7 @@
                     @if(count($categories) > 0)
                         @foreach($categories as $cat)
                             <li class="list-unstyled">
-                                <a class="active fs-5 text-dark text-decoration-none"
+                                <a class="link-secondary active fs-5 text-dark text-decoration-none"
                                    href="/cat/{{ $cat->name }}">{{ $cat->name }}</a>
                             </li>
 
@@ -82,6 +82,7 @@
                     @endif
                 </div>
             </div>
+            {{--MAIN CARDS CONTENT--}}
             <div class="col-9 mt-4">
                 <div class="row">
                     @if(count($tasks) > 0)
@@ -89,38 +90,64 @@
                             <div class="col-md-8 mb-4">
                                 <div class="card border-0">
                                     <div class="card-body">
-                                        <img
-                                                src="{{ Storage::url($task -> user -> image) }}"
-                                                class="rounded-circle" style="width: 45px;height:45px " alt="...">
-                                        {{ $task -> user -> name }}
-                                        {{ $task -> created_at }}
-                                        <h5 class="card-title">
-                                            <a href="/task/{{ $task->id }}"
-                                               class="text-decoration-none text-dark hover-effect">{{ $task->title }}</a>
-                                        </h5>
-                                        <p class="card-text">{{ substr($task->description, 0, 100) }}...</p>
-                                    </div>
-                                    <div class="card-img-container" style="padding: 20px;">
-                                        <img src="{{ Storage::url($task->image) }}" style="width: 100%; height: 290px;"
-                                             class="card-img-top rounded-3" alt="...">
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="m-3">
-                                            <div class="row">
-                                                <div id="task-{{ $task->id }}" class="task d-flex align-items-center">
-                                                    <div class="like-button me-3" data-task-id="{{ $task->id }}">
-                                                        <i class=" fa-regular fa-heart red-heart{{  in_array($task->id, $likedTaskIds)? ' fa-solid red-heart' : '' }}"></i>
-
-                                                        <span class="like-count">{{ $task->likes_count }}</span>
-                                                    </div>
-                                                    <a href="task/{{ $task->id }}" class="text-decoration-none">
-                                                        <i class="fa-regular fa-comment me-1"></i>
+                                        <div class="row align-items-center">
+                                            <div class="col-1">
+                                                <img
+                                                        src="{{ Storage::url($task->user->image) }}"
+                                                        class="rounded-circle"
+                                                        style="width: 45px; height: 45px;"
+                                                        alt="...">
+                                            </div>
+                                            <div class="col pl-0">
+                                                <div>{{ $task -> user->name }}</div>
+                                                <div>
+                                                    @if($task->category)
+                                                    <a class="link-secondary active fs-7 text-dark text-decoration-none"
+                                                       href="/cat/{{ $cat->name }}">{{ $task-> category -> name }}
                                                     </a>
-                                                    <span class="">{{ $task->comments_count }}</span>
+                                                    @endif
+                                                        <?php
 
+                                                        $date_string = strval($task->created_at);
+                                                        $date = new DateTime($date_string);
+                                                        $current_date = new DateTime();
+
+                                                        // Сравниваем дату с текущей датой
+                                                        if ($date->format('Y-m-d') == $current_date->format('Y-m-d')) {
+                                                            echo $date->format('H:i');
+                                                        } elseif ($date->format('Y-m-d') == $current_date->modify('-1 day')->format('Y-m-d')) {
+                                                            echo "Yesterday";
+                                                        } else {
+                                                            echo $date->format('d F'); // Выводим день и месяц
+                                                        }
+
+                                                        ?>
                                                 </div>
                                             </div>
                                         </div>
+                                        <a href="/task/{{ $task->id }}"
+                                           class="text-decoration-none text-dark hover-effect">
+                                            <h5 class="card-title mt-3">{{ $task->title }}</h5>
+                                            <p class="card-text">{{ substr($task->description, 0, 100) }}...</p>
+
+                                    <div class="card-img-container">
+                                        <img src="{{ Storage::url($task->image) }}" style="width: 100%; height: 290px;" class="card-img-top rounded-3" alt="...">
+                                    </div>
+                                        </a>
+                                    <div class="d-flex justify-content-between align-items-center mt-3 ms-1 ">
+                                        <div id="task-{{ $task->id }}" class="task d-flex align-items-center">
+                                            <div class="like-button me-3" data-task-id="{{ $task->id }}">
+                                                <i class="fa-regular fa-heart red-heart{{ in_array($task->id, $likedTaskIds) ? ' fa-solid red-heart' : '' }}"></i>
+                                                <span class="like-count">{{ $task->likes_count }}</span>
+                                            </div>
+                                            <a href="task/{{ $task->id }}" class="text-decoration-none">
+                                                <i class="fa-regular fa-comment me-1"></i>
+                                            </a>
+                                            <span>{{ $task->comments_count }}</span>
+                                            <i style="height: 12px;" class=" fa-regular fa-bookmark ms-3"></i>
+                                        </div>
+                                    </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -128,6 +155,8 @@
                     @endif
                 </div>
             </div>
+            {{--END MAIN CARDS CONTENT--}}
+
         </div>
     </div>
     <script>

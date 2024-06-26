@@ -10,6 +10,7 @@ use App\Http\Controllers\TasksController;
 use App\Http\Controllers\HomeController;
 
 //Route::resource('bbs', \App\Http\Controllers\TasksController::class);
+//MAIN
 Route::controller(TasksController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/cat/{slug}', 'category_tasks')->name('category');
@@ -25,7 +26,7 @@ Route::post('/like-task', [LikeController::class, 'like'])->name('like-task');
 
 
 Auth::routes();
-
+//HOME
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::put('/home/update_profile/{id}', [HomeController::class, 'update_profile'])->name('home.update.profile');
 Route::put('/home/update_task/{id}', [HomeController::class, 'update_task'])->name('home.update.task');
