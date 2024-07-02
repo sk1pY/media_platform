@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,9 @@ use App\Http\Controllers\HomeController;
 
 //Route::resource('bbs', \App\Http\Controllers\TasksController::class);
 //MAIN
+
+Route::get('/search', [SearchController::class, 'search'])->name('live.search');
+
 Route::controller(TasksController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/cat/{slug}', 'category_tasks')->name('category');
