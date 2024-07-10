@@ -24,7 +24,6 @@ class LikeController extends Controller
         $task = Task::find($taskId);
         $like = Like::where(['task_id' => $taskId, 'user_id' => $userId])->first();
 
-        // $like_sum = Like::where(["task_id" => $taskId])->first();
         if ($like) {
             $like->delete();
             $task->decrement('likes');

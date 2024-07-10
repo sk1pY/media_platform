@@ -9,12 +9,12 @@
                          alt="User Image">
                     <span class="ms-3">{{ Auth::user()->name }}</span>
                 </div>
-                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#Modal"
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editProfile"
                         style="width: 100%;">
                     Edit Profile
                 </button>
                 {{-- MODAL EDIT PROFILE WINDOW --}}
-                <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="editProfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">

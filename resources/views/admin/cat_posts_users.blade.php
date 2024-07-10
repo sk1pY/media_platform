@@ -41,7 +41,7 @@
                                             aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ route('home.update',['task => $task -> id']) }}" method="POST">
+                                    <form action="{{ route('home.update.task',['task => $task -> id']) }}" method="POST">
                                         @csrf
                                         @method('put')
                                         <input type="text" name="title" value="{{ old('title',$task->title) }}">

@@ -4,27 +4,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>@yield('title', 'Main')</title>
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-{{--    d--}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.css"
           integrity="sha512-U9Y1sGB3sLIpZm3ePcrKbXVhXlnQNcuwGQJ2WjPjnp6XHqVTdgIlbaDzJXJIAuCTp3y22t+nhI4B88F/5ldjFA=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
     <style>
         .red-heart {
             color: red; /* Красный цвет */
+        }
+        .yellow-bookmark {
+            color: #307df0; /* Красный цвет */
         }
 
         .custom-dropdown {
@@ -59,32 +57,26 @@
     </style>
 </head>
 <body style="background-color: #f2f2f2">
-
-
 <nav style="background-color:#D9F0FF; height: 60px;" class="navbar navbar-expand-lg navbar-light fixed-top custom-navbar">
     <div class="container-fluid " style="padding-left: 138px; padding-right: 120px;">
         <a href="{{ route('index') }}" class="navbar-brand me-auto fw-bold fs-4">PROJEKT</a>
-        <div class="d-flex justify-content-center align-items-center me-auto">
+{{--        SEARCH--}}
+        <div class="d-flex justify-content-center align-items-center me-auto search-container">
             <div class="input-group rounded" style="width: 600px; margin-left: 65px; position: relative;">
                 <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
                        aria-describedby="search-addon" id="search" name="search">
-                <ul class="list-group search-result" style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 1000;"></ul>
+                <ul class="list-group search-result" style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 1000; display: none;"></ul>
             </div>
         </div>
 
-
-
         {{--        <a href="#" class="nav-item nav-link me-3">ADMIN</a>--}}
-
         @guest
-
             <a href="{{ route('register') }}" class="nav-item nav-link me-3">Регистрация</a>
             <a href="{{ route('login') }}" class="nav-item nav-link me-3">Войти</a>
         @endguest
         @auth
-
             <button type="button" class="btn me-3 bg-white rounded-4 text-start p-2" data-bs-toggle="modal"
-                    data-bs-target="#Modal">
+                    data-bs-target="#createPost">
                 <i class="fa-solid fa-pencil me-1   "></i>
                 <span class="text-black " style="font-family: Arial, Helvetica, sans-serif;">Написать</span>
             </button>
@@ -100,7 +92,9 @@
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
 
-                <ul class="dropdown-menu dropdown-menu-end custom-dropdown">
+                <ul class="dropdown-menu dropdown-menu-end custom-dropdown mt-4" style="width: 200px; height: 200px">
+                    <a href="{{ route('home') }}" class="link-secondary text-decoration-none text-dark">
+
                     <li class="d-flex align-items-center">
                         <img
                             src="{{ Storage::url(Auth::user()->image) }}"
@@ -108,19 +102,19 @@
                             style="width: 45px; height: 45px;"
                             alt="...">
                         <div class="d-flex flex-column">
-                            <a href="{{ route('home') }}" class="link-secondary text-decoration-none text-dark">
                                 {{ Auth::user()->name }}
-                            </a>
+
                             <p class="mb-0">личный блог</p>
                         </div>
                     </li>
-
-                    <li class="d-flex align-items-center">
-                        <i class="fa-regular fa-bookmark me-2"></i>
-                        <a href="#" class="link-secondary text-decoration-none text-dark">
+                    </a>
+                    <a href="{{ route('bookmarks.index') }}" class="link-secondary text-decoration-none text-dark">
+                        <li class="d-flex align-items-center">
+                            <i class="fa-regular fa-bookmark me-2"></i>
                             Закладки
-                        </a>
-                    </li>
+                        </li>
+                    </a>
+
                     <li class="d-flex align-items-center" style="cursor: pointer"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>
@@ -135,14 +129,95 @@
                 </ul>
             </div>
             {{--END DROPDOWN MENU PROFILE--}}
+            {{-- MODAL WINDOW --}}
+            <div class="modal fade" id="createPost" tabindex="-1"  aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title" id="exampleModalLabel">Add task</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ route('create') }}" enctype="multipart/form-data" method="POST">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput1" class="form-label">Title</label>
+                                    <input name="title" type="text" class="form-control" id="exampleFormControlInput1"
+                                           placeholder="title">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                                    <textarea name="description" class="form-control" id="exampleFormControlTextarea1"
+                                              rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    Select a category
+                                    @if(count($categories) > 0)
+                                        <select name="cat_name" class="form-select">
+                                            <option selected></option>
+                                            @foreach($categories as $cat)
+                                                <option>{{ $cat->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                </div>
+                                <div class="mb-3">
+                                    <label for="exampleFormControlInput2" class="form-label">Image</label>
+                                    <input name="image" type="file" class="form-control" id="exampleFormControlInput2">
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <input type="submit" value="send" class="btn btn-primary">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- END MODAL WINDOW --}}
         @endauth
     </div>
 </nav>
 
-
 <div class="container content" style="margin-top: 50px;">
-    @yield('content')
+    <div class="row">
+        <div class="col-lg-3 mt-4" style="border-right: 1px solid #ddd; background-color: #f2f2f2;">
+            <div class="position-sticky" style="top: 75px;">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="#">
+                            <i class="fa-solid fa-fire"></i> Популярное
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="#">
+                            <i class="fa-regular fa-clock"></i> Новое
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="#">
+                            <i class="fa-regular fa-clipboard"></i> Моя лента
+                        </a>
+                    </li>
+
+
+                <h1 class="nav-link fs-5 text-dark mt-3">Категории</h1>
+                @if(count($categories) > 0)
+
+                        @foreach($categories as $cat)
+                            <li>
+                                <a class="link-secondary active fs-5 text-dark text-decoration-none"
+                                   href="/cat/{{ $cat->name }}">{{ $cat->name }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-9">
+            @yield('content')
+        </div>
+    </div>
 </div>
+
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -153,7 +228,7 @@
                 url: '{{ route("live.search") }}',
                 data: { 'search': value },
                 success: function(data) {
-                    $('.search-result').html(data);
+                    $('.search-result').html(data).show();
                 }
             });
         });
@@ -165,5 +240,6 @@
         });
     });
 </script>
+
 </body>
 </html>

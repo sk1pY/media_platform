@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Like;
@@ -19,10 +20,11 @@ class TasksController extends Controller
           //  $tasks = Task::latest()->get();
             $categories = Category::get();
             $tasks = Task::withCount(['comments','likes'])->orderBy('created_at','DESC')->get();
-            $likedTaskIds = Like::where('user_id', Auth::id())->pluck('task_id')->toArray();
-         //   dd($likedTaskIds);
+            $likedTaskUser = Like::where('user_id', Auth::id())->pluck('task_id')->toArray();
+            $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('task_id')->toArray();
 
-            return view('index', compact('tasks','categories','likedTaskIds'));
+
+            return view('index', compact('tasks','categories','likedTaskUser','bookmarkTaskUser'));
         }
     public function category_tasks($slug){
         $tasks = Task::whereHas('category', function ($query) use ($slug) {
@@ -30,9 +32,11 @@ class TasksController extends Controller
         })->orderBy('created_at', 'DESC')->get();
         return view('category_tasks',compact('tasks'));
     }
+
     public function task($id)
     {
         $task = Task::find($id);
+
         if ($task == null) {
             abort(404, 'error');
         }
@@ -93,6 +97,7 @@ class TasksController extends Controller
         return 'eror';
 
     }
+
 
 
 }

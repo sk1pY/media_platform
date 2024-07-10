@@ -15,7 +15,7 @@ class SearchController extends Controller
 
             if ($posts->count() > 0) {
                 foreach ($posts as $post) {
-                    $output .= '<li class="list-group-item "><a class=" link-secondary text-decoration-none text-dark" href="'.route('about_task',$post->id). '">'.$post->title.'</a></li>';
+                    $output .= '<a class=" link-secondary text-decoration-none text-dark" href="'.route('task.about',$post->id). '"><li class="list-group-item ">'.$post->title.'</li></a>';
                 }
             } else {
                 $output = '<li class="list-group-item">No results found</li>';

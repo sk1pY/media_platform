@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BookmarksController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SearchController;
@@ -13,12 +14,11 @@ use App\Http\Controllers\HomeController;
 //Route::resource('bbs', \App\Http\Controllers\TasksController::class);
 //MAIN
 
-Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 
 Route::controller(TasksController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/cat/{slug}', 'category_tasks')->name('category');
-    Route::get('/task/{id}', 'task')->name('about_task');
+    Route::get('/task/{id}', 'task')->name('task.about');
     Route::post('/store','create')->name('create');
     Route::delete('/delete/{id}', 'delete')->name('delete')->where('id', '[0-9]+');
 });
@@ -27,7 +27,6 @@ Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
 Route::post('/admin/create_category',[AdminController::class,'store'])->name('admin.create.category');
 
 Route::post('/like-task', [LikeController::class, 'like'])->name('like-task');
-
 
 Auth::routes();
 //HOME
@@ -44,3 +43,9 @@ Route::post('/admin/cat/add', [AdminController::class, 'store_cat'])->name('cat.
 Route::group(['middleware' => 'useradmin'], function () {
     Route::get('/admin',[AdminController::class,'index']);
 });
+//SEARCH
+Route::get('/search', [SearchController::class, 'search'])->name('live.search');
+//BOOKMARKS
+Route::get('/bookmarks', [BookmarksController::class, 'index'])->name('bookmarks.index');
+Route::post('/bookmarks/add', [BookmarksController::class, 'add'])->name('bookmarks.add');
+Route::post('/bookmarks/destroy/{id}', [BookmarksController::class, 'destroy'])->name('bookmarks.destroy');

@@ -9,7 +9,7 @@
         }
     </style>
     <div class="container">
-        <div class="container-fluid full-width-container">
+        <div class="container-fluid full-width-container ">
             <div class="row">
 
                 <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
