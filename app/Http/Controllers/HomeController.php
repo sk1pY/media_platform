@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Subscribe;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Task;
 use App\Models\User;
@@ -24,10 +25,16 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index($id)
     {
+        $user = User::where('id', $id)->first();
+       // dd($user->image);
+        $tasks = Task::where('user_id', $id)->get();
+        $subAuthors = Subscribe::where('subscriber_id', Auth::id())->pluck('author_id')->toArray();
+        $countSubAuthors = Subscribe::where('author_id', $id)->count();
 
-        return view('home', ['user' => Auth::user(), 'tasks' => Auth::user()->tasks()->latest()->get()]);
+
+        return view('home', compact('user', 'tasks','subAuthors','countSubAuthors'));
 
     }
 
@@ -50,7 +57,7 @@ class HomeController extends Controller
             unset($validatedData['image']);
         }
             $task->update($validatedData + ['user_id' => Auth::id()]);
-            return redirect('/home');
+            return redirect('/home/'.Auth::id());
     }
 
     public function update_profile(Request $request, $id)
@@ -76,7 +83,14 @@ class HomeController extends Controller
         }
         $user->update($validatedData);
 
-        return redirect('/home');
+        return redirect('/home/'.Auth::id());
 
+    }
+
+    public function destroy($id)
+    {
+        Task::find($id)->delete();
+        // Task::truncate(); удаляет все записи с таблицы и обнуляет автоинкремен в 0
+        return redirect('/home/'.Auth::id());
     }
 }

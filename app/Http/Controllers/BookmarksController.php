@@ -32,9 +32,6 @@ class BookmarksController extends Controller
             'task_id' => $taskId]);
         return response()->json(['success' => true,  'bookmark' => true]);
 
-
-      //  return redirect()->route('bookmarks.index');
-
     }
 
     Public function destroy($id){

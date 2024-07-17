@@ -14,17 +14,14 @@ class CommentController extends Controller
         $validatedData = $request->validate([
             'task_id' => 'required',
             'text' => 'required|string|max:255',
-            // Другие правила валидации по необходимости
         ]);
 
-        // Создание комментария
         $comment = Comment::create([
             'task_id' => $validatedData['task_id'],
             'user_id' => Auth::user()->id,
             'text' => $validatedData['text'],
-            // Другие поля комментария
         ]);
         // Редирект на страницу поста или другую нужную страницу
-        return redirect()->route('about_task', $comment->task_id);
+        return redirect()->route('task.about', $comment->task_id);
     }
 }

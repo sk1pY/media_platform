@@ -13,7 +13,7 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $arr = ['Memes','News','Games','Music'];
+        $arr = ['Мемы','Новости','Игры','Музыка'];
         for ($i = 0; $i < count($arr); $i++) {
             Category::create([
                 'name' => $arr[$i]

@@ -1,30 +1,30 @@
 @extends('layouts.app')
 @section('title', 'todo app')
 @section('category')
-    <div class="position-sticky" style="top: 75px;  background-color: #f2f2f2;">
+    <div class="position-sticky" style="top: 75px; border-right: 1px solid #ddd; background-color: #f2f2f2;">
         <ul class="nav flex-column">
-            <a class=" rounded-pill  nav-link active fs-5 text-dark" aria-current="page" href="#">
-                <i class="fa-solid fa-fire "></i> Популярное
-            </a>
-            <a class="rounded-pill nav-link active fs-5 text-dark" aria-current="page" href="#">
-                <i class="fa-regular fa-clock"></i> Новое
-            </a>
-            <a class="rounded-pill nav-link active fs-5 text-dark" aria-current="page" href="{{ route('myfeed') }}">
-                <i class="fa-regular fa-clipboard"></i> Моя лента
-            </a>
-            <h1 class="fs-6 mt-3 ms-3" style="color: grey;">Темы</h1>
+            <li class="nav-item">
+                <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="#">
+                    <i class="fa-solid fa-fire"></i> Популярное
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="#">
+                    <i class="fa-regular fa-clock"></i> Новое
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="{{ route('myfeed') }}">
+                    <i class="fa-regular fa-clipboard"></i> Моя лента
+                </a>
+            </li>
+            <h1 class="nav-link fs-5 text-dark mt-3">Категории</h1>
+            @if(count($categories) > 0)
 
-            @if(count($categories) >  0)
                 @foreach($categories as $cat)
-                    <li class="rounded-pill nav-link d-flex align-items-center ">
-                        <img
-                            src="https://static.toiimg.com/thumb/msid-75403416,width-1280,height-720,resizemode-4/75403416.jpg"
-                            class=" rounded-circle"
-                        style="width:30px;height: 30px">
-                        <div class="d-flex ">
-                            <a class="  nav-link active fs-5 text-dark"
-                               href="/cat/{{ $cat->name }}">{{ $cat->name }}</a>
-                        </div>
+                    <li>
+                        <a class="link-secondary active fs-5 text-dark text-decoration-none"
+                           href="/cat/{{ $cat->name }}">{{ $cat->name }}</a>
                     </li>
                 @endforeach
         </ul>
@@ -33,6 +33,8 @@
 @endsection
 @section('content')
     {{--MAIN CARDS CONTENT--}}
+    <h1>Моя лента</h1>
+    <br>
     @if(count($tasks) > 0)
         @foreach($tasks as $task)
             <div class="card border-0 mb-4">
@@ -188,8 +190,7 @@
                 if (subAuthors.includes(subId)) {
                     $(this).text('Отписаться').removeClass('btn btn-secondary').addClass(' btn btn-outline-secondary')
                 } else {
-                    $(this).text('Подписаться').removeClass('btn btn-outline-secondary').addClass('btn btn-secondary');
-                    ;
+                    $(this).text('Подписаться').removeClass('btn btn-outline-secondary').addClass('btn btn-secondary');;
                 }
             });
 

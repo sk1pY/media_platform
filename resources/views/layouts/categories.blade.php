@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('title', 'todo app')
 @section('category')
     <div class="position-sticky" style="top: 75px; border-right: 1px solid #ddd; background-color: #f2f2f2;">
@@ -15,7 +14,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="#">
+                <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="{{ route('myfeed') }}">
                     <i class="fa-regular fa-clipboard"></i> Моя лента
                 </a>
             </li>
@@ -33,26 +32,6 @@
     </div>
 @endsection
 @section('content')
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Delete bookmark</th>
 
-            </tr>
-            </thead>
-            <tbody>
-            @foreach ($bookmarks as $bookmark)
-            <tr>
-               <th scope="row"> <a href="{{ route('task.about',['id' => $bookmark->task->id]) }}">{{ $bookmark->task->title }}</a></th>
-                <th ><form action="{{ route('bookmarks.destroy',['id' => $bookmark->id]) }}" method="post">
-                        @csrf
-                        <input class="btn btn-danger" type="submit" value="Удалить">
-                    </form></th>
-
-            </tr>
-            @endforeach
-            </tbody>
-        </table>
 
 @endsection
