@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Subscribe;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Task;
 use App\Models\User;
@@ -24,10 +25,14 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index($id)
     {
+        $user = User::where('id', $id)->first();
+       // dd($user->image);
+        $tasks = Task::where('user_id', $id)->get();
+        $subAuthors = Subscribe::where('subscriber_id', Auth::id())->pluck('author_id')->toArray();
 
-        return view('home', ['user' => Auth::user(), 'tasks' => Auth::user()->tasks()->latest()->get()]);
+        return view('home', compact('user', 'tasks','subAuthors'));
 
     }
 

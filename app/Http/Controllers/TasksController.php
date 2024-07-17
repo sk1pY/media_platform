@@ -6,6 +6,7 @@ use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Like;
+use App\Models\Subscribe;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -17,14 +18,15 @@ class TasksController extends Controller
 {
         public function index()
         {
-          //  $tasks = Task::latest()->get();
+
             $categories = Category::get();
+            //сумма лайков и коментов WithCount(*****)
             $tasks = Task::withCount(['comments','likes'])->orderBy('created_at','DESC')->get();
             $likedTaskUser = Like::where('user_id', Auth::id())->pluck('task_id')->toArray();
             $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('task_id')->toArray();
+            $subAuthors = Subscribe::where('subscriber_id', Auth::id())->pluck('author_id')->toArray();
 
-
-            return view('index', compact('tasks','categories','likedTaskUser','bookmarkTaskUser'));
+            return view('index', compact('tasks','categories','likedTaskUser','bookmarkTaskUser','subAuthors'));
         }
     public function category_tasks($slug){
         $tasks = Task::whereHas('category', function ($query) use ($slug) {
@@ -35,14 +37,17 @@ class TasksController extends Controller
 
     public function task($id)
     {
-        $task = Task::find($id);
+        $likedTaskUser = Like::where('user_id', Auth::id())->pluck('task_id')->toArray();
+        $bookmarkTaskUser = Bookmark::where('user_id', Auth::id())->pluck('task_id')->toArray();
+        //get() Всегда возращает коллекцию
+        $task = Task::where('id',$id)->withCount(['comments','likes'])->first();
 
         if ($task == null) {
             abort(404, 'error');
         }
 
         $comments = Comment::where('task_id', $id)->orderBy('created_at', 'desc')->get();
-        return view('about_task', compact('task', 'comments'));
+        return view('about_task', compact('task', 'comments','likedTaskUser','bookmarkTaskUser'));
     }
 
     private const BB_VALIDATOR = [

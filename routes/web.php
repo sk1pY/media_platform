@@ -5,6 +5,7 @@ use App\Http\Controllers\BookmarksController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +31,7 @@ Route::post('/like-task', [LikeController::class, 'like'])->name('like-task');
 
 Auth::routes();
 //HOME
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/home/{id}', [HomeController::class, 'index'])->name('home');
 Route::put('/home/update_profile/{id}', [HomeController::class, 'update_profile'])->name('home.update.profile');
 Route::put('/home/update_task/{id}', [HomeController::class, 'update_task'])->name('home.update.task');
 
@@ -41,7 +42,7 @@ Route::get('/admin/users', [AdminController::class, 'admin_users'])->name('users
 Route::post('/admin/cat/add', [AdminController::class, 'store_cat'])->name('cat.add');
 
 Route::group(['middleware' => 'useradmin'], function () {
-    Route::get('/admin',[AdminController::class,'index']);
+    Route::get('/admin',[AdminController::class,'index'])->name('admin');
 });
 //SEARCH
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
@@ -49,3 +50,6 @@ Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 Route::get('/bookmarks', [BookmarksController::class, 'index'])->name('bookmarks.index');
 Route::post('/bookmarks/add', [BookmarksController::class, 'add'])->name('bookmarks.add');
 Route::post('/bookmarks/destroy/{id}', [BookmarksController::class, 'destroy'])->name('bookmarks.destroy');
+
+//SUBSCRIBE
+Route::post('/subscribe',[SubscribeController::class,'add'])->name('subscribe');
