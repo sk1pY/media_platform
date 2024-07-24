@@ -53,14 +53,18 @@ class TasksController extends Controller
     private const BB_VALIDATOR = [
         'title' => 'required|max:250',
         'description' => 'required',
-        'image' => 'nullable',
+        'image' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048', // Например, если вы принимаете изображение
         'cat_name' => 'nullable'
     ];
 
     public function create(Request $request)
     {
-        $filePath = $request->file('image')->store('public/images');
-        $validated = $request->validate(self::BB_VALIDATOR);
+
+        $filePath = $request->hasFile('image') ? $request->file('image')->store('public/images') : 'public/images/def.jpg';
+
+        if ($request->hasFile('image')) {
+            $filePath = $request->file('image')->store('public');
+        }         $validated = $request->validate(self::BB_VALIDATOR);
         $category_id = null;
 
         if(!empty($validated['cat_name'])){
@@ -73,7 +77,6 @@ class TasksController extends Controller
             'description' => $validated['description'],
             'category_id' => $category_id,
             'image' => $filePath]);
-        $file = $request->file('image');
 
 
         return redirect()->route('index');
