@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('categories', Category::all());
         });
+        Carbon::setLocale('ru');
 
     }
 }

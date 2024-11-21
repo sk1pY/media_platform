@@ -29,8 +29,9 @@ Route::fallback(function () {
 });
 //podpisannaya ssilka
 //URL::signedRoute('invitations', ['invitation' => 12345, 'answer' => 'yes']);
-
-
+Route::group(['middleware' => ['useradmin']], function () {
+    Route::get('admin', [AdminController::class, 'index']);
+});
 Route::controller(TasksController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/cat/{slug}', 'category_tasks')->name('category');

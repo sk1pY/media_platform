@@ -76,7 +76,8 @@
                         <p class="card-text">{{ substr($task->description, 0, 100) }}...</p>
 
                         <div class="card-img-container">
-                            <img src="{{ Storage::url($task->image) }}"
+                            <img src="{{ Storage::url($task->image) }}
+"
                                  style="width: 100%; height: 290px;" class="card-img-top rounded-3"
                                  alt="...">
                         </div>
