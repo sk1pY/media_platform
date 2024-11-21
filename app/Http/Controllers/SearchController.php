@@ -11,7 +11,7 @@ class SearchController extends Controller
     {
         if ($request->ajax()) {
             $output = "";
-            $posts = Task::where('title', 'LIKE', '%' . $request->search . "%")->get();
+                $posts = Task::where('title', 'LIKE', '%' . $request->search . "%")->get();
 
             if ($posts->count() > 0) {
                 foreach ($posts as $post) {

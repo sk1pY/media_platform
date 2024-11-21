@@ -168,13 +168,9 @@
                         } else {
                             $('#message').text(response.message).css('color', 'red');
                         }
-
                     },
                     error: function (xhr, status, error) {
-                        // Обработка ошибки
                         console.error('Произошла ошибка при добавлении/удалении закладки');
-
-                        // Дополнительные действия, если нужно
                     }
                 });
             });
@@ -182,7 +178,6 @@
         var subAuthors = @json($subAuthors);
 
         $(document).ready(function () {
-            // Условно добавляем класс на основе наличия идентификатора пользователя в массиве subAuthors
             $('.sub-button').each(function () {
                 var subId = $(this).data('author-id');
                 if (subAuthors.includes(subId)) {

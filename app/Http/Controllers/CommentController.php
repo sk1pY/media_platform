@@ -21,7 +21,7 @@ class CommentController extends Controller
             'user_id' => Auth::user()->id,
             'text' => $validatedData['text'],
         ]);
-        // Редирект на страницу поста или другую нужную страницу
+
         return redirect()->route('task.about', $comment->task_id);
     }
 }
