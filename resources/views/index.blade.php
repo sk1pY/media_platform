@@ -45,7 +45,6 @@
                                 style="width: 45px; height: 45px;"
                                 alt="{{ Storage::url($task->user->image) }}">
                         </div>
-                        <p> {{ Storage::url($task->user->image) }} </p>
 
                         <div class="col pl-0">
                             <div><a class="fw-bold link-dark text-decoration-none"
