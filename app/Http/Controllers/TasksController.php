@@ -60,7 +60,7 @@ class TasksController extends Controller
     public function create(Request $request)
     {
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store( 'public');
+            $path = $request->file('image')->store( 'public/taskImages');
             $fileName = basename($path);
         }
 

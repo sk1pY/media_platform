@@ -40,12 +40,11 @@
                     <div class="row align-items-center">
                         <div class="col-1">
                             <img
-                                src="{{ Storage::url($task->user->image) }}"
+                                src="{{Auth::user()->image ? Storage::url(Auth::user()->image):asset('imageAvatar/def.jpg') }}"
                                 class="rounded-circle"
                                 style="width: 45px; height: 45px;"
-                                alt="{{ Storage::url($task->user->image) }}">
+                                alt="...">
                         </div>
-
                         <div class="col pl-0">
                             <div><a class="fw-bold link-dark text-decoration-none"
                                     href="{{ route('home',$task-> user -> id) }}">{{ $task -> user->name }}</a></div>
@@ -77,7 +76,7 @@
                         <p class="card-text">{{ substr($task->description, 0, 100) }}...</p>
 
                         <div class="card-img-container">
-                            <img src="{{ Storage::url($task->image) }}
+                            <img src="{{ Storage::url('taskImages/'.$task->image) }}
 "
                                  style="width: 100%; height: 290px;" class="card-img-top rounded-3"
                                  alt="...">

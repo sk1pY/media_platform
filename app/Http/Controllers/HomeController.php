@@ -74,11 +74,9 @@ class HomeController extends Controller
                     Storage::disk('public')->delete($user->image);
                 }
 
-                // Сохраняем новое изображение
                 $imagePath = $request->file('image')->store('images', 'public');
                 $validatedData['image'] = $imagePath;
             } else {
-                // Если новое изображение не загружено, удаляем из массива валидации поле 'image'
                 unset($validatedData['image']);
             }
         $user->update($validatedData);

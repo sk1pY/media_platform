@@ -8,8 +8,11 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.css"
           integrity="sha512-U9Y1sGB3sLIpZm3ePcrKbXVhXlnQNcuwGQJ2WjPjnp6XHqVTdgIlbaDzJXJIAuCTp3y22t+nhI4B88F/5ldjFA=="
@@ -21,6 +24,7 @@
             background-color: white; /* Легкий серый фон при наведении */
             color: black; /* Темно-серый текст при наведении */
         }
+
         .red-heart {
             color: red;
         }
@@ -75,7 +79,7 @@
             </div>
         </div>
 
-{{--        <a href="{{ route('admin')}}" class="nav-item nav-link me-3">ADMIN</a>--}}
+        {{--        <a href="{{ route('admin')}}" class="nav-item nav-link me-3">ADMIN</a>--}}
         @guest
             <a href="{{ route('register') }}" class="nav-item nav-link me-3">Регистрация</a>
             <a href="{{ route('login') }}" class="nav-item nav-link me-3">Войти</a>
@@ -94,19 +98,19 @@
                 <div class="d-flex align-items-center link-secondary active drop" data-bs-toggle="dropdown"
                      data-bs-offset="140,160">
                     <img
-                        src="{{ Storage::url(Auth::user()->image) }}"
-                        class="blur-image dropdown-toggle me-2 rounded-circle"
+                        src="{{Auth::user()->image ? Storage::url(Auth::user()->image):asset('imageAvatar/def.jpg') }}"                        class="blur-image dropdown-toggle me-2 rounded-circle"
                         style="width: 45px; height: 45px;"
                         alt="...">
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
 
                 <ul class="dropdown-menu dropdown-menu-end custom-dropdown mt-4" style="width: 200px; height: 200px">
-                    <a href="{{ route('home',['id'=> Auth::user() -> id]) }}" class="link-secondary text-decoration-none text-dark">
+                    <a href="{{ route('home',['id'=> Auth::user() -> id]) }}"
+                       class="link-secondary text-decoration-none text-dark">
 
                         <li class="d-flex align-items-center">
                             <img
-                                src="{{ Storage::url(Auth::user()->image) }}"
+                                src="{{Auth::user()->image ? Storage::url(Auth::user()->image):asset('imageAvatar/def.jpg') }}"
                                 class="dropdown-toggle me-2 rounded-circle"
                                 style="width: 45px; height: 45px;"
                                 alt="...">
@@ -189,14 +193,14 @@
 <div class="container" style="margin-top: 80px;">
     <div class="row">
         @if(View::hasSection('category'))
-        <div class="col-lg-3">
-            @yield('category')
-        </div>
-        <div class="col-lg-9" style="width: 600px">
-            @yield('content')
-        </div>
-            @else
-            <div class="col-lg-12" >
+            <div class="col-lg-3">
+                @yield('category')
+            </div>
+            <div class="col-lg-9" style="width: 600px">
+                @yield('content')
+            </div>
+        @else
+            <div class="col-lg-12">
                 @yield('content')
             </div>
         @endif
@@ -221,7 +225,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $(document).click(function(event) {
+        $(document).click(function (event) {
             let target = $(event.target);
             if (!target.closest('#search').length && !target.closest('.search-result').length) {
                 $('.search-result').hide();

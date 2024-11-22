@@ -41,11 +41,12 @@
                         <div class="rounded-top text-white d-flex flex-row"
                              style="background-color: #444444; height:200px;">
                             <div class="ms-4 mt-3 d-flex flex-column" style="width: 150px;">
-                                <img src="{{ Storage::url($user->image) }}"
-                                     alt="Generic placeholder image" class="rounded-circle border-0 img-thumbnail mt-5 mb-2"
+                                <img src="{{Auth::user()->image ? Storage::url(Auth::user()->image):asset('imageAvatar/def.jpg') }}"
+                                     alt="111"
+                                     class="rounded-circle border-0 img-thumbnail mt-5 mb-2"
                                      style=" z-index: 1">
-
                             </div>
+
                             <div class="ms-3" style="margin-top: 130px;">
                                 <h5>{{ $user->name }}</h5>
                             </div>
@@ -96,7 +97,7 @@
                                                         <div class="row align-items-center">
                                                             <div class="col-1">
                                                                 <img
-                                                                    src="{{ Storage::url($task->user->image) }}"
+                                                                    src="{{Auth::user()->image ? Storage::url(Auth::user()->image):asset('imageAvatar/def.jpg') }}"
                                                                     class="rounded-circle"
                                                                     style="width: 45px; height: 45px;"
                                                                     alt="...">
@@ -121,7 +122,7 @@
                                                                         } elseif ($date->format('Y-m-d') == $current_date->modify('-1 day')->format('Y-m-d')) {
                                                                             echo "Yesterday";
                                                                         } else {
-                                                                            echo $date->format('d F'); // Выводим день и месяц
+                                                                            echo $date->format('d F');
                                                                         }
 
                                                                         ?>
@@ -134,22 +135,24 @@
                                                    class="text-decoration-none text-dark hover-effect">
                                                     <h5 class="card-title mt-3">{{ $task->title }}</h5>
                                                     <div class="card-img-container">
-                                                        <img src="{{ Storage::url($task->image) }}"
-                                                             style="width: 100%; height: 290px;"
-                                                             class="card-img-top rounded-3"
-                                                             alt="...">
+                                                        <img
+
+                                                            src="{{ Storage::url('taskImages/'.$task->image) }}"
+                                                            style="width: 100%; height: 290px;"
+                                                            class="card-img-top rounded-3"
+                                                            alt="...">
                                                     </div>
                                                 </a>
                                                 @if ( Auth::user()->id == $user->id)
                                                     <div class="card-footer">
-                                                        <form action="{{ route('home.delete.task', $task->id) }}" method="POST"
+                                                        <form action="{{ route('home.delete.task', $task->id) }}"
+                                                              method="POST"
                                                               class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
                                                             <input class="btn btn-outline-danger" type="submit"
                                                                    value="Удалить">
                                                         </form>
-                                                        <!-- Button trigger modal -->
                                                         <button type="button" class="btn btn-outline-warning"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#editTaskModal{{ $task->id }}">
