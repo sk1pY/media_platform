@@ -19,6 +19,7 @@
                     <li class="rounded-pill nav-link d-flex align-items-center ">
                         <img
                             src="https://static.toiimg.com/thumb/msid-75403416,width-1280,height-720,resizemode-4/75403416.jpg"
+                            alt="..."
                             class=" rounded-circle"
                         style="width:30px;height: 30px">
                         <div class="d-flex ">
@@ -40,7 +41,7 @@
                     <div class="row align-items-center">
                         <div class="col-1">
                             <img
-                                src="{{Auth::user()->image ? Storage::url(Auth::user()->image):asset('imageAvatar/def.jpg') }}"
+                                src="{{$task->user->image? Storage::url($task->user->image):asset('imageAvatar/def.jpg') }}"
                                 class="rounded-circle"
                                 style="width: 45px; height: 45px;"
                                 alt="...">
@@ -170,9 +171,6 @@
                             $('#message').text(response.message).css('color', 'red');
                         }
                     },
-                    error: function (xhr, status, error) {
-                        console.error('Произошла ошибка при добавлении/удалении закладки');
-                    }
                 });
             });
         });
@@ -185,7 +183,6 @@
                     $(this).text('Отписаться').removeClass('btn btn-secondary').addClass(' btn btn-outline-secondary')
                 } else {
                     $(this).text('Подписаться').removeClass('btn btn-outline-secondary').addClass('btn btn-secondary');
-                    ;
                 }
             });
 

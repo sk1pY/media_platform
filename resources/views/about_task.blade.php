@@ -37,7 +37,7 @@
         <div class="card-body">
             <div class="row align-items-center">
                 <div class="col-1">
-                    <img src="{{ Storage::url($task->user->image) }}" class="rounded-circle" style="width: 45px; height: 45px;" alt="...">
+                    <img  src="{{$task->user->image? Storage::url($task->user->image):asset('imageAvatar/def.jpg') }}" class="rounded-circle" style="width: 45px; height: 45px;" alt="...">
                 </div>
                 <div class="col pl-0">
                     <div><a class="fw-bold link-dark text-decoration-none" href="{{ route('home',$task->user->id) }}">{{ $task->user->name }}</a></div>
@@ -66,7 +66,7 @@
                 <p class="card-text">{{ $task->description }}...</p>
 
                 <div class="card-img-container">
-                    <img src="{{ Storage::url($task->image) }}" style="width: 100%; height: 290px;" class="card-img-top rounded-3" alt="...">
+                    <img src="{{ Storage::url('taskImages/'.$task->image) }}" style="width: 100%; height: 290px;" class="card-img-top rounded-3" alt="...">
                 </div>
             </a>
             <div class="d-flex justify-content-between align-items-center mt-3 ms-2 ">
@@ -181,12 +181,6 @@
                             $('#message').text(response.message).css('color', 'red');
                         }
 
-                    },
-                    error: function (xhr, status, error) {
-                        // Обработка ошибки
-                        console.error('Произошла ошибка при добавлении/удалении закладки');
-
-                        // Дополнительные действия, если нужно
                     }
                 });
             });
