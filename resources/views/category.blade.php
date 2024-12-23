@@ -1,25 +1,32 @@
 @extends('layouts.app')
+
 @section('content')
+    <div class="position-relative mb-3" >
+        <img style="width: 100%; height: 290px"  src="{{Storage::url('categoryImages/'.$category->image)}}" alt="123" >
+
+        <div class="position-absolute top-50 start-50 translate-middle text-white fw-bold">
+            <span class="fs-1">{{ $category->name }}</span>
+        </div>
+    </div>
+
     {{--MAIN CARDS CONTENT--}}
     @if(count($posts) > 0)
         @foreach($posts as $post)
             <div class="card border-0 mb-4">
                 <div class="card-body">
-                    <div class="row align-items-center ">
-                        <div class="col-auto ">
-                            <img
-                                src="{{$post->user->image? Storage::url('avatarImages/'.$post->user->image):asset('imageAvatar/def.jpg') }}"
+                    <div class="row align-items-center">
+                        <div class="col-1">
+                            <img  src="{{$post->user->image? Storage::url('avatarImages/'.$post->user->image):asset('imageAvatar/def.jpg') }}"
                                 class="rounded-circle"
                                 style="width: 45px; height: 45px;"
                                 alt="...">
                         </div>
-                        <div class="col p-0">
-                            <div><a class="fw-bold link-dark text-decoration-none "
-                                    href="{{ route('home',$post-> user -> id) }}">{{ $post -> user->name }}</a>
-                            </div>
+                        <div class="col pl-0">
+                            <div><a class="fw-bold link-dark text-decoration-none"
+                                    href="{{ route('home',$post-> user -> id) }}">{{ $post -> user->name }}</a></div>
                             <div>
                                 @if($post->category)
-                                    <a class="link-secondary active fs-7 text-dark text-decoration-none me-2"
+                                    <a class="link-secondary active fs-7 text-dark text-decoration-none"
                                        href="/cat/{{ $post-> category -> name }}">{{ $post-> category -> name }}
                                     </a>
                                 @endif
@@ -39,7 +46,7 @@
                             @endif
                         @endauth
                     </div>
-                    <a href="{{ route('posts.show', ['post' => $post ->  id]) }}"
+                    <a href="{{ route('posts.show', ['id' => $post ->  id]) }}"
                        class="text-decoration-none text-dark hover-effect">
                         <h5 class="card-title mt-3">{{ $post->title }}</h5>
                         <p class="card-text">{{ substr($post->description, 0, 100) }}...</p>
@@ -60,7 +67,7 @@
                                 </i>
                             </div>
                             {{--                    LIKE--}}
-                            <a href="{{ route('posts.show',['post' => $post-> id]) }}" style="cursor: pointer"
+                            <a href="{{ route('posts.show',['id' => $post-> id]) }}" style="cursor: pointer"
                                class="text-decoration-none">
                                 <i class="fa-regular fa-comment me-1">
                                     <span class="ms-0">{{ $post->comments_count }}</span>
@@ -185,3 +192,4 @@
         {{--        SUBSCRIBE--}}
     </script>
 @endsection
+

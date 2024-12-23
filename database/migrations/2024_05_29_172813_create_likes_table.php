@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('task_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('post_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
 
-            // Добавьте составной уникальный индекс
-            $table->unique(['task_id', 'user_id']);
+            $table->unique(['post_id', 'user_id']);
         });
     }
 

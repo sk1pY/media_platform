@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    public function tasks(): \Illuminate\Database\Eloquent\Relations\HasMany
+
+    use HasFactory;
+    protected $fillable = ['name'];
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Post::class);
     }
 }

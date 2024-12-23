@@ -44,7 +44,7 @@
             <tbody>
             @foreach ($bookmarks as $bookmark)
             <tr>
-               <th scope="row"> <a href="{{ route('task.about',['id' => $bookmark->task->id]) }}">{{ $bookmark->task->title }}</a></th>
+               <th scope="row"> <a href="{{ route('posts.show',['id' => $bookmark->post->id]) }}">{{ $bookmark->post->title }}</a></th>
                 <th ><form action="{{ route('bookmarks.destroy',['id' => $bookmark->id]) }}" method="post">
                         @csrf
                         <input class="btn btn-danger" type="submit" value="Удалить">

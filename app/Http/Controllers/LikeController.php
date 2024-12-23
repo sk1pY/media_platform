@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Like;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Task;
+use App\Models\Post;
 use Illuminate\Support\Facades\DB;
 
 // Добавлено для использования модели Task
@@ -19,23 +19,24 @@ class LikeController extends Controller
      */
     public function like(Request $request)
     {
-        $taskId = $request->input('task_id');
+        $postId = $request->input('post_id');
+
         $userId = auth()->id();
-        $task = Task::find($taskId);
-        $like = Like::where(['task_id' => $taskId, 'user_id' => $userId])->first();
+        $post = Post::find($postId);
+        $like = Like::where(['post_id' => $postId, 'user_id' => $userId])->first();
 
         if ($like) {
             $like->delete();
-            $task->decrement('likes');
-            return response()->json(['success' => true, 'likes' => $task->likes, 'liked' => false]);
+            $post->decrement('likes');
+            return response()->json(['success' => true, 'likes' => $post->likes, 'liked' => false]);
         } else {
             Like::create([
-                'task_id' => $taskId,
+                'post_id' => $postId,
                 'user_id' => $userId,
             ]);
-            $task->increment('likes');
+            $post->increment('likes');
 
-            return response()->json(['success' => true, 'likes' => $task->likes, 'liked' => true]);
+            return response()->json(['success' => true, 'likes' => $post->likes, 'liked' => true]);
         }
 
     }

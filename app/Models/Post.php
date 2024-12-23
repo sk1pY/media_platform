@@ -7,20 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 
-class Task extends Model
+class Post extends Model
 {
+    use HasFactory;
     protected static function boot()
     {
         parent::boot();
 
         static::deleting(function ($task) {
-            // Удаление изображения, если оно существует
             if ($task->image && Storage::exists($task->image)) {
                 Storage::delete($task->image);
             }
         });
     }
-    use HasFactory;
+
+
 
     protected $fillable = [
         'title',

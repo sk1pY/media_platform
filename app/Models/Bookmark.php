@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Bookmark extends Model
 {
     use HasFactory;
-     protected $fillable = ['user_id', 'task_id'];
+     protected $fillable = ['user_id', 'post_id'];
 
      public function user(){
          return $this->belongsTo(User::class);
      }
 
-    public function task()
+    public function post()
     {
-        return $this->belongsTo(Task::class);
+        return $this->belongsTo(Post::class);
     }
 
      public function category()

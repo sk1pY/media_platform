@@ -12,16 +12,16 @@ class CommentController extends Controller
 
     public function store(Request $request){
         $validatedData = $request->validate([
-            'task_id' => 'required',
-            'text' => 'required|string|max:255',
+            'post_id' => 'required',
+            'text' => 'required|string|max:600',
         ]);
 
         $comment = Comment::create([
-            'task_id' => $validatedData['task_id'],
+            'post_id' => $validatedData['post_id'],
             'user_id' => Auth::user()->id,
             'text' => $validatedData['text'],
         ]);
 
-        return redirect()->route('task.about', $comment->task_id);
+        return redirect()->route('posts.show', $comment->post_id);
     }
 }

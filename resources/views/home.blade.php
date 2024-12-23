@@ -1,37 +1,4 @@
 @extends('layouts.app')
-@section('category')
-    <div class="position-sticky" style="top: 75px; border-right: 1px solid #ddd; background-color: #f2f2f2;">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="#">
-                    <i class="fa-solid fa-fire"></i> Популярное
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="#">
-                    <i class="fa-regular fa-clock"></i> Новое
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="link-secondary nav-link active fs-5 text-dark" aria-current="page" href="#">
-                    <i class="fa-regular fa-clipboard"></i> Моя лента
-                </a>
-            </li>
-
-
-            <h1 class="nav-link fs-5 text-dark mt-3">Категории</h1>
-            @if(count($categories) > 0)
-
-                @foreach($categories as $cat)
-                    <li>
-                        <a class="link-secondary active fs-5 text-dark text-decoration-none"
-                           href="/cat/{{ $cat->name }}">{{ $cat->name }}</a>
-                    </li>
-                @endforeach
-        </ul>
-        @endif
-    </div>
-@endsection
 @section('content')
     <section class="h-100 gradient-custom-2">
         <div class="container  h-100 " style="width: 1000px">
@@ -41,7 +8,7 @@
                         <div class="rounded-top text-white d-flex flex-row"
                              style="background-color: #444444; height:200px;">
                             <div class="ms-4 mt-3 d-flex flex-column" style="width: 150px;">
-                                <img src="{{Auth::user()->image ? Storage::url(Auth::user()->image):asset('imageAvatar/def.jpg') }}"
+                                <img src="{{$user->image? Storage::url('avatarImages/'.$user->image):asset('imageAvatar/def.jpg') }}"
                                      alt="111"
                                      class="rounded-circle border-0 img-thumbnail mt-5 mb-2"
                                      style=" z-index: 1">
@@ -54,6 +21,7 @@
                         <div class="p-4 text-black bg-body-tertiary">
                             <div class="d-flex justify-content-between align-items-center text-center py-1 text-body">
                                 <div>
+                                    @auth
                                     @if (Auth::user()->id == $user->id)
                                         <button type="button" data-bs-toggle="modal"
                                                 data-bs-target="#editProfile" data-mdb-button-init data-mdb-ripple-init
@@ -71,10 +39,11 @@
                                             </button>
                                         </div>
                                     @endif
+                                    @endauth
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <div class="me-3">
-                                        <p class="mb-1 h5">{{ count($tasks) }}</p>
+                                        <p class="mb-1 h5">{{ count($posts) }}</p>
                                         <p class="small text-muted mb-0">Постов</p>
                                     </div>
                                     <div>
@@ -88,8 +57,8 @@
                         <div class="card-body p-4 text-black">
                             <div class=" text-body">
                                 {{--MAIN CARDS CONTENT--}}
-                                @if(count($tasks) > 0)
-                                    @foreach($tasks as $task)
+                                @if(count($posts) > 0)
+                                    @foreach($posts as $post)
                                         <div class="card border-0 mb-4">
                                             <div class="card-body">
                                                 <div class="row align-items-center">
@@ -97,22 +66,22 @@
                                                         <div class="row align-items-center">
                                                             <div class="col-1">
                                                                 <img
-                                                                    src="{{Auth::user()->image ? Storage::url(Auth::user()->image):asset('imageAvatar/def.jpg') }}"
+                                                                    src="{{$post->user->image? Storage::url('avatarImages/'.$post->user->image):asset('imageAvatar/def.jpg') }}"
                                                                     class="rounded-circle"
                                                                     style="width: 45px; height: 45px;"
                                                                     alt="...">
                                                             </div>
                                                             <div class="col pl-0">
-                                                                <div>{{ $task -> user->name }}</div>
+                                                                <div>{{ $post -> user->name }}</div>
                                                                 <div>
-                                                                    @if($task->category)
+                                                                    @if($post->category)
                                                                         <a class="link-secondary active fs-7 text-dark text-decoration-none"
-                                                                           href="/cat/{{ $task-> category -> name }}">{{ $task-> category -> name }}
+                                                                           href="/cat/{{ $post-> category -> name }}">{{ $post-> category -> name }}
                                                                         </a>
                                                                     @endif
                                                                         <?php
 
-                                                                        $date_string = strval($task->created_at);
+                                                                        $date_string = strval($post->created_at);
                                                                         $date = new DateTime($date_string);
                                                                         $current_date = new DateTime();
 
@@ -131,21 +100,22 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <a href="{{ route('task.about', ['id' => $task ->  id]) }}"
+                                                <a href="{{ route('posts.show', ['id' => $post ->  id]) }}"
                                                    class="text-decoration-none text-dark hover-effect">
-                                                    <h5 class="card-title mt-3">{{ $task->title }}</h5>
+                                                    <h5 class="card-title mt-3">{{ $post->title }}</h5>
                                                     <div class="card-img-container">
                                                         <img
 
-                                                            src="{{ Storage::url('taskImages/'.$task->image) }}"
+                                                            src="{{ Storage::url('postImages/'.$post->image) }}"
                                                             style="width: 100%; height: 290px;"
                                                             class="card-img-top rounded-3"
                                                             alt="...">
                                                     </div>
                                                 </a>
+                                                @auth()
                                                 @if ( Auth::user()->id == $user->id)
                                                     <div class="card-footer">
-                                                        <form action="{{ route('home.delete.task', $task->id) }}"
+                                                        <form action="{{ route('home.delete.task', $post->id) }}"
                                                               method="POST"
                                                               class="d-inline">
                                                             @csrf
@@ -155,11 +125,12 @@
                                                         </form>
                                                         <button type="button" class="btn btn-outline-warning"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#editTaskModal{{ $task->id }}">
+                                                                data-bs-target="#editPostModal{{ $post->id }}">
                                                             Изменить
                                                         </button>
                                                     </div>
                                                 @endif
+                                                @endauth
                                             </div>
                                         </div>
                                     @endforeach
@@ -213,36 +184,36 @@
     </div>
     {{-- END MODAL EDIT PROFILE WINDOW --}}
     <!-- MODAL UPDATE POST-->
-    @foreach($tasks as $task)
-        <div class="modal fade" id="editTaskModal{{ $task->id }}" tabindex="-1"
+    @foreach($posts as $post)
+        <div class="modal fade" id="editPostModal{{ $post->id }}" tabindex="-1"
              aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Task</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Post</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('home.update.task', $task->id) }}" method="POST"
+                        <form action="{{ route('home.update.task', $post->id) }}" method="POST"
                               enctype="multipart/form-data">
                             @csrf
                             @method('put')
                             <div class="mb-3">
-                                <label for="taskTitle{{ $task->id }}" class="form-label">Title</label>
+                                <label for="postTitle{{ $post->id }}" class="form-label">Title</label>
                                 <input type="text" name="title" class="form-control"
-                                       id="taskTitle{{ $task->id }}" value="{{ $task->title }}">
+                                       id="postTitle{{ $post->id }}" value="{{ $post->title }}">
                             </div>
                             <div class="mb-3">
-                                <label for="taskDescription{{ $task->id }}"
+                                <label for="postDescription{{ $post->id }}"
                                        class="form-label">Description</label>
                                 <input type="text" name="description" class="form-control"
-                                       id="taskDescription{{ $task->id }}" value="{{ $task->description }}">
+                                       id="postDescription{{ $post->id }}" value="{{ $post->description }}">
                             </div>
                             <div class="mb-3">
-                                <label for="taskImage{{ $task->id }}" class="form-label">Image</label>
+                                <label for="postImage{{ $post->id }}" class="form-label">Image</label>
                                 <input type="file" name="image" class="form-control"
-                                       id="taskImage{{ $task->id }}">
+                                       id="postImage{{ $post->id }}">
                             </div>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
                             </button>

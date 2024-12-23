@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     use HasFactory;
+    protected $fillable = ['user_id','post_id', 'text'];
 
-    public function tasks()
+    public function posts()
     {
         return $this->belongsto(Task::class);
     }
@@ -19,6 +20,5 @@ class Comment extends Model
         return $this->belongsto(User::class);
     }
 
-    protected $fillable = ['user_id','task_id', 'text'];
 }
 

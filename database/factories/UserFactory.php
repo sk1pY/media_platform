@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -23,10 +24,15 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $imageFiles = Storage::files('public/avatarImages');
+        $randomImage = $imageFiles[array_rand($imageFiles)];
+        $fileName = basename($randomImage);
+
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'image' => $fileName,
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];

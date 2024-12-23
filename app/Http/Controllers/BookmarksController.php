@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Like;
-use App\Models\Task;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +13,7 @@ class BookmarksController extends Controller
 {
     public function index()
     {
-        $bookmarks = Bookmark::with('user', 'task')->get();
+        $bookmarks = Bookmark::with('user', 'post')->get();
         return view('bookmarks', compact('bookmarks'));
 
 
@@ -21,20 +21,21 @@ class BookmarksController extends Controller
 
     public function add(Request $request)
     {
-        $taskId = $request->input('bookmark_id');
-        $bookmark = Bookmark::where(['user_id' => Auth::id(),'task_id' => $taskId])->first();
+        $postId = $request->input('bookmark_id');
+
+        $bookmark = Bookmark::where(['user_id' => Auth::id(),'post_id' => $postId])->first();
         if($bookmark){
             $bookmark->delete();
             return response()->json(['success' => true, 'bookmark' => false]);
         }
         Bookmark::create([
             'user_id' => Auth::user() -> id,
-            'task_id' => $taskId]);
+            'post_id' => $postId]);
         return response()->json(['success' => true,  'bookmark' => true]);
 
     }
 
-    Public function destroy($id){
+    public function destroy($id){
 
         Bookmark::find($id)->delete();
         return redirect()->route('bookmarks.index');
