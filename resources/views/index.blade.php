@@ -15,7 +15,7 @@
                         </div>
                         <div class="col p-0">
                             <div><a class="fw-bold link-dark text-decoration-none "
-                                    href="{{ route('home',$post-> user -> id) }}">{{ $post -> user->name }}</a>
+                                    href="{{ route('home.profile.show',$post-> user -> id) }}">{{ $post -> user->name }}</a>
                             </div>
                             <div>
                                 @if($post->category)
@@ -74,7 +74,12 @@
                                                         in_array($post->id,$bookmarkPostUser)? 'fa-solid yellow-bookmark' : '' }}"></i>
 
                             </div>
+
                         </div>
+                        {{--                            VIEWS--}}
+                        <i style="font-size: 1.2rem" class=" bi bi-eye-fill me-2">
+                            <span id="view-number">{{ $post->views }}</span>
+                        </i>
                     </div>
 
                 </div>

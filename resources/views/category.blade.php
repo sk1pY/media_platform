@@ -23,11 +23,11 @@
                         </div>
                         <div class="col pl-0">
                             <div><a class="fw-bold link-dark text-decoration-none"
-                                    href="{{ route('home',$post-> user -> id) }}">{{ $post -> user->name }}</a></div>
+                                    href="{{ route('home.profile.show',$post-> user -> id) }}">{{ $post -> user->name }}</a></div>
                             <div>
                                 @if($post->category)
                                     <a class="link-secondary active fs-7 text-dark text-decoration-none"
-                                       href="/cat/{{ $post-> category -> name }}">{{ $post-> category -> name }}
+                                       href="{{route('categories.show',$post-> category->id)}}">{{ $post-> category -> name }}
                                     </a>
                                 @endif
                                 <small class="text-muted">{{ $post->created_at->diffForHumans() }}</small>
@@ -46,7 +46,7 @@
                             @endif
                         @endauth
                     </div>
-                    <a href="{{ route('posts.show', ['id' => $post ->  id]) }}"
+                    <a href="{{ route('posts.show', ['post' => $post ->  id]) }}"
                        class="text-decoration-none text-dark hover-effect">
                         <h5 class="card-title mt-3">{{ $post->title }}</h5>
                         <p class="card-text">{{ substr($post->description, 0, 100) }}...</p>
@@ -67,7 +67,7 @@
                                 </i>
                             </div>
                             {{--                    LIKE--}}
-                            <a href="{{ route('posts.show',['id' => $post-> id]) }}" style="cursor: pointer"
+                            <a href="{{ route('posts.show',['post' => $post-> id]) }}" style="cursor: pointer"
                                class="text-decoration-none">
                                 <i class="fa-regular fa-comment me-1">
                                     <span class="ms-0">{{ $post->comments_count }}</span>

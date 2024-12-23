@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -56,22 +57,29 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+
         $validated = $request->validate([
             'title' => 'required',
             'description' => 'required',
             'category_id' => 'required',
-            'image' => 'mimes:jpeg,jpg,png,gif|nullable|max:10000',
-
+            'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
-        if($request->hasFile('image')){
-            if($post->image){
-                Storage::delete('postImages/'.$post->image);
+        if ($request->hasFile('image')) {
+            if ($post->image) {
+                Storage::delete('postImages/' . $post->image);
             }
+            $path = $request->file('image')->store('postImages', 'public');
+            $fileName = basename($path);
+            $validated['image'] = $fileName;
+
+        }else {
+            $validated['image'] = $post->image;
 
         }
-        $post -> update(array_merge($validated,
-            ['user_id'=>$request->input('user_id')]));
+
+        $post->update(array_merge($validated,
+            ['user_id' => $request->input('user_id')]));
 
         return redirect()->route('admin.posts.index');
     }
@@ -79,8 +87,9 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('admin.posts.index');
     }
 }

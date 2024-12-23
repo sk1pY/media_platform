@@ -11,34 +11,38 @@
                     style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 1000; display: none;"></ul>
             </div>
         </div>
-
+        @role('admin')
         <a href="{{ route('admin.index')}}" class="nav-item nav-link me-3">ADMIN</a>
+        @endrole
         @guest
             <a href="{{ route('register') }}" class="nav-item nav-link me-3">Регистрация</a>
             <a href="{{ route('login') }}" class="nav-item nav-link me-3">Войти</a>
         @endguest
         @auth
-            <i class="fa-regular fa-bell fa-lg" style="width: 40px; "></i>
-            <button type="button" class="btn me-3 bg-white rounded-4 text-start p-2" data-bs-toggle="modal"
-                    data-bs-target="#createPost" data-bs-dismiss="modal">
-                <i class="fa-solid fa-pencil me-1   "></i>
-                <span class="text-black " style="font-family: Arial, Helvetica, sans-serif;">Написать</span>
-            </button>
+            @can('create posts')
 
+                <i class="fa-regular fa-bell fa-lg" style="width: 40px; "></i>
+                <button type="button" class="btn me-3 bg-white rounded-4 text-start p-2" data-bs-toggle="modal"
+                        data-bs-target="#createPost" data-bs-dismiss="modal">
+                    <i class="fa-solid fa-pencil me-1   "></i>
+                    <span class="text-black " style="font-family: Arial, Helvetica, sans-serif;">Написать</span>
+                </button>
 
+            @endcan
             {{--DROPDOWN MENU PROFILE--}}
             <div class="dropdown">
                 <div class="d-flex align-items-center link-secondary active drop" data-bs-toggle="dropdown"
                      data-bs-offset="140,160">
                     <img
-                        src="{{Auth::user()->image ? Storage::url(Auth::user()->image):asset('imageAvatar/def.jpg') }}"                        class="blur-image dropdown-toggle me-2 rounded-circle"
+                        src="{{Auth::user()->image ? Storage::url(Auth::user()->image):asset('imageAvatar/def.jpg') }}"
+                        class="blur-image dropdown-toggle me-2 rounded-circle"
                         style="width: 45px; height: 45px;"
                         alt="...">
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
 
                 <ul class="dropdown-menu dropdown-menu-end custom-dropdown mt-4" style="width: 200px; height: 200px">
-                    <a href="{{ route('home',['id'=> Auth::user() -> id]) }}"
+                    <a href="{{ route('home.profile.show',['user'=> Auth::user() -> id]) }}"
                        class="link-secondary text-decoration-none text-dark">
 
                         <li class="d-flex align-items-center">
@@ -54,6 +58,7 @@
                             </div>
                         </li>
                     </a>
+
                     <a href="{{ route('bookmarks.index') }}" class="link-secondary text-decoration-none text-dark">
                         <li class="d-flex align-items-center">
                             <i class="fa-regular fa-bookmark me-2"></i>
@@ -155,3 +160,38 @@
         @endif
     </div>
 </div>
+{{--SEARCH JS--}}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#search').on('keyup', function () {
+            var value = $(this).val();
+            $.ajax({
+                type: 'get',
+                url: '{{ route("live.search") }}',
+                data: {'search': value},
+                success: function (data) {
+                    $('.search-result').html(data).show();
+                }
+            });
+        });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            // success: function (response) {
+            //     console.log('Success:', response);
+            // },
+            // error: function (xhr, status, error) {
+            //     console.error('Error:', status, error);
+            //     console.error('Response:', xhr.responseText);
+            // }
+        });
+        $(document).click(function (event) {
+            let target = $(event.target);
+            if (!target.closest('#search').length && !target.closest('.search-result').length) {
+                $('.search-result').hide();
+            }
+        });
+
+    });
+</script>

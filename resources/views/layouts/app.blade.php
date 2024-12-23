@@ -18,6 +18,8 @@
           integrity="sha512-U9Y1sGB3sLIpZm3ePcrKbXVhXlnQNcuwGQJ2WjPjnp6XHqVTdgIlbaDzJXJIAuCTp3y22t+nhI4B88F/5ldjFA=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <style>
         .nav-link:hover {
@@ -77,33 +79,6 @@
         </div>
     </div>
 </div>
-{{--SEARCH JS--}}
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#search').on('keyup', function () {
-            var value = $(this).val();
-            $.ajax({
-                type: 'get',
-                url: '{{ route("live.search") }}',
-                data: {'search': value},
-                success: function (data) {
-                    $('.search-result').html(data).show();
-                }
-            });
-        });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $(document).click(function (event) {
-            let target = $(event.target);
-            if (!target.closest('#search').length && !target.closest('.search-result').length) {
-                $('.search-result').hide();
-            }
-        });
 
-    });
-</script>
 </body>
 </html>

@@ -177,27 +177,6 @@
             </div>
 
 
-            <li>
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-book me-2" width="16" height="16"></i>
-                    Все посты
-                </a>
-
-            </li>
-
-            <li>
-                <a href="{{ route('admin.categories.index') }}" class="nav-link text-white">
-                    <i class="bi bi-journal-check me-2" width="16" height="16"></i>
-                    Все категории
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.users.index') }}" class="nav-link text-white">
-                    <i class="bi bi-people me-2" width="16" height="16"></i>
-                    Юзеры
-                </a>
-            </li>
-
         </ul>
         <hr>
 

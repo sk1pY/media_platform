@@ -33,7 +33,7 @@ class PostController extends Controller
         $likedPostUser = Like::where('user_id', Auth::id())->pluck('post_id')->toArray();
         $bookmarkPostUser = Bookmark::where('user_id', Auth::id())->pluck('post_id')->toArray();
 
-        $posts = $category->posts()->orderBy('created_at', 'DESC')->get();
+        $posts = $category->posts()->orderBy('created_at', 'DESC')->withCount(['comments', 'likes'])->get();
 
         return view('category', compact('posts','likedPostUser','bookmarkPostUser','subAuthors','category'));
     }
@@ -115,7 +115,11 @@ class PostController extends Controller
 
         return view('myfeed', compact('posts', 'likedPostUser', 'bookmarkPostUser', 'subAuthors'));
     }
-
+    public  function incrementViews(Post $post)
+    {
+        $post->increment('views');
+        return response()->json(['views' => $post->views]);
+    }
     public function error()
     {
         return 'eror';

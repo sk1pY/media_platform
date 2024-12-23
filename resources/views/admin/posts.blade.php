@@ -57,7 +57,7 @@
                         </div>
                         <div class="modal-body">
                             <form action="{{ route('admin.posts.update',['post'=>$post->id])}}"
-                                  method="post">
+                                  method="post" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <label for="title" class="form-label">Title</label>
@@ -84,8 +84,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-
-
                                 <input type="file" name="image">
                                 <img src="{{ Storage::url('postImages/'.$post->image) }}" alt="123"
                                      style="width: 40px;height: 40px;">

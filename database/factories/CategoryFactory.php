@@ -21,8 +21,42 @@ class CategoryFactory extends Factory
         $randomImage = $imageFiles[array_rand($imageFiles)];
 
         $fileName = basename($randomImage);
+
+        $categories = [
+            "Технологии",
+            "Наука",
+            "Образование",
+            "Финансы",
+            "Бизнес",
+            "Искусство",
+            "Музыка",
+            "Кино",
+            "Книги",
+            "Здоровье",
+            "Медицина",
+            "Спорт",
+            "Фитнес",
+            "Путешествия",
+            "Туризм",
+            "Кулинария",
+            "Рецепты",
+            "Домашний уют",
+            "Дизайн интерьера",
+            "Садоводство",
+            "Автомобили",
+            "Мотоциклы",
+            "Мода",
+            "Красота",
+            "Строительство",
+            "Архитектура",
+            "История",
+            "Культура",
+            "Политика",
+            "Экология"
+        ];
+
         return [
-            'name' => $this->faker->lexify(str_repeat('?', rand(7, 10))),
+            'name' => $this->faker->unique()->randomElement($categories),
             'image' => $fileName,
         ];
     }

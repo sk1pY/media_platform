@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -15,7 +15,7 @@ class SearchController extends Controller
 
             if ($posts->count() > 0) {
                 foreach ($posts as $post) {
-                    $output .= '<a class=" link-secondary text-decoration-none text-dark" href="'.route('task.about',$post->id). '"><li class="list-group-item ">'.$post->title.'</li></a>';
+                    $output .= '<a class=" link-secondary text-decoration-none text-dark" href="'.route('posts.show',$post->id). '"><li class="list-group-item ">'.$post->title.'</li></a>';
                 }
             } else {
                 $output = '<li class="list-group-item">No results found</li>';

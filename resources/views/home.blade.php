@@ -76,7 +76,7 @@
                                                                 <div>
                                                                     @if($post->category)
                                                                         <a class="link-secondary active fs-7 text-dark text-decoration-none"
-                                                                           href="/cat/{{ $post-> category -> name }}">{{ $post-> category -> name }}
+                                                                           href="{{ route('categories.show',$post->category->id ) }}">{{ $post-> category -> name }}
                                                                         </a>
                                                                     @endif
                                                                         <?php
@@ -100,7 +100,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <a href="{{ route('posts.show', ['id' => $post ->  id]) }}"
+                                                <a href="{{ route('posts.show', ['post' => $post ->  id]) }}"
                                                    class="text-decoration-none text-dark hover-effect">
                                                     <h5 class="card-title mt-3">{{ $post->title }}</h5>
                                                     <div class="card-img-container">

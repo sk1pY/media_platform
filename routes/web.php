@@ -28,19 +28,20 @@ Route::post('/store_comment', [CommentController::class, 'store'])->name('commen
 Route::post('/like-post', [LikeController::class, 'like'])->name('like-post');
 //SEARCH
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
-
+//VIEW
+Route::post('/post/{post}/incrementViews',[PostController::class,'incrementViews'])->name('post.incrementViews');
 
 //HOME
-Route::prefix('home')->group(function () {
-    Route::get('{id}', [HomeController::class, 'index'])->name('home');
-    Route::put('/update_profile/{id}', [HomeController::class, 'update_profile'])->name('home.update.profile');
-    Route::put('/update_task/{id}', [HomeController::class, 'update_task'])->name('home.update.task');
-    Route::delete('/delete/{id}', [HomeController::class, 'destroy'])->name('home.delete.task');
+Route::name('home.')->prefix('home')->group(function () {
+    Route::get('/{user}', [HomeController::class, 'index'])->name('profile.show');
+    Route::put('/update_profile/{id}', [HomeController::class, 'update_profile'])->name('update.profile');
+    Route::put('/update_task/{id}', [HomeController::class, 'update_task'])->name('update.task');
+    Route::delete('/delete/{id}', [HomeController::class, 'destroy'])->name('delete.task');
 });
 
 
 //ADMIN_PANEL
-Route::name('admin.')->prefix('admin')->group(function () {
+Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
     Route::post('/roles', [RolePermissionController::class, 'roles_store'])->name('roles.store');
     Route::delete('/roles/{role}', [RolePermissionController::class, 'roles_destroy'])->name('roles.destroy');
