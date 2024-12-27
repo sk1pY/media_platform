@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->string('image')->default('public/imageAvatar/def.jpg');;
+            $table->string('image')->default('public/default_images/default.png');
             $table->foreignId('category_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->integer('likes')->default(0);

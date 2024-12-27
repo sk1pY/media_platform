@@ -1,14 +1,11 @@
 <?php
 
 namespace Database\Factories;
-
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Task>
- */
+
 class PostFactory extends Factory
 {
     /**
@@ -23,6 +20,7 @@ class PostFactory extends Factory
         $randomImage = $imageFiles[array_rand($imageFiles)];
 
         $fileName = basename($randomImage);
+
         return [
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraph(15, true),
@@ -30,6 +28,6 @@ class PostFactory extends Factory
             'category_id' => $this->faker->numberBetween(1, 10),
             'user_id' =>  User::inRandomOrder()->first()->id,
             'likes' => 0
-        ];
+            ];
     }
 }

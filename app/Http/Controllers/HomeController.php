@@ -19,25 +19,21 @@ class HomeController extends Controller
     public function index($id)
     {
         $user = User::where('id', $id)->first();
-       // dd($user->image);
         $posts = Post::where('user_id', $id)->get();
-        $subAuthors = Subscribe::where('subscriber_id', Auth::id())->pluck('author_id')->toArray();
         $countSubAuthors = Subscribe::where('author_id', $id)->count();
 
-
-        return view('home', compact('user', 'posts','subAuthors','countSubAuthors'));
+        return view('home', compact('user', 'posts','countSubAuthors'));
 
     }
 
-    public function update_post(Request $request, $id)
+    public function update_post(Request $request, Post $post)
     {
-        $post = Post::findOrFail($id);
         $validatedData = $request->validate([
             'title' => 'required|string|max:50',
-            'description' => 'required|string|max:255',
+            'description' => 'required|string',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
-     //   dd($validatedData);
+
         if ($request->hasFile('image')) {
             if ($post->image) {
                 Storage::disk('public')->delete($post->image);
@@ -48,34 +44,47 @@ class HomeController extends Controller
         } else {
             unset($validatedData['image']);
         }
-        $post->update($validatedData + ['user_id' => Auth::id()]);
-            return redirect('/home/'.Auth::id());
+        $post->update(array_merge($validatedData, ['user_id' => Auth::id()]));
+            return redirect()->route('home.profile.show',Auth::id());
     }
 
     public function update_profile(Request $request, $id)
     {
         $user = User::findOrFail($id);
-       // dd($user);
         $validatedData = $request->validate([
             'name' => 'required|string|max:50',
             'email' => 'required|string|max:50',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image_cover' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-            if ($request->hasFile('image')) {
+            if ($request->hasFile('image') ) {
                 if ($user->image) {
                     Storage::disk('public')->delete($user->image);
                 }
 
-                $imagePath = $request->file('image')->store('images', 'public');
+                $imagePath = $request->file('image')->store('avatarImages', 'public');
+                $fileName = basename($imagePath);
 
-
-                $validatedData['image'] = $imagePath;
+                $validatedData['image'] = $fileName;
             } else {
                 unset($validatedData['image']);
             }
+
+        if ($request->hasFile('image_cover') ) {
+            if ($user->image_cover) {
+                Storage::disk('public')->delete($user->image_cover);
+            }
+
+            $imagePath = $request->file('image_cover')->store('profile_cover_images', 'public');
+            $fileName = basename($imagePath);
+
+            $validatedData['image_cover'] = $fileName;
+        } else {
+            unset($validatedData['image_cover']);
+        }
         $user->update($validatedData);
 
-        return redirect('/home/'.Auth::id());
+            return redirect()->back();
 
     }
 

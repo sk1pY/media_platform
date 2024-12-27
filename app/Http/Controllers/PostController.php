@@ -13,44 +13,48 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-
         $categories = Category::get();
-        //сумма лайков и коментов WithCount(*****)
-        $posts = Post::withCount(['comments', 'likes'])->orderBy('created_at', 'DESC')->get();
-        $likedPostUser = Like::where('user_id', Auth::id())->pluck('post_id')->toArray();
-        $bookmarkPostUser = Bookmark::where('user_id', Auth::id())->pluck('post_id')->toArray();
-        $subAuthors = Subscribe::where('subscriber_id', Auth::id())->pluck('author_id')->toArray();
+//        $posts = Post::withCount(['comments', 'likes'])->orderBy('created_at', 'DESC')->get();
 
-        return view('index', compact('posts', 'categories', 'likedPostUser', 'bookmarkPostUser', 'subAuthors'));
+        $query = Post::withCount(['comments', 'likes']);
+        if ($request->filled('filter')) {
+            switch ($request->input('filter')) {
+                case 'popular':
+                    $query->withCount(['comments', 'likes'])->orderBy('comments_count', 'desc');
+                    break;
+                case 'recent':
+                    $query->withCount(['comments', 'likes'])->orderBy('created_at', 'desc');
+                    break;
+                case 'old':
+                    $query->withCount(['comments', 'likes'])->orderBy('created_at', 'asc');
+            }
+        }
+
+        $posts = $query->get();
+
+        return view('index', compact('posts', 'categories'));
     }
 
     public function categories(Category $category)
     {
-        $subAuthors = Subscribe::where('subscriber_id', Auth::id())->pluck('author_id')->toArray();
-
-        $likedPostUser = Like::where('user_id', Auth::id())->pluck('post_id')->toArray();
-        $bookmarkPostUser = Bookmark::where('user_id', Auth::id())->pluck('post_id')->toArray();
 
         $posts = $category->posts()->orderBy('created_at', 'DESC')->withCount(['comments', 'likes'])->get();
 
-        return view('category', compact('posts','likedPostUser','bookmarkPostUser','subAuthors','category'));
+        return view('category', compact('posts', 'category'));
     }
 
-    public function post($id)
+    public function post(Post $post)
     {
-        $likedPostUser = Like::where('user_id', Auth::id())->pluck('post_id')->toArray();
-        $bookmarkPostUser = Bookmark::where('user_id', Auth::id())->pluck('post_id')->toArray();
 
-        $post = Post::where('id', $id)->withCount(['comments', 'likes'])->first();
+//        if ($post == null) {
+//            abort(404, 'error');
+//        }
+        $post = $post->withCount(['comments', 'likes'])->find($post->id);
+        $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->get();
 
-        if ($post == null) {
-            abort(404, 'error');
-        }
-
-        $comments = Comment::where('post_id', $id)->orderBy('created_at', 'desc')->get();
-        return view('about_task', compact('post', 'comments', 'likedPostUser', 'bookmarkPostUser'));
+        return view('about_task', compact('post', 'comments'));
     }
 
     private const BB_VALIDATOR = [
@@ -105,21 +109,20 @@ class PostController extends Controller
 
     public function my_feed()
     {
-        $likedPostUser = Like::where('user_id', Auth::id())->pluck('post_id')->toArray();
-        $bookmarkPostUser = Bookmark::where('user_id', Auth::id())->pluck('post_id')->toArray();
-        $subAuthors = Subscribe::where('subscriber_id', Auth::id())->pluck('author_id')->toArray();
-
         $authors_ids = Subscribe::where('subscriber_id', Auth::id())->pluck('author_id');
 
         $posts = Post::whereIn('user_id', $authors_ids)->withCount(['comments', 'likes'])->get();
 
-        return view('myfeed', compact('posts', 'likedPostUser', 'bookmarkPostUser', 'subAuthors'));
+        return view('myfeed', compact('posts'));
     }
-    public  function incrementViews(Post $post)
+
+    public function incrementViews(Post $post)
     {
+
         $post->increment('views');
         return response()->json(['views' => $post->views]);
     }
+
     public function error()
     {
         return 'eror';

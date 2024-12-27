@@ -1,11 +1,15 @@
 <nav style="background-color:#D9F0FF; height: 60px;"
      class="navbar navbar-expand-lg navbar-light fixed-top custom-navbar">
     <div class="container-fluid " style="padding-left: 138px; padding-right: 120px;">
-        <a href="{{ route('index') }}" class="navbar-brand me-auto fw-bold fs-4">PROJEKT</a>
+        <div class="d-flex">
+            <a href="{{ route('index') }}" class="navbar-brand me-auto fw-bold fs-4">PROJEKT</a>
+            <img src="{{ asset('favicon.png') }}" alt="" style="height: 50px;width: 50px">
+        </div>
+
         {{--        SEARCH--}}
         <div class="d-flex justify-content-center align-items-center me-auto search-container">
             <div class="input-group rounded" style="width: 600px; margin-left: 65px; position: relative;">
-                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                <input type="search" class="form-control rounded" placeholder="Поиск" aria-label="Search"
                        aria-describedby="search-addon" id="search" name="search">
                 <ul class="list-group search-result"
                     style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 1000; display: none;"></ul>
@@ -34,7 +38,7 @@
                 <div class="d-flex align-items-center link-secondary active drop" data-bs-toggle="dropdown"
                      data-bs-offset="140,160">
                     <img
-                        src="{{Auth::user()->image ? Storage::url(Auth::user()->image):asset('imageAvatar/def.jpg') }}"
+                        src="{{Auth::user()->image ? Storage::url('avatarImages/'.Auth::user()->image):asset('imageAvatar/def.jpg') }}"
                         class="blur-image dropdown-toggle me-2 rounded-circle"
                         style="width: 45px; height: 45px;"
                         alt="...">
@@ -44,10 +48,9 @@
                 <ul class="dropdown-menu dropdown-menu-end custom-dropdown mt-4" style="width: 200px; height: 200px">
                     <a href="{{ route('home.profile.show',['user'=> Auth::user() -> id]) }}"
                        class="link-secondary text-decoration-none text-dark">
-
                         <li class="d-flex align-items-center">
                             <img
-                                src="{{Auth::user()->image ? Storage::url(Auth::user()->image):asset('imageAvatar/def.jpg') }}"
+                                src="{{Auth::user()->image ? Storage::url('avatarImages/'.Auth::user()->image):asset('imageAvatar/def.jpg') }}"
                                 class="dropdown-toggle me-2 rounded-circle"
                                 style="width: 45px; height: 45px;"
                                 alt="...">
@@ -58,9 +61,10 @@
                             </div>
                         </li>
                     </a>
-
                     <a href="{{ route('bookmarks.index') }}" class="link-secondary text-decoration-none text-dark">
+
                         <li class="d-flex align-items-center">
+
                             <i class="fa-regular fa-bookmark me-2"></i>
                             Закладки
                         </li>
@@ -128,18 +132,23 @@
     </div>
 </div>
 {{-- END MODAL WINDOW --}}
-
+{{--CATEGORIES--}}
 <div>
     <div class="position-sticky" style="top: 75px;  background-color: #f2f2f2;">
         <ul class="nav flex-column">
-            <a class=" rounded-pill  nav-link active fs-5 text-dark" aria-current="page" href="#">
-                <i class="fa-solid fa-fire "></i> Популярное
+            <a style="font-size: 1.1rem;" class=" rounded-pill  nav-link active  text-dark" aria-current="page"
+               href="#">
+                <i class="fa-solid fa-fire p-0" style="width: 20px; height: 20px"></i>
+                <span class="ms-1">Популярное</span>
             </a>
-            <a class="rounded-pill nav-link active fs-5 text-dark" aria-current="page" href="#">
-                <i class="fa-regular fa-clock"></i> Новое
+            <a style="font-size: 1.1rem;" class="rounded-pill nav-link active text-dark" aria-current="page" href="#">
+                <i class="fa-regular fa-clock" style="width: 20px; height: 20px"></i>
+                <span class="ms-1">Новое</span>
             </a>
-            <a class="rounded-pill nav-link active fs-5 text-dark" aria-current="page" href="{{ route('my_feed') }}">
-                <i class="fa-regular fa-clipboard"></i> Моя лента
+            <a style="font-size: 1.1rem;" class="rounded-pill nav-link active text-dark" aria-current="page"
+               href="{{ route('my_feed') }}">
+                <i class="fa-regular fa-clipboard" style="width: 20px; height: 20px"></i>
+                <span class="ms-1">Моя лента</span>
             </a>
             <h1 class="fs-6 mt-3 ms-3" style="color: grey;">Темы</h1>
 
@@ -152,7 +161,8 @@
                             class=" rounded-circle"
                             style="width:30px;height: 30px">
 
-                        <a class="ms-2 link-secondary active fs-5 text-dark text-decoration-none"
+                        <a style="font-size: 1.1rem;"
+                           class="ms-2 link-secondary active text fw-normal text-dark text-decoration-none"
                            href="{{route('categories.show',['category'=>$cat->id])}}">{{ $cat->name }}</a>
                     </li>
                 @endforeach
@@ -160,6 +170,7 @@
         @endif
     </div>
 </div>
+{{--END CATEGORIES--}}
 {{--SEARCH JS--}}
 <script type="text/javascript">
     $(document).ready(function () {

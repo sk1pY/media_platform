@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Storage;
 class Post extends Model
 {
     use HasFactory;
-
+    protected $attributes = [
+        'image' => 'public/default_images/default.png',
+    ];
     protected $fillable = [
         'title',
         'description',
@@ -35,15 +37,11 @@ class Post extends Model
         return $this->belongsto(Category::class);
     }
 
-    public function likes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function likes()
     {
-        return $this->hasMany(Like::class);
+        return $this->belongsToMany(User::class,'post_like_user');
     }
 
-    public function isLikedBy(User $user)
-    {
-        return $this->likes()->where('user_id', $user->id)->exists();
-    }
 
 
 }

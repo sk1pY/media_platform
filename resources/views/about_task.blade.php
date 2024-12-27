@@ -12,10 +12,10 @@
                 <div class="col p-0">
                     <div><a class="fw-bold link-dark text-decoration-none"
                             href="{{ route('home.profile.show',$post->user->id) }}">{{ $post->user->name }}</a></div>
-                    <div>
+                    <small class="text-muted">
                         @if($post->category)
-                            <a class="link-secondary active fs-7 text-dark text-decoration-none"
-                               href="/cat/{{ $post->category->name }}">{{ $post->category->name }}</a>
+                            <a class="link-secondary active fs-7 text-dark text-decoration-none me-1"
+                               href="{{route('categories.show',$post->category->id)}}">{{ $post->category->name }}</a>
                         @endif
                         <?php
                         $date_string = strval($post->created_at);
@@ -25,12 +25,12 @@
                         if ($date->format('Y-m-d') == $current_date->format('Y-m-d')) {
                             echo $date->format('H:i');
                         } elseif ($date->format('Y-m-d') == $current_date->modify('-1 day')->format('Y-m-d')) {
-                            echo "Yesterday";
+                            echo "Вчера";
                         } else {
                             echo $date->format('d F');
                         }
                         ?>
-                    </div>
+                    </small>
                 </div>
             </div>
             <a href="{{ route('posts.show', ['post' => $post->id]) }}"
@@ -45,11 +45,12 @@
             </a>
             <div class="d-flex justify-content-between align-items-center mt-3 ms-2 ">
                 <div id="post-{{ $post->id }}" class="post d-flex align-items-center">
-                    <div style="cursor: pointer" class="like-button me-3" data-post-id="{{ $post->id }}">
-                        <i class="fa-regular fa-heart red-heart{{ in_array($post->id, $likedPostUser) ? ' fa-solid red-heart' : '' }}">
+                    <div style="cursor: pointer" class="like-button me-3"
+                         data-post-id="{{ $post->id }}">
+                        <i class="fa-regular fa-heart red-heart {{ in_array($post->id, $likedPostUser) ? ' fa-solid red-heart' : '' }}">
                             <span class="like-count">{{ $post->likes_count }}</span>
-                        </i>
 
+                        </i>
                     </div>
                     <a href="#comentary" style="cursor: pointer" class="text-decoration-none">
                         <i class="fa-regular fa-comment me-1">
@@ -64,11 +65,12 @@
                     </div>
 
                 </div>
-{{--                VIEWS--}}
+                {{--                VIEWS--}}
                 <i style="font-size: 1.2rem" class="bi bi-eye-fill me-2">
                     <span id="view-number">{{ $post->views }}</span>
                 </i>
-            </div>{{-- Comment Forma --}}
+            </div>
+            {{-- Comment Forma --}}
             <form action="{{ route('comment.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="post_id" value="{{ $post->id }}">
@@ -89,7 +91,9 @@
                                 src="{{$comment->user->image? Storage::url('avatarImages/'.$comment->user->image):asset('imageAvatar/def.jpg') }}"
                                 class="rounded-circle" style="width: 40px; height: 40px;" alt="...">
                             <div class=" ms-2 ">
-                                <div class="fw-bold me-2"><a class="fw-bold link-dark text-decoration-none" href="{{ route('home.profile.show',['user'=>$comment->user->id]) }}">{{ $comment->user->name }}</a></div>
+                                <div class="fw-bold me-2"><a class="fw-bold link-dark text-decoration-none"
+                                                             href="{{ route('home.profile.show',['user'=>$comment->user->id]) }}">{{ $comment->user->name }}</a>
+                                </div>
                                 <div class="text-muted">{{ $comment->created_at->diffForHumans() }}</div>
                             </div>
                         </div>
@@ -168,33 +172,16 @@
         @endforeach
 
     </div>
-    </div>
+
     {{-- END MAIN CARDS CONTENT --}}
     <script>
-        $(document).ready(function () {
-            setTimeout(function () {
-                $.ajax({
-                    url: "{{ route('post.incrementViews', $post->id) }}",
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (data) {
-                        $('#view-number').text(data.views);
-                    },
-                    error: function (xhr, status, error) {
-                        console.log("Error: " + error);
-                        console.log("Status: " + status);
-                        console.log(xhr.responseText);
-                    }
-                });
-            }, 5000);
-        });
-
-        $(document).keydown(function (e) {
-            if (e.keyCode === 13) {
-                $("#commForm").submit();
-            }
-        });
+        var incrementViewsUrl = "{{ route('posts.incrementViews', $post->id) }}";
     </script>
+    <script src="{{ asset('js/view.js') }}"></script>
+    <script src="{{ asset('js/bookmark.js') }}"></script>
+    <script>
+        var likePostUrl = '{{ route("like_post") }}';
+    </script>
+    <script src="{{ asset('js/like.js') }}"></script>
+
 @endsection

@@ -25,17 +25,17 @@ Route::controller(PostController::class)->group(function () {
 //COMMENTARIES
 Route::post('/store_comment', [CommentController::class, 'store'])->name('comment.store');
 //LIKES
-Route::post('/like-post', [LikeController::class, 'like'])->name('like-post');
+Route::post('/like-post', [LikeController::class, 'like'])->name('like_post');
 //SEARCH
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 //VIEW
-Route::post('/post/{post}/incrementViews',[PostController::class,'incrementViews'])->name('post.incrementViews');
+Route::post('/posts/{post}/incrementViews',[PostController::class,'incrementViews'])->name('posts.incrementViews');
 
 //HOME
 Route::name('home.')->prefix('home')->group(function () {
     Route::get('/{user}', [HomeController::class, 'index'])->name('profile.show');
     Route::put('/update_profile/{id}', [HomeController::class, 'update_profile'])->name('update.profile');
-    Route::put('/update_task/{id}', [HomeController::class, 'update_task'])->name('update.task');
+    Route::put('/update_post/{post}', [HomeController::class, 'update_post'])->name('update.post');
     Route::delete('/delete/{id}', [HomeController::class, 'destroy'])->name('delete.task');
 });
 
@@ -63,6 +63,5 @@ Route::post('/bookmarks/destroy/{id}', [BookmarksController::class, 'destroy'])-
 
 //SUBSCRIBE
 Route::post('/subscribe', [SubscribeController::class, 'add'])->name('subscribe');
-
 
 Auth::routes();

@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             CategoriesSeeder::class,
             PostsSeeder::class,
             CommentsSeeder::class,
-            LikeSeeder::class,
+            PostLikeSeeder::class,
         ]);
 
     }
