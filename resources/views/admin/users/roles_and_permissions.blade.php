@@ -13,7 +13,7 @@
                 <input class="btn btn-sm btn-primary" type="submit" value="Добавить">
             </form>
             <h1>Роли</h1>
-            <table class="table table-sm table-bordered table-striped h-auto ">
+            <table class="table table-sm table-bordered table-striped small">
                 <thead>
                 <tr>
                     <th scope="col" class="col-1">#</th>
@@ -47,7 +47,7 @@
             </form>
 
             <h1>Разрешения</h1>
-            <table class="table table-sm table-bordered table-striped">
+            <table class="table table-sm table-bordered table-striped small">
                 <thead>
                 <tr>
                     <th scope="col" class="col-1">#</th>
@@ -77,11 +77,11 @@
 
         </div>
     </div>
-    <table class="table table-sm table-bordered table-striped mt-0">
+    <table class="table table-sm table-bordered table-striped small">
         <thead>
         <tr>
-            <th scope="col" class="col-3">Роль</th>
-            <th scope="col" class="col-7 text-center">Разрешения</th>
+            <th scope="col" class="col-1">Роль</th>
+            <th scope="col" class="col text-center">Разрешения</th>
         </tr>
         </thead>
         <tbody>

@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    $('.like-button').off('click').on('click', function () { // off() перед on()
+    $('.like-button').off('click').on('click', function () {
         var postId = $(this).data('post-id');
         var button = $(this);
-        var likeCountSpan = button.closest('.post').find('.like-count');
+        var likeCountSpan = button.closest('.comment').find('.like-count');
         var heartIcon = button.find('.fa-heart');
 
         $.ajax({

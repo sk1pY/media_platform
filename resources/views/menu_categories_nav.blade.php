@@ -1,6 +1,6 @@
 <nav style="background-color:#D9F0FF; height: 60px;"
      class="navbar navbar-expand-lg navbar-light fixed-top custom-navbar">
-    <div class="container-fluid " style="padding-left: 138px; padding-right: 120px;">
+    <div class="container-fluid " style="padding-left: 120px; padding-right: 120px;">
         <div class="d-flex">
             <a href="{{ route('index') }}" class="navbar-brand me-auto fw-bold fs-4">PROJEKT</a>
             <img src="{{ asset('favicon.png') }}" alt="" style="height: 50px;width: 50px">
@@ -8,7 +8,7 @@
 
         {{--        SEARCH--}}
         <div class="d-flex justify-content-center align-items-center me-auto search-container">
-            <div class="input-group rounded" style="width: 600px; margin-left: 65px; position: relative;">
+            <div class="input-group rounded" style="width: 600px; margin-left: 165px; position: relative;">
                 <input type="search" class="form-control rounded" placeholder="Поиск" aria-label="Search"
                        aria-describedby="search-addon" id="search" name="search">
                 <ul class="list-group search-result"
@@ -23,15 +23,13 @@
             <a href="{{ route('login') }}" class="nav-item nav-link me-3">Войти</a>
         @endguest
         @auth
-            @can('create posts')
-
+            @can('create_posts')
                 <i class="fa-regular fa-bell fa-lg" style="width: 40px; "></i>
                 <button type="button" class="btn me-3 bg-white rounded-4 text-start p-2" data-bs-toggle="modal"
                         data-bs-target="#createPost" data-bs-dismiss="modal">
                     <i class="fa-solid fa-pencil me-1   "></i>
                     <span class="text-black " style="font-family: Arial, Helvetica, sans-serif;">Написать</span>
                 </button>
-
             @endcan
             {{--DROPDOWN MENU PROFILE--}}
             <div class="dropdown">
@@ -85,7 +83,6 @@
             </div>
             {{--END DROPDOWN MENU PROFILE--}}
         @endauth
-
     </div>
 </nav>
 {{-- MODAL WINDOW --}}
@@ -93,7 +90,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title" id="exampleModalLabel">Add task</h1>
+                <h1 class="modal-title" id="exampleModalLabel">Написать новый пост</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -102,15 +99,15 @@
                     <div class="mb-3">
                         <label for="exampleFormControlInput1" class="form-label">Title</label>
                         <input name="title" type="text" class="form-control" id="exampleFormControlInput1"
-                               placeholder="title">
+                               placeholder="Заголовок">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                        <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
                         <textarea name="description" class="form-control" id="exampleFormControlTextarea1"
                                   rows="3"></textarea>
                     </div>
                     <div class="mb-3">
-                        Select a category
+                        Выберите категорию
                         @if(count($categories) > 0)
                             <select name="cat_name" class="form-select">
                                 <option selected></option>
@@ -121,11 +118,11 @@
                         @endif
                     </div>
                     <div class="mb-3">
-                        <label for="exampleFormControlInput2" class="form-label">Image</label>
+                        <label for="exampleFormControlInput2" class="form-label">Фото поста</label>
                         <input name="image" type="file" class="form-control" id="exampleFormControlInput2">
                     </div>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <input type="submit" value="send" class="btn btn-primary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <input type="submit" value="Создать" class="btn btn-primary">
                 </form>
             </div>
         </div>
@@ -137,13 +134,14 @@
     <div class="position-sticky" style="top: 75px;  background-color: #f2f2f2;">
         <ul class="nav flex-column">
             <a style="font-size: 1.1rem;" class=" rounded-pill  nav-link active  text-dark" aria-current="page"
-               href="#">
+               href="{{ route('popular') }}">
                 <i class="fa-solid fa-fire p-0" style="width: 20px; height: 20px"></i>
                 <span class="ms-1">Популярное</span>
             </a>
-            <a style="font-size: 1.1rem;" class="rounded-pill nav-link active text-dark" aria-current="page" href="#">
+            <a style="font-size: 1.1rem;" class="rounded-pill nav-link active text-dark" aria-current="page"
+               href="{{ route('newest') }}">
                 <i class="fa-regular fa-clock" style="width: 20px; height: 20px"></i>
-                <span class="ms-1">Новое</span>
+                <span class="ms-1">Свежее за 24ч</span>
             </a>
             <a style="font-size: 1.1rem;" class="rounded-pill nav-link active text-dark" aria-current="page"
                href="{{ route('my_feed') }}">

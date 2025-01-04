@@ -24,15 +24,15 @@ class LikeController extends Controller
 
         $post = Post::find($postId);
 
-        $like = Like::where(['post_id' => $postId, 'user_id' => $userId])->first();
+        $like = Like::where(['user_id'=>$userId,'likeable_type'=>Post::class,'likeable_id'=>$postId])->first();
 
         if ($like) {
-            $post->likes()->detach($userId);
+            $post->likes()->where('user_id', $userId)->delete();
             $post->decrement('likes');
             return response()->json(['success' => true, 'likes' => $post->likes, 'liked' => false]);
         } else {
 
-            $post->likes()->attach($userId);
+            $post->likes()->create(['user_id'=>$userId]);
             $post->increment('likes');
 
             return response()->json(['success' => true, 'likes' => $post->likes, 'liked' => true]);

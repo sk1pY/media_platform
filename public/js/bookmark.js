@@ -1,7 +1,7 @@
 $(document).ready(function () {
-    $('.bookmark-button').on('click', function () {
+    $('.bookmark-button').off('click').on('click', function () { // off() перед on()
         var bookmarkId = $(this).data('bookmark-id');
-        var bookmarkButton = $(this).find('.fa-bookmark');
+        var bookmarkButton = $(this).find('.bookmark_button ');
 
         $.ajax({
             url: '/bookmarks/add',
@@ -12,9 +12,9 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.success) {
                     if (response.bookmark) {
-                        bookmarkButton.addClass('fa-solid yellow-bookmark');
+                        bookmarkButton.addClass('bi bi-bookmark-fill color_grey').removeClass('bi bi-bookmark');
                     } else {
-                        bookmarkButton.removeClass('fa-solid ');
+                        bookmarkButton.addClass('bi bi-bookmark').removeClass('bi bi-bookmark-fill color_grey');
                     }
                 } else {
                     $('#message').text(response.message).css('color', 'red');

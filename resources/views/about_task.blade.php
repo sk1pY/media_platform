@@ -49,19 +49,19 @@
                          data-post-id="{{ $post->id }}">
                         <i class="fa-regular fa-heart red-heart {{ in_array($post->id, $likedPostUser) ? ' fa-solid red-heart' : '' }}">
                             <span class="like-count">{{ $post->likes_count }}</span>
-
                         </i>
                     </div>
                     <a href="#comentary" style="cursor: pointer" class="text-decoration-none">
-                        <i class="fa-regular fa-comment me-1">
+                        <i class="fa-regular fa-comment me-1 color_grey">
                             <span class="ms-0">{{ $post->comments_count }}</span>
                         </i>
-
                     </a>
 
                     {{-- BOOKMARKS --}}
-                    <div style="cursor: pointer" class="bookmark-button me-3" data-bookmark-id="{{ $post->id }}">
-                        <i class="ms-3 fa-regular fa-bookmark yellow-bookmark{{ in_array($post->id, $bookmarkPostUser) ? ' fa-solid yellow-bookmark' : '' }}"></i>
+                    <div style="cursor: pointer" class="bookmark-button "
+                         data-bookmark-id="{{ $post->id }}">
+
+                        <i class=" bookmark_button ms-3 bi {{ in_array($post->id,$bookmarkPostUser)? 'bi-bookmark-fill color_grey' : 'bi-bookmark' }}"></i>
                     </div>
 
                 </div>
@@ -71,7 +71,7 @@
                 </i>
             </div>
             {{-- Comment Forma --}}
-            <form action="{{ route('comment.store') }}" method="POST">
+            <form id="comment_section" action="{{ route('comment.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="post_id" value="{{ $post->id }}">
                 <div class="mb-3 mt-3">
@@ -80,10 +80,28 @@
                 <button type="submit" class="btn btn-primary">Отправить</button>
             </form>
         </div>
+        {{--FILTER--}}
+        <div class="m-2">
+            <form action="{{ route('posts.show',$post->id) }}" id="filterForm" method="get">
 
+                <select class="form-select w-25 text-decoration-none" id="rating" name="filter_comments"
+                        form="filterForm"
+                        onchange="this.form.submit()">
+
+                    <option value="">Выберите фильтр</option>
+                    <option value="recent" {{ request('filter') === 'recent' ? 'selected' : '' }} >Самые новые
+                    </option>
+                    <option value="old" {{ request('filter') === 'old' ? 'selected' : '' }}> Самые старые
+                    </option>
+                    {{--                    <option value="popular" {{ request('filter') === 'popular' ? 'selected' : '' }}>Популярные--}}
+                    {{--                    </option>--}}
+                </select></form>
+        </div>
+        {{--FILTER--}}
         {{-- COMMENTS SECTION --}}
         @foreach($comments as $comment)
-            <div class="card border-0 m-3">
+
+            <div class="card border-0 m-2 rounded-4 " style="background-color:whitesmoke		">
                 <div class="card-body">
                     <div class="row align-items-center ">
                         <div class="d-flex align-items-center">
@@ -98,82 +116,41 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-2">{{ $comment->text }}</div>
+                    <div class=" d-flex flex-column">
+                        <div class="mt-2 me-3">{{ $comment->text }}</div>
+                        <div class="m-2 fs-5 comment">
+                            <div class="likedislike-comment-button" data-comment-id="{{ $comment->id }}">
+                                <i class="like_button bi
+                            {{ in_array($comment->id,$likeCommentUser)? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up' }}"
+                                   data-type="like"
+                                   data-comment-id="{{ $comment->id }}"
+                                   style="cursor: pointer">
+                                    <span class="like-count">{{$comment->like}}</span>
+                                </i>
+                            </div>
+                            <div class="likedislike-comment-button" data-comment-id="{{ $comment->id }}">
+                                <i class="dislike_button bi
+                            {{ in_array($comment->id,$dislikeCommentUser)? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down' }}"
+                                   data-type="dislike"
+                                   data-comment-id="{{ $comment->id }}"
+                                   style="cursor: pointer">
+                                    <span class="dislike-count">{{$comment->dislike}}</span>
+                                </i>
+                            </div>
+                        </div>
 
+                    </div>
                 </div>
             </div>
-            <script>
-
-                $(document).ready(function () {
-                    $('.like-button').on('click', function () {
-                        var postId = $(this).data('post-id');
-                        var button = $(this);
-                        var likeCountSpan = button.closest('.post').find('.like-count');
-                        var heartIcon = button.find('.fa-heart'); // Иконка сердца
-
-                        $.ajax({
-                            url: '/like-post',
-                            method: 'POST',
-                            data: {
-                                post_id: postId,
-                                _token: $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function (response) {
-                                if (response.success) {
-                                    likeCountSpan.text(response.likes);
-                                    if (response.liked) {
-                                        heartIcon.addClass('fa-solid red-heart');
-                                    } else {
-                                        heartIcon.removeClass('fa-solid ');
-                                    }
-                                } else {
-                                    $('#message').text(response.message).css('color', 'red');
-                                }
-                            },
-                            error: function () {
-                                $('#message').text('An error occurred. Please try again later.').css('color', 'red');
-                            }
-                        });
-                    });
-                });
-
-                $(document).ready(function () {
-                    $('.bookmark-button').on('click', function () {
-                        var postId = $(this).data('bookmark-id');
-                        var button = $(this);
-                        var bookmarkButton = button.find('.fa-bookmark');
-
-                        $.ajax({
-                            url: '/bookmarks/add',
-                            method: 'POST',
-                            data: {
-                                bookmark_id: postId
-                            },
-                            success: function (response) {
-                                if (response.success) {
-                                    //  likeCountSpan.text(response.likes);
-                                    if (response.bookmark) {
-                                        bookmarkButton.addClass('fa-solid yellow-bookmark');
-                                    } else {
-                                        bookmarkButton.removeClass('fa-solid ');
-                                    }
-                                } else {
-                                    $('#message').text(response.message).css('color', 'red');
-                                }
-
-                            }
-                        });
-                    });
-                });
-
-
-            </script>
-
-        @endforeach
-
+    </div>
+    @endforeach
     </div>
 
     {{-- END MAIN CARDS CONTENT --}}
+    <script>
+        var likeUrl = "{{ route('comments.like') }}";
+    </script>
+    <script src="{{ asset('js/like_dislike_comment.js') }}"></script>
     <script>
         var incrementViewsUrl = "{{ route('posts.incrementViews', $post->id) }}";
     </script>

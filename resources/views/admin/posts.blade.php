@@ -9,12 +9,12 @@
             </ul>
         </div>
     @endif
-    <table class="table table-sm table-bordered table-striped ">
+    <table class="table table-sm table-bordered table-striped small m-2">
         <thead>
         <tr class="text-center align-middle">
-            <th scope="col" class="col-5">Title</th>
-            <th scope="col" class="col-1">Author</th>
-            <th scope="col" class="col-2">Edit/Delete</th>
+            <th scope="col" class="col-7">Title</th>
+            <th scope="col" class="col-3">Author</th>
+            <th scope="col" class="col">Edit/Delete</th>
 
         </tr>
         </thead>
@@ -30,17 +30,17 @@
                     <p>{{$post->user? $post->user->surname.' '.$post->user->name: 'Без автора'}}</p>
                 </td>
 
-                <td class="text-center d-flex ">
+                <td class="text-center d-flex">
                     <button type="button" class="btn btn-sm" data-bs-toggle="modal"
                             data-bs-target="#update.{{$post->id}}">
                         <i class="bi bi-pencil-square"></i>
                     </button>
-                    <form action="{{ route('admin.posts.destroy', $post->id)}}" method="post"
-                          id>
+
+                    <form action="{{ route('admin.posts.destroy', $post->id)}}" method="post">
                         @csrf
                         @method('delete')
-                        <button class="btn btn-sm fs-3">
-                            <i type="submit" class="bi bi-x"></i>
+                        <button class="btn btn-sm text-danger">
+                            <i class="bi bi-x"></i>
                         </button>
                     </form>
                 </td>
@@ -61,9 +61,9 @@
                                 @csrf
                                 @method('put')
                                 <label for="title" class="form-label">Title</label>
-                                <input id="title" class="form-control"  name="title"
+                                <input id="title" class="form-control" name="title"
                                        value="{{ old('title',$post->title) }}">
-                                <input type="hidden" name="user_id" value="{{$post->user->id}}" >
+                                <input type="hidden" name="user_id" value="{{$post->user->id}}">
 
                                 <label for="description" class="form-label">Описание</label>
                                 <textarea

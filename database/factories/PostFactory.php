@@ -27,7 +27,8 @@ class PostFactory extends Factory
             'image' => $fileName,
             'category_id' => $this->faker->numberBetween(1, 10),
             'user_id' =>  User::inRandomOrder()->first()->id,
-            'likes' => 0
+            'likes' => 0,
+            'views' => $this->faker->numberBetween(0, 50),
             ];
     }
 }

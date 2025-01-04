@@ -14,14 +14,14 @@ class PermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['name' => 'view content']);
-        Permission::create(['name' => 'create posts']);
-        Permission::create(['name' => 'delete posts']);
-        Permission::create(['name' => 'manage users']);
-        Permission::create(['name' => 'moderate comments']);
+        Permission::create(['name' => 'view_content']);
+        Permission::create(['name' => 'create_posts']);
+        Permission::create(['name' => 'delete_posts']);
+        Permission::create(['name' => 'manage_users']);
+        Permission::create(['name' => 'moderate_comments']);
 
         $userRole = Role::where(['name' => 'user'])->first();
-        $userRole->givePermissionTo('view content');
+        $userRole->givePermissionTo('create_posts');
 
         $adminRole = Role::where(['name' => 'admin'])->first();
         $adminRole->givePermissionTo(Permission::all());

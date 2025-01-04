@@ -9,7 +9,7 @@ class Category extends Model
 {
 
     use HasFactory;
-    protected $fillable = ['name'];
+    protected $fillable = ['name','image'];
     public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Post::class);

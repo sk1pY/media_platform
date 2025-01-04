@@ -7,7 +7,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SubscribeController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Admin\RolePermissionController;
@@ -17,13 +16,15 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/categories/{category}', 'categories')->name('categories.show');
     Route::get('/posts/{post}', 'post')->name('posts.show');
     Route::post('/posts', 'store')->name('posts.store');
-
     Route::get('/my_feed', 'my_feed')->name('my_feed');
+    Route::get('/newest', 'newest')->name('newest');
+    Route::get('/popular', 'popular')->name('popular');
     Route::delete('/delete/{id}', 'delete')->name('delete')->where('id', '[0-9]+');
 
 });
 //COMMENTARIES
 Route::post('/store_comment', [CommentController::class, 'store'])->name('comment.store');
+Route::post('/comments/like_dislike', [CommentController::class, 'like_dislike'])->name('comments.like');
 //LIKES
 Route::post('/like-post', [LikeController::class, 'like'])->name('like_post');
 //SEARCH
@@ -54,6 +55,7 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
     Route::resource('posts', \App\Http\Controllers\Admin\PostController::class);
+    Route::resource('/comments',\App\Http\Controllers\Admin\CommentController::class );
 
 });
 //BOOKMARKS
@@ -64,4 +66,3 @@ Route::post('/bookmarks/destroy/{id}', [BookmarksController::class, 'destroy'])-
 //SUBSCRIBE
 Route::post('/subscribe', [SubscribeController::class, 'add'])->name('subscribe');
 
-Auth::routes();

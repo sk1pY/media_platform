@@ -1,36 +1,50 @@
 @extends('admin.layouts.index')
 @section('content')
-    <form action="{{route('admin.categories.store')}}" method="post" class="d-flex g-2 m-2 w-50">
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    <form action="{{route('admin.categories.store')}}" method="post" class="d-flex g-2 m-2 w-50" enctype="multipart/form-data">
         @csrf
-        <input class="form-control" type="text" name="name">
-        <input class="btn btn-sm btn-secondary" type="submit">
+        <div class="d-flex flex-column m-3">
+            <label for="name">Категория</label>
+            <input id="name" class="form-control" type="text" name="name">
+            <label for="image">Фото</label>
+
+            <input id="image" class="form-control " type="file" name="image">
+            <input class="btn btn-sm btn-secondary mt-2" type="submit" value="Добавить">
+
+        </div>
+
     </form>
-    <table class="table table-sm table-bordered table-striped w-auto ">
+    <table class="table table-sm table-bordered table-striped small">
         <thead>
         <tr class="align-middle">
-            <th scope="col" class="col-1">#</th>
-            <th scope="col" class="col-8">имя</th>
-            <th scope="col" class="col-1">Изменить/Удалить</th>
+            <th scope="col" class="col-8 text-center">имя</th>
+            <th scope="col" class="col-3 text-center">Изменить/Удалить</th>
         </tr>
         </thead>
         <tbody>
         @foreach( $categories as $category )
-            <tr class="align-middle">
-                <th>{{$category -> id}}</th>
-                <td class=""><a href="{{ route('categories.show',['category' => $category->id]) }}"
+            <tr class="align-middle ">
+                <td class="ps-3 "><a href="{{ route('categories.show',['category' => $category->id]) }}"
                                 class="text-decoration-none text-dark ">{{$category -> name}}</a>
                 </td>
-                <td class="d-flex">
-                    <button type="button" class="btn btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#modal-{{ $category->id }}">
-                        <i class="bi bi-pencil-square "></i>
+                <td class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#modal-{{ $category->id }}">
+                        <i class="bi bi-pencil-square"></i>
                     </button>
-                    <form action="{{ route('admin.categories.destroy', ['category' => $category->id])}}" method="post"
-                          id>
+
+                    <form action="{{ route('admin.categories.destroy', ['category' => $category->id]) }}" method="post" class="ms-2">
                         @csrf
                         @method('delete')
-                        <button class="btn btn-sm fs-3 ">
-                            <i type="submit" class="bi bi-x "></i>
+                        <button class="btn btn-sm text-danger">
+                            <i class="bi bi-x"></i>
                         </button>
                     </form>
                     {{--                    MODAL--}}
@@ -45,11 +59,13 @@
                                 <div class="modal-body">
                                     <form id="formChangeTitle-{{$category->id}}"
                                           action="{{ route('admin.categories.update',['category'=>$category->id]) }}"
-                                          method="post">
+                                          method="post"
+                                          enctype="multipart/form-data"
+                                    >
                                         @csrf
                                         @method('patch')
                                         <input class="form-control" type="text" name="name" value="{{$category->name}}">
-
+                                        <input type="file" name="image">
                                     </form>
                                 </div>
                                 <div class="modal-footer">
@@ -65,9 +81,14 @@
                 </td>
 
             </tr>
+            <div class="mt-4">
+            </div>
+
         @endforeach
         </tbody>
     </table>
+    {{ $categories->links('pagination::bootstrap-5') }}
+
 @endsection
 
 

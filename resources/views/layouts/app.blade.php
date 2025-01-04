@@ -20,6 +20,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <style>
+
+        .color_grey{
+            color:#595959;
+        }
         .nav-link:hover {
             background-color: white;
             color: black;
@@ -29,9 +33,7 @@
             color: red;
         }
 
-        .yellow-bookmark {
-            color: #595959;
-        }
+
 
         .custom-dropdown {
             min-width: 200px;
@@ -60,6 +62,12 @@
             background-color: #fff;
             border: 1px solid #ccc;
             border-radius: 0 0 5px 5px;
+        }
+
+        .sub_button_custom{
+            --bs-btn-padding-y: .25rem;!important;
+            --bs-btn-padding-x: .5rem;!important;
+            --bs-btn-font-size: .75rem;!important;
         }
 
     </style>
