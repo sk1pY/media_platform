@@ -101,7 +101,7 @@
         {{-- COMMENTS SECTION --}}
         @foreach($comments as $comment)
 
-            <div class="card border-0 m-2 rounded-4 " style="background-color:whitesmoke		">
+            <div class="card border-0 m-2 rounded-4 " style="background-color:whitesmoke">
                 <div class="card-body">
                     <div class="row align-items-center ">
                         <div class="d-flex align-items-center">
@@ -118,10 +118,10 @@
                     </div>
                     <div class=" d-flex flex-column">
                         <div class="mt-2 me-3">{{ $comment->text }}</div>
-                        <div class="m-2 fs-5 comment">
+                        @auth
+                        <div class="d-flex m-2 fs-5 comment">
                             <div class="likedislike-comment-button" data-comment-id="{{ $comment->id }}">
-                                <i class="like_button bi
-                            {{ in_array($comment->id,$likeCommentUser)? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up' }}"
+                                <i class="me-2 like_button bi bi-hand-thumbs-up"
                                    data-type="like"
                                    data-comment-id="{{ $comment->id }}"
                                    style="cursor: pointer">
@@ -129,8 +129,7 @@
                                 </i>
                             </div>
                             <div class="likedislike-comment-button" data-comment-id="{{ $comment->id }}">
-                                <i class="dislike_button bi
-                            {{ in_array($comment->id,$dislikeCommentUser)? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down' }}"
+                                <i class="dislike_button bi bi-hand-thumbs-down"
                                    data-type="dislike"
                                    data-comment-id="{{ $comment->id }}"
                                    style="cursor: pointer">
@@ -138,14 +137,12 @@
                                 </i>
                             </div>
                         </div>
-
+                        @endauth
                     </div>
                 </div>
             </div>
+        @endforeach
     </div>
-    @endforeach
-    </div>
-
     {{-- END MAIN CARDS CONTENT --}}
     <script>
         var likeUrl = "{{ route('comments.like') }}";

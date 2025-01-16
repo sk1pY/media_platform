@@ -57,6 +57,8 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     Route::resource('posts', \App\Http\Controllers\Admin\PostController::class);
     Route::resource('/comments',\App\Http\Controllers\Admin\CommentController::class );
 
+
+
 });
 //BOOKMARKS
 Route::get('/bookmarks', [BookmarksController::class, 'index'])->name('bookmarks.index');

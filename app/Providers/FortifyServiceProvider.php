@@ -33,21 +33,8 @@ class FortifyServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-
-        Fortify::createUsersUsing(CreateNewUser::class);
-        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
-        Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
-        Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
-
-        RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
-
-            return Limit::perMinute(5)->by($throttleKey);
-        });
-
-
-        RateLimiter::for('two-factor', function (Request $request) {
-            return Limit::perMinute(5)->by($request->session()->get('login.id'));
+        Fortify::loginView(function () {
+            return response()->json(['message' => 'Login page not available. Use POST /login for API.'], 404);
         });
         Fortify::loginView(function () {
             return view('auth.login');
@@ -55,6 +42,25 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::registerView(function () {
             return view('auth.register');
         });
+        RateLimiter::for('login', function (Request $request) {
+            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
+
+            return Limit::perMinute(5)->by($throttleKey);
+        });
+        Fortify::authenticateUsing(function (\Illuminate\Http\Request $request) {
+            $user = \App\Models\User::where('email', $request->email)->first();
+
+            if ($user && \Hash::check($request->password, $user->password)) {
+                return $user;
+            }
+
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        });
+        Fortify::createUsersUsing(CreateNewUser::class);
+//        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
+//        Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
+//        Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+
 
         Fortify::requestPasswordResetLinkView(function () {
             return view('auth.forgot-password');

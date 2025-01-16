@@ -1,7 +1,7 @@
 @extends('admin.layouts.index')
 @section('content')
 
-    <table class="table table-sm table-bordered table-striped ">
+    <table id="table" class="table table-sm table-bordered table-striped ">
         <thead>
         <tr>
             <th scope="col">#</th>
@@ -10,13 +10,14 @@
             <th scope="col">#</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="tablecontents">
         @foreach( $users as $user )
             <tr>
                 <th scope="row">{{$user -> id}}</th>
                 <td>{{$user -> name}}</td>
                 <td>
-                    <form action="{{ route('admin.role_for_user.update',['user'=>$user->id] ) }}" method="post" class="d-flex align-items-center gap-2">
+                    <form action="{{ route('admin.role_for_user.update',['user'=>$user->id] ) }}" method="post"
+                          class="d-flex align-items-center gap-2">
                         @csrf
                         @method('PUT')
                         <select name="role" class="form-select form-select-sm">
@@ -41,10 +42,12 @@
                 </td>
 
             </tr>
-        </tbody>
-
         @endforeach
-
+        </tbody>
     </table>
+    <div class="mt-4">
+        {{ $users->links('pagination::bootstrap-5') }}
+    </div>
+    <script src="{{asset('js/table.js')}}"></script>
 
 @endsection

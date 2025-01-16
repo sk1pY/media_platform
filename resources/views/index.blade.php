@@ -31,6 +31,9 @@
     @include('includes/card')
 
 {{--    SCRIPTS--}}
+    <script>
+        var likePostUrl = '{{ route("like_post") }}';
+    </script>
     <script src="{{ asset('js/like.js') }}"></script>
     <script src="{{ asset('js/bookmark.js') }}"></script>
     <script> var subAuthors = @json($subAuthors); </script>

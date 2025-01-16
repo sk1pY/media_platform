@@ -22,18 +22,22 @@
         </div>
 
     </form>
-    <table class="table table-sm table-bordered table-striped small">
+    <table id="table" class="table table-sm table-bordered table-striped small">
         <thead>
         <tr class="align-middle">
             <th scope="col" class="col-8 text-center">имя</th>
+            <th scope="col" class="col-8 text-center">дата </th>
             <th scope="col" class="col-3 text-center">Изменить/Удалить</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="tablecontents">
         @foreach( $categories as $category )
             <tr class="align-middle ">
                 <td class="ps-3 "><a href="{{ route('categories.show',['category' => $category->id]) }}"
                                 class="text-decoration-none text-dark ">{{$category -> name}}</a>
+                </td>
+                <td>
+                    {{$category->created_at}}
                 </td>
                 <td class="d-flex justify-content-center">
                     <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#modal-{{ $category->id }}">
@@ -88,6 +92,7 @@
         </tbody>
     </table>
     {{ $categories->links('pagination::bootstrap-5') }}
+ <script src="{{asset('js/table.js')}}"></script>
 
 @endsection
 

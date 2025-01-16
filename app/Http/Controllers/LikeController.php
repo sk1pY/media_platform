@@ -32,7 +32,7 @@ class LikeController extends Controller
             return response()->json(['success' => true, 'likes' => $post->likes, 'liked' => false]);
         } else {
 
-            $post->likes()->create(['user_id'=>$userId]);
+            $post->likes()->create(['user_id'=>$userId,'is_liked' => true]);
             $post->increment('likes');
 
             return response()->json(['success' => true, 'likes' => $post->likes, 'liked' => true]);

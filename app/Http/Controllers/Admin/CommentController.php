@@ -3,22 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 
-class UserController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = User::with('roles')->paginate(10);
-        $roles = Role::get();
-        return view('admin.users', compact('users','roles'));
-
-
+        $comments = Comment::paginate(9);
+        return view('admin.comment', compact('comments'));
     }
 
     /**
@@ -64,9 +60,9 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( User $user)
+    public function destroy(Comment $comment)
     {
-        $user->delete();
-        return redirect()->route('admin.users.index');
+        $comment->delete();
+        return redirect()->back();
     }
 }

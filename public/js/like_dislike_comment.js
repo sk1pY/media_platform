@@ -8,7 +8,6 @@ $(document).ready(function () {
 
         var commentButtonLike = $(this).find('.like_button');
         var commentButtonDislike = $(this).find('.dislike_button');
-        console.log(commentButtonDislike);
         $.ajax({
             method: 'post',
             url: likeUrl,
@@ -21,19 +20,8 @@ $(document).ready(function () {
                 if (response.success) {
                     likeCountSpan.text(response.like);
                     dislikeCountSpan.text(response.dislike);
-                    if (response.liked) {
-                        commentButtonLike.addClass('bi bi-hand-thumbs-up-fill').removeClass('bi bi-hand-thumbs-up');
-                        commentButtonDislike.addClass('bi bi-hand-thumbs-down').removeClass('bi bi-hand-thumbs-down-fill');
-                    } else {
-                        commentButtonLike.addClass('bi bi-hand-thumbs-up').removeClass('bi bi-hand-thumbs-up-fill');
-                    }
-                    if (response.disliked) {
-                        commentButtonDislike.addClass('bi bi-hand-thumbs-down-fill').removeClass('bi bi-hand-thumbs-up');
-                        commentButtonLike.addClass('bi bi-hand-thumbs-up').removeClass('bi bi-hand-thumbs-up-fill');
-                    } else {
-                        commentButtonDislike.addClass('bi bi-hand-thumbs-down').removeClass('bi bi-hand-thumbs-down-fill');
 
-                    }
+
                 } else {
                     $('#message').text(response.message).css('color', 'red');
                 }

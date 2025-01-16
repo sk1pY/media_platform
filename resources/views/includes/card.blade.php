@@ -68,7 +68,7 @@
                          data-post-id="{{ $post->id }}">
                         <i class="fa-regular fa-heart red-heart
                         {{ in_array($post->id, $likedPostUser) ? ' fa-solid red-heart' : '' }}">
-                            <span class="like-count">{{ $post->likes_count }}</span>
+                            <span class="like-count">{{ $post->likes }}</span>
 
                         </i>
                     </div>

@@ -9,6 +9,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
+    <!-- Подключение jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Подключение DataTables CSS и JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <!-- Подключение jQuery UI для sortable -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
     <title>Admin</title>
     <style>
         body {
@@ -101,15 +112,6 @@
                     <div class="accordion-body">
                         <li>
                             <a href="#" class="nav-link text-white">
-                                Удаление или редактирование контента
-                            </a>
-
-                        </li>
-                    </div>
-
-                    <div class="accordion-body">
-                        <li>
-                            <a href="#" class="nav-link text-white">
                                 Фильтры
                             </a>
 
@@ -183,7 +185,7 @@
 
     </div>
 
-    <div class="col-9">
+    <div class="col-8">
         @yield('content')
     </div>
 </div>
