@@ -21,6 +21,8 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/popular', 'popular')->name('popular');
     Route::delete('/delete/{id}', 'delete')->name('delete')->where('id', '[0-9]+');
 
+    Route::post('/posts/{post}/hide', 'hide')->name('posts.hide');
+
 });
 //COMMENTARIES
 Route::post('/store_comment', [CommentController::class, 'store'])->name('comment.store');
@@ -52,14 +54,16 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     Route::put('/roles_and_permissions/{role}', [RolePermissionController::class, 'roles_and_permissions_update'])->name('roles_and_permissions.update');
     Route::put('/role_for_user/{user}', [RolePermissionController::class, 'role_for_user'])->name('role_for_user.update');
     Route::delete('/role_for_user/{user}', [RolePermissionController::class, 'role_for_user'])->name('role_for_user.update');
+
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::put('/posts/{user}/update-status', [\App\Http\Controllers\Admin\UserController::class,'update_status'])->name('users.update.status');
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
     Route::resource('posts', \App\Http\Controllers\Admin\PostController::class);
+    Route::put('/posts/{post}/update-status', [\App\Http\Controllers\Admin\PostController::class,'update_status'])->name('posts.update.status');
     Route::resource('/comments',\App\Http\Controllers\Admin\CommentController::class );
-
-
-
 });
+
+
 //BOOKMARKS
 Route::get('/bookmarks', [BookmarksController::class, 'index'])->name('bookmarks.index');
 Route::post('/bookmarks/add', [BookmarksController::class, 'add'])->name('bookmarks.add');
@@ -67,4 +71,11 @@ Route::post('/bookmarks/destroy/{id}', [BookmarksController::class, 'destroy'])-
 
 //SUBSCRIBE
 Route::post('/subscribe', [SubscribeController::class, 'add'])->name('subscribe');
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Route::fallback(function(){
+//   return view('error.error');
+//});
+
+
 

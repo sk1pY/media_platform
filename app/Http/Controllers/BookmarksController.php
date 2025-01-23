@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class BookmarksController extends Controller
 {
-    public function index(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application
+    public function index(): View|Factory|Application
     {
         $bookmarks = Bookmark::with('user', 'post')->get();
         return view('bookmarks', compact('bookmarks'));
@@ -16,7 +21,7 @@ class BookmarksController extends Controller
 
     }
 
-    public function add(Request $request): \Illuminate\Http\JsonResponse
+    public function add(Request $request): JsonResponse
     {
         $postId = $request->input('bookmark_id');
 
@@ -26,14 +31,17 @@ class BookmarksController extends Controller
             $bookmark->delete();
             return response()->json(['success' => true, 'bookmark' => false]);
         }
-        Bookmark::create([
-            'user_id' => Auth::user()->id,
-            'post_id' => $postId]);
+
+            Bookmark::create([
+                'user_id' => Auth::id(),
+                'post_id' => $postId]);
+
+
         return response()->json(['success' => true, 'bookmark' => true]);
 
     }
 
-    public function destroy($id): \Illuminate\Http\RedirectResponse
+    public function destroy($id): RedirectResponse
     {
 
         Bookmark::find($id)->delete();

@@ -5,8 +5,9 @@
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">имя</th>
+            <th scope="col">Name</th>
             <th scope="col">Роль</th>
+            <th scope="col">#</th>
             <th scope="col">#</th>
         </tr>
         </thead>
@@ -31,7 +32,18 @@
                         <button class="btn btn-secondary btn-sm" type="submit">ok</button>
                     </form>
                 </td>
-
+                <td class="">
+                    <form action="{{route('admin.users.update.status',$user->id)}}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-check form-switch ">
+                            <input
+                                data-id="{{$user->id}}"
+                                class="js-switch form-check-input" type="checkbox" role="switch"
+                                {{$user->status? "checked":"   "}}>
+                        </div>
+                    </form>
+                </td>
                 <td>
                     <form action="{{ route('admin.users.destroy',['user'=> $user->id]) }}" method="post">
                         @csrf
@@ -48,6 +60,17 @@
     <div class="mt-4">
         {{ $users->links('pagination::bootstrap-5') }}
     </div>
+
+    <script>
+        $('.js-switch').click(function () {
+            let id = $(this).data('id');
+
+            const url = "{{ route('admin.users.update.status', ':id') }}".replace(':id', id);
+            window.url = url;
+        });
+    </script>
+    <script src="{{asset('js/switch.js')}}"></script>
+
     <script src="{{asset('js/table.js')}}"></script>
 
 @endsection

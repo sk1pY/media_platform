@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -17,10 +18,20 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $imageFiles = Storage::files('public/categoryImages');
-        $randomImage = $imageFiles[array_rand($imageFiles)];
+        $sourcePath = database_path('seeders/categoryImages');
+        $destinationPath = storage_path('app/public/categoryImages');
 
-        $fileName = basename($randomImage);
+        if (!File::exists($destinationPath)) {
+            File::makeDirectory($destinationPath, 0755, true);
+        }
+
+        $files = File::files($sourcePath);
+
+
+        foreach ($files as $file) {
+            $destination = $destinationPath . '/' . basename($file);
+            File::copy($file->getPathname(), $destination);
+        }
 
         $categories = [
             "Технологии",
@@ -57,7 +68,7 @@ class CategoryFactory extends Factory
 
         return [
             'name' => $this->faker->unique()->randomElement($categories),
-            'image' => $fileName,
+            'image' => $files ? $files[array_rand($files)]->getFilename() : null,
         ];
     }
 }

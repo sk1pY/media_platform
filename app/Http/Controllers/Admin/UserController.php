@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -60,7 +61,12 @@ class UserController extends Controller
     {
         //
     }
-
+    public function update_status(Request $request, User $user)
+    {
+        $status = $request['status'];
+        $user->update(['status' => $status]);
+        return response()->json(['success' => 'User status updated successfully.','status' => $status]);
+    }
     /**
      * Remove the specified resource from storage.
      */

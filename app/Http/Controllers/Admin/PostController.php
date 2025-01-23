@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('category')->orderBy('created_at','desc')->paginate(10);
+        $posts = Post::with('category')->orderBy('created_at', 'desc')->paginate(10);
         $categories = Category::all();
         return view('admin.posts', compact('posts', 'categories'));
     }
@@ -73,7 +73,7 @@ class PostController extends Controller
             $fileName = basename($path);
             $validated['image'] = $fileName;
 
-        }else {
+        } else {
             $validated['image'] = $post->image;
 
         }
@@ -82,6 +82,13 @@ class PostController extends Controller
             ['user_id' => $request->input('user_id')]));
 
         return redirect()->route('admin.posts.index');
+    }
+
+    public function update_status(Request $request, Post $post)
+    {
+        $status = $request['status'];
+        $post->update(['status' => $status]);
+        return response()->json(['success' => 'User status updated successfully.','status' => $status]);
     }
 
     /**

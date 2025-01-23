@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -25,17 +26,31 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $imageFiles = Storage::files('public/avatarImages');
-        $randomImage = $imageFiles[array_rand($imageFiles)];
-        $fileName = basename($randomImage);
+        $sourcePath = database_path('seeders/avatarImages');
+        $destinationPath = storage_path('app/public/avatarImages');
+        if (!File::exists($destinationPath)) {
+            File::makeDirectory($destinationPath, 0755, true);
+        }
+
+        $files = File::files($sourcePath);
+
+
+        foreach ($files as $file) {
+            $destination = $destinationPath . '/' . basename($file);
+            File::copy($file->getPathname(), $destination);
+        }
+
+
+
 
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'image' => $fileName,
+            'image' => $files ? $files[array_rand($files)]->getFilename() : null,
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'status' => 1
         ];
     }
 

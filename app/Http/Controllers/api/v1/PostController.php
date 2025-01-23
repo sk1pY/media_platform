@@ -87,11 +87,7 @@ class PostController extends Controller
             'category_id' => 'required|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        if ($validatedData->fails()) {
-            \Log::error('Validation errors:', $validator->errors()->toArray());
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-        $user = Auth::user();
+
 
         if ($request->hasFile('image')) {
             if ($post->image) {

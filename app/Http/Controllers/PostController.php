@@ -2,39 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bookmark;
 use App\Models\Category;
 use App\Models\Comment;
-use App\Models\Like;
+use App\Models\HiddenPost;
 use App\Models\Subscribe;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
+
 
 class PostController extends Controller
 {
     public function index(Request $request)
     {
         $categories = Category::get();
-        $posts = Post::withCount(['comments', 'likes'])->orderBy('created_at', 'DESC')->get();
+        $posts = Post::where('status', 1)->withCount(['comments', 'likes'])->get();
+
+
+        if (Auth::check()) {
+
+            $postIds = $posts->pluck('id')->toArray();
+            $hiddenPostIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id')->toArray();
+
+            $resultArrayIds = collect($postIds)->reject(function ($value) use ($hiddenPostIds) {
+                return in_array($value, $hiddenPostIds);
+            })->all();
+            $posts = Post::whereIn('id', $resultArrayIds)->where('status', 1)->get();
+            $postsForFilters = Post::whereIn('id', $resultArrayIds)->where('status', 1);
+
+        }else{
+            $postsForFilters = Post::where('status', 1)->withCount(['comments', 'likes']);
+        }
+
 
         if ($request->filled('filter')) {
-            $query = Post::withCount(['comments', 'likes']);
 
             switch ($request->input('filter')) {
                 case 'popular':
-                    $query->withCount(['comments', 'likes'])->orderBy('comments_count', 'desc');
+                    $postsForFilters->orderBy('views', 'desc');
                     break;
                 case 'recent':
-                    $query->withCount(['comments', 'likes'])->orderBy('created_at', 'desc');
+                    $postsForFilters->orderBy('created_at', 'desc');
                     break;
                 case 'old':
-                    $query->withCount(['comments', 'likes'])->orderBy('created_at', 'asc');
+                    $postsForFilters->orderBy('created_at', 'asc');
             }
-            $posts = $query->get();
-
+            $posts = $postsForFilters->get();
         }
 
 
@@ -165,11 +181,35 @@ class PostController extends Controller
         return response()->json(['views' => $post->views]);
     }
 
-    public function error()
-    {
-        return 'eror';
 
+    public function hide(Request $request, Post $post)
+    {
+
+        if ($request['hidden']) {
+            $hiddenPost = HiddenPost::where(['user_id' => Auth::id(), 'post_id' => $post->id])->first();
+            if ($hiddenPost) {
+                $post->hiddenPosts()->detach(Auth::id());
+            } else {
+                $post->hiddenPosts()->attach(Auth::id());
+            }
+        }
+        return redirect()->route('index');
     }
 
+    public function invitations(Request $request, $invitation, $answer)
+    {
+        if ($answer === 'yes') {
+            return response()->json([
+                'message' => 'Спасибо за принятие приглашения!',
+                'invitation_id' => $invitation,
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Вы отклонили приглашение.',
+                'invitation_id' => $invitation,
+            ]);
+        }
 
+
+    }
 }

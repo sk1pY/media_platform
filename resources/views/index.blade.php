@@ -17,12 +17,12 @@
                     onchange="this.form.submit()">
 
                 <option value="">Выберите фильтр</option>
-                <option value="recent" {{ request('filter') === 'recent' ? 'selected' : '' }} >Самые новые
+                <option value="recent" {{ request('filter') === 'recent' ? 'selected' : '' }} >Новые
                 </option>
-                <option value="old" {{ request('filter') === 'old' ? 'selected' : '' }}> Самые старые
+                <option value="old" {{ request('filter') === 'old' ? 'selected' : '' }}> Старые
                 </option>
-{{--                <option value="popular" {{ request('filter') === 'popular' ? 'selected' : '' }}>Популярные--}}
-                {{--                </option>--}}
+                <option value="popular" {{ request('filter') === 'popular' ? 'selected' : '' }}>Самые популярные
+                                </option>
             </select>
         </form>
     </div>

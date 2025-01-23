@@ -19,7 +19,8 @@ class Post extends Model
         'category_id',
         'user_id',
         'image',
-        'likes'
+        'likes',
+        'status'
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -40,6 +41,10 @@ class Post extends Model
     public function likes()
     {
         return $this->morphMany(Like::class,'likeable');
+    }
+
+    public function hiddenPosts(){
+        return $this->belongsToMany(User::class,'users_hidden_posts');
     }
 
 

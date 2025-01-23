@@ -8,7 +8,7 @@
                         src="{{$post->user->image? Storage::url('avatarImages/'.$post->user->image):asset('imageAvatar/def.jpg') }}"
                         class="rounded-circle"
                         style="width: 45px; height: 45px;"
-                        alt="...">
+                        alt="{{Storage::url('avatarImages/'.$post->user->image)}}">
                 </div>
                 <div class="col p-0">
                     <div><a class="fw-bold link-dark text-decoration-none "
@@ -43,7 +43,11 @@
                                     class="bi bi-three-dots text-center" style="font-size: 27px;"></i></a>
 
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Скрыть</a></li>
+                                <li>
+                                    <form action="{{route('posts.hide',$post->id)}}" method="post">
+                                        @csrf
+                                        <input class="dropdown-item" type="submit" name="hidden" value="Скрыть">
+                                    </form>
                                 <li><a class="dropdown-item" href="#">Пожаловаться</a></li>
                             </ul>
                         </div>

@@ -91,8 +91,7 @@
                     {{$role->name}}
                 </td>
                 <td>
-                    <form id="formPermission"
-                          action="{{ route('admin.roles_and_permissions.update',['role'=>$role->id]) }}"
+                    <form action="{{ route('admin.roles_and_permissions.update',['role'=>$role->id]) }}"
                           method="post">
                         @csrf
                         @method('PUT')
@@ -100,19 +99,14 @@
                         @foreach($permissions as $permission)
 
                             <div class="form-check form-check-inline">
-                                <input id="permission_{{ $permission->id }}" class="form-check-input" type="checkbox"
-
-                                       name="permissions[]"
+                                <input class=" js-role-update form-check-input"
+                                       data-id ="{{$role->id}}"
+                                       type="checkbox"
                                        value="{{ $permission->id }}"
-                                       @if($role->permissions->contains($permission)) checked @endif
-
-                                >
+                                       @if($role->permissions->contains($permission)) checked @endif>
                                 <label class="form-check-label" for="inlineCheckbox1">{{$permission->name}}</label>
                             </div>
-
                         @endforeach
-                        <button type="submit" class="btn btn-sm btn-primary">Принять</button>
-
                     </form>
                 </td>
 
@@ -120,8 +114,17 @@
 
             @endforeach
 
-    </tbody>
+        </tbody>
 
-</table>
+    </table>
+    <script>
+        $('.js-role-update').click(function () {
+            let id = $(this).data('id');
+
+            const url = "{{ route('admin.roles_and_permissions.update', ':id') }}".replace(':id', id);
+            window.url = url;
+        });
+    </script>
+<script src="{{asset('js/role_update.js')}}"></script>
 
 @endsection

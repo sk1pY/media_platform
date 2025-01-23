@@ -14,14 +14,16 @@
         <tr class="text-center align-middle">
             <th scope="col" class="col-6">Title</th>
             <th scope="col" class="col-3">Author</th>
-            <th scope="col" class="col-3">Actions</th>
+            <th scope="col" class="col-1">status</th>
+            <th scope="col" class="col">Actions</th>
         </tr>
         </thead>
         <tbody id="tablecontents">
         @foreach($posts as $post)
             <tr class="align-middle">
                 <td>
-                    <img alt="logo" src="{{ Storage::url('postImages/' . $post->image) }}" style="width: 30px; height: 30px;">
+                    <img alt="logo" src="{{ Storage::url('postImages/' . $post->image) }}"
+                         style="width: 30px; height: 30px;">
                     <a class="text-decoration-none text-black" href="{{ route('posts.show', ['post' => $post->id]) }}">
                         {{ $post->title }}
                     </a>
@@ -29,8 +31,21 @@
                 <td class="text-center">
                     {{ $post->user ? $post->user->surname . ' ' . $post->user->name : 'Без автора' }}
                 </td>
+                <td class="">
+                    <form action="{{route('admin.posts.update.status',$post->id)}}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-check form-switch ">
+                            <input
+                                data-id="{{$post->id}}"
+                                class="js-switch form-check-input" type="checkbox" role="switch"
+                                 {{$post->status? "checked":"   "}}>
+                        </div>
+                    </form>
+                </td>
                 <td class="text-center">
-                    <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#update{{ $post->id }}">
+                    <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
+                            data-bs-target="#update{{ $post->id }}">
                         <i class="bi bi-pencil-square"></i>
                     </button>
                     <form action="{{ route('admin.posts.destroy', $post->id) }}" method="post" style="display: inline;">
@@ -43,7 +58,8 @@
                 </td>
             </tr>
             <!-- Modal -->
-            <div class="modal fade" id="update{{ $post->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade" id="update{{ $post->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -51,29 +67,36 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ route('admin.posts.update', ['post' => $post->id]) }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('admin.posts.update', ['post' => $post->id]) }}" method="post"
+                                  enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <label for="title" class="form-label">Title</label>
-                                <input id="title" class="form-control form-control-sm" name="title" value="{{ old('title', $post->title) }}">
+                                <input id="title" class="form-control form-control-sm" name="title"
+                                       value="{{ old('title', $post->title) }}">
                                 <input type="hidden" name="user_id" value="{{ $post->user->id }}">
                                 <label for="description" class="form-label">Описание</label>
-                                <textarea class="form-control form-control-sm" id="description" name="description" rows="3">{{ $post->description }}</textarea>
+                                <textarea class="form-control form-control-sm" id="description" name="description"
+                                          rows="3">{{ $post->description }}</textarea>
                                 <label for="category" class="form-label">Категория</label>
                                 <select class="form-control form-control-sm" name="category_id">
                                     <option value="" {{ !$post->category_id ? 'selected' : '' }}>Без категории</option>
                                     @foreach($categories as $cat)
-                                        <option value="{{ $cat->id }}" {{ $post->category && $post->category->id == $cat->id ? 'selected' : '' }}>
+                                        <option
+                                            value="{{ $cat->id }}" {{ $post->category && $post->category->id == $cat->id ? 'selected' : '' }}>
                                             {{ $cat->name }}
                                         </option>
                                     @endforeach
                                 </select>
                                 <label for="image" class="form-label">Изображение</label>
                                 <input type="file" class="form-control form-control-sm" name="image">
-                                <img src="{{ Storage::url('postImages/' . $post->image) }}" alt="Изображение" style="width: 30px; height: 30px;">
+                                <img src="{{ Storage::url('postImages/' . $post->image) }}" alt="Изображение"
+                                     style="width: 30px; height: 30px;">
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-success btn-sm">Принять</button>
-                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Закрыть</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                                        Закрыть
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -86,8 +109,15 @@
     <div class="mt-4">
         {{ $posts->links('pagination::bootstrap-5') }}
     </div>
+    <script>
+        $('.js-switch').click(function () {
+            let id = $(this).data('id');
+
+            const url = "{{ route('admin.posts.update.status', ':id') }}".replace(':id', id);
+            window.url = url;
+        });
+    </script>
     <script src="{{asset('js/table.js')}}"></script>
-
-
+    <script src="{{asset('js/switch.js')}}"></script>
 
 @endsection
