@@ -15,9 +15,7 @@
                     style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 1000; display: none;"></ul>
             </div>
         </div>
-        @role('admin')
-        <a href="{{ route('admin.index')}}" class="nav-item nav-link me-3">ADMIN</a>
-        @endrole
+
         @guest
             <a href="{{ route('register') }}" class="nav-item nav-link me-3">Регистрация</a>
             <a href="{{ route('login') }}" class="nav-item nav-link me-3">Войти</a>
@@ -27,8 +25,9 @@
                 <i class="fa-regular fa-bell fa-lg" style="width: 40px; "></i>
                 <button type="button" class="btn me-3 bg-white rounded-4 text-start p-2" data-bs-toggle="modal"
                         data-bs-target="#createPost" data-bs-dismiss="modal">
-                    <i class="fa-solid fa-pencil me-1   "></i>
-                    <span class="text-black " style="font-family: Arial, Helvetica, sans-serif;">Написать</span>
+                    <i class="bi bi-pencil-square me-1 "></i>
+
+                    <span class="text-black " style="font-family: Arial, Helvetica, sans-serif;">Создать</span>
                 </button>
             @endcan
             {{--DROPDOWN MENU PROFILE--}}
@@ -43,7 +42,7 @@
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
 
-                <ul class="dropdown-menu dropdown-menu-end custom-dropdown mt-4" style="width: 200px; height: 200px">
+                <ul class="dropdown-menu dropdown-menu-end custom-dropdown mt-4 h-auto w-auto">
                     <a href="{{ route('home.profile.show',['user'=> Auth::user() -> id]) }}"
                        class="link-secondary text-decoration-none text-dark">
                         <li class="d-flex align-items-center">
@@ -65,6 +64,14 @@
 
                             <i class="fa-regular fa-bookmark me-2"></i>
                             Закладки
+                        </li>
+                    </a>
+                    <a href="{{ route('hidden_posts') }}" class="link-secondary text-decoration-none text-dark">
+
+                        <li class="d-flex align-items-center">
+
+                            <i class="bi bi-eye-slash me-2"></i>
+                            Скрытые посты
                         </li>
                     </a>
 
@@ -130,8 +137,8 @@
 </div>
 {{-- END MODAL WINDOW --}}
 {{--CATEGORIES--}}
-<div>
-    <div class="position-sticky" style="top: 75px;  background-color: #f2f2f2;">
+    <div class="sticky-top" style="top: 70px;">
+{{--    <div class="position-sticky" style="top: 75px;  background-color: #f2f2f2;">--}}
         <ul class="nav flex-column">
             <a style="font-size: 1.1rem;" class=" rounded-pill  nav-link active  text-dark" aria-current="page"
                href="{{ route('popular') }}">
@@ -167,7 +174,6 @@
         </ul>
         @endif
     </div>
-</div>
 {{--END CATEGORIES--}}
 {{--SEARCH JS--}}
 <script type="text/javascript">
@@ -187,13 +193,7 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            // success: function (response) {
-            //     console.log('Success:', response);
-            // },
-            // error: function (xhr, status, error) {
-            //     console.error('Error:', status, error);
-            //     console.error('Response:', xhr.responseText);
-            // }
+
         });
         $(document).click(function (event) {
             let target = $(event.target);

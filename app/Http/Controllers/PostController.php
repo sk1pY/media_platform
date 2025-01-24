@@ -18,28 +18,25 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
+
         $categories = Category::get();
         $posts = Post::where('status', 1)->withCount(['comments', 'likes'])->get();
 
-
         if (Auth::check()) {
-
             $postIds = $posts->pluck('id')->toArray();
             $hiddenPostIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id')->toArray();
 
             $resultArrayIds = collect($postIds)->reject(function ($value) use ($hiddenPostIds) {
                 return in_array($value, $hiddenPostIds);
             })->all();
-            $posts = Post::whereIn('id', $resultArrayIds)->where('status', 1)->get();
+            $posts = Post::whereIn('id', $resultArrayIds)->where('status', 1)->withCount(['comments', 'likes'])->orderBy('created_at','desc')->get();
             $postsForFilters = Post::whereIn('id', $resultArrayIds)->where('status', 1);
 
         }else{
-            $postsForFilters = Post::where('status', 1)->withCount(['comments', 'likes']);
+            $postsForFilters = Post::where('status', 1);
         }
 
-
         if ($request->filled('filter')) {
-
             switch ($request->input('filter')) {
                 case 'popular':
                     $postsForFilters->orderBy('views', 'desc');
@@ -50,10 +47,9 @@ class PostController extends Controller
                 case 'old':
                     $postsForFilters->orderBy('created_at', 'asc');
             }
-            $posts = $postsForFilters->get();
+
+            $posts = $postsForFilters->withCount(['comments', 'likes'])->get();
         }
-
-
         return view('index', compact('posts', 'categories'));
     }
 
@@ -209,7 +205,22 @@ class PostController extends Controller
                 'invitation_id' => $invitation,
             ]);
         }
+    }
+
+    public function hidden_posts()
+    {
+        $postsIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id');
+        $posts = Post::whereIn('id',$postsIds)->withCount(['comments', 'likes'])->get();
+        return view('hidden_posts', compact('posts'));
+    }
+
+    public function sidebar()
+    {
+
+        $user  = User::where('id', Auth::id())->first();
 
 
+        $countSubAuthors = Subscribe::where('author_id', $id)->count();
+        return view('sidebar', compact('countSubAuthors', 'user'));
     }
 }

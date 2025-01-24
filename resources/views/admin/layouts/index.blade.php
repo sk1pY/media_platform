@@ -14,7 +14,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
     <title>Admin</title>
     <style>
@@ -56,7 +57,7 @@
                         Управление пользователями
                     </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse ms-4" data-bs-parent="#accordionExample">
+                <div id="collapseOne" class="accordion-collapse collapse ms-4 show" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <li>
                             <a href="{{ route('admin.users.index') }}" class="nav-link text-white">
@@ -70,13 +71,13 @@
                             </a>
                         </li>
                     </div>
-{{--                    <div class="accordion-body">--}}
-{{--                        <li>--}}
-{{--                            <a href="#" class="nav-link text-white">--}}
-{{--                                Редактирование профилей пользователей--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                    </div>--}}
+                    {{--                    <div class="accordion-body">--}}
+                    {{--                        <li>--}}
+                    {{--                            <a href="#" class="nav-link text-white">--}}
+                    {{--                                Редактирование профилей пользователей--}}
+                    {{--                            </a>--}}
+                    {{--                        </li>--}}
+                    {{--                    </div>--}}
                 </div>
             </div>
             <div class="accordion-item">
@@ -87,7 +88,7 @@
                         Модерация контента
                     </button>
                 </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse ms-4" data-bs-parent="#accordionExample">
+                <div id="collapseTwo" class="accordion-collapse collapse ms-4 show" data-bs-parent="#accordionExample">
 
                     <div class="accordion-body ">
                         <li>
@@ -100,19 +101,27 @@
                     <div class="accordion-body ">
                         <li>
                             <a href="{{ route('admin.comments.index') }}" class="nav-link text-white">
-                                Просмотр списка  комментариев
+                                Просмотр списка комментариев
                             </a>
 
                         </li>
                     </div>
-                    <div class="accordion-body">
+                    <div class="accordion-body ">
                         <li>
-                            <a href="#" class="nav-link text-white">
-                                Фильтры
+                            <a href="{{ route('admin.complains.index') }}" class="nav-link text-white">
+                                Просмотр списка жалоб
                             </a>
 
                         </li>
                     </div>
+                    {{--                    <div class="accordion-body">--}}
+                    {{--                        <li>--}}
+                    {{--                            <a href="#" class="nav-link text-white">--}}
+                    {{--                                Фильтры--}}
+                    {{--                            </a>--}}
+
+                    {{--                        </li>--}}
+                    {{--                    </div>--}}
                 </div>
             </div>
             <div class="accordion-item">
@@ -123,7 +132,8 @@
                         Управление категориями
                     </button>
                 </h2>
-                <div id="collapseThree" class="accordion-collapse collapse  ms-4" data-bs-parent="#accordionExample">
+                <div id="collapseThree" class="accordion-collapse collapse  ms-4 show"
+                     data-bs-parent="#accordionExample">
 
                     <div class="accordion-body">
                         <li>
@@ -135,44 +145,44 @@
                     </div>
                 </div>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header nav-link text-white d-flex">
-                    <i class="bi bi-plus-circle-dotted me-2" width="16" height="16"></i>
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                        Технические настройки
-                    </button>
-                </h2>
-                <div id="collapseFour" class="accordion-collapse collapse ms-4" data-bs-parent="#accordionExample">
+            {{--            <div class="accordion-item">--}}
+            {{--                <h2 class="accordion-header nav-link text-white d-flex">--}}
+            {{--                    <i class="bi bi-plus-circle-dotted me-2" width="16" height="16"></i>--}}
+            {{--                    <button class="accordion-button" type="button" data-bs-toggle="collapse"--}}
+            {{--                            data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">--}}
+            {{--                        Технические настройки--}}
+            {{--                    </button>--}}
+            {{--                </h2>--}}
+            {{--                <div id="collapseFour" class="accordion-collapse collapse ms-4" data-bs-parent="#accordionExample">--}}
 
-                    <div class="accordion-body">
-                        <li>
-                            <a href="#" class="nav-link text-white">
-                                Управление настройками сайта (логотип, описание, ключевые слова)
-                            </a>
+            {{--                    <div class="accordion-body">--}}
+            {{--                        <li>--}}
+            {{--                            <a href="#" class="nav-link text-white">--}}
+            {{--                                Управление настройками сайта (логотип, описание, ключевые слова)--}}
+            {{--                            </a>--}}
 
-                        </li>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header nav-link text-white d-flex">
-                    <i class="bi bi-plus-circle-dotted me-2" width="16" height="16"></i>
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
-                        Мониторинг активности                    </button>
-                </h2>
-                <div id="collapseFive" class="accordion-collapse collapse ms-4" data-bs-parent="#accordionExample">
+            {{--                        </li>--}}
+            {{--                    </div>--}}
+            {{--                </div>--}}
+            {{--            </div>--}}
+            {{--            <div class="accordion-item">--}}
+            {{--                <h2 class="accordion-header nav-link text-white d-flex">--}}
+            {{--                    <i class="bi bi-plus-circle-dotted me-2" width="16" height="16"></i>--}}
+            {{--                    <button class="accordion-button" type="button" data-bs-toggle="collapse"--}}
+            {{--                            data-bs-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive">--}}
+            {{--                        Мониторинг активности                    </button>--}}
+            {{--                </h2>--}}
+            {{--                <div id="collapseFive" class="accordion-collapse collapse ms-4" data-bs-parent="#accordionExample">--}}
 
-                    <div class="accordion-body">
-                        <li>
-                            <a href="#" class="nav-link text-white">
-                                Базовая статистика по просмотрам и жалобам                            </a>
+            {{--                    <div class="accordion-body">--}}
+            {{--                        <li>--}}
+            {{--                            <a href="#" class="nav-link text-white">--}}
+            {{--                                Базовая статистика по просмотрам и жалобам                            </a>--}}
 
-                        </li>
-                    </div>
-                </div>
-            </div>
+            {{--                        </li>--}}
+            {{--                    </div>--}}
+            {{--                </div>--}}
+            {{--            </div>--}}
 
 
         </ul>

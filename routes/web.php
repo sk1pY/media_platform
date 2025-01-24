@@ -20,8 +20,9 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/newest', 'newest')->name('newest');
     Route::get('/popular', 'popular')->name('popular');
     Route::delete('/delete/{id}', 'delete')->name('delete')->where('id', '[0-9]+');
-
+    Route::get('/hidden_posts', 'hidden_posts')->name('hidden_posts');
     Route::post('/posts/{post}/hide', 'hide')->name('posts.hide');
+
 
 });
 //COMMENTARIES
@@ -61,6 +62,9 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     Route::resource('posts', \App\Http\Controllers\Admin\PostController::class);
     Route::put('/posts/{post}/update-status', [\App\Http\Controllers\Admin\PostController::class,'update_status'])->name('posts.update.status');
     Route::resource('/comments',\App\Http\Controllers\Admin\CommentController::class );
+
+    //Complains
+    Route::resource('complains', \App\Http\Controllers\admin\ComplainController::class);
 });
 
 

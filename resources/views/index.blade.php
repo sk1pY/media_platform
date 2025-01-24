@@ -17,9 +17,9 @@
                     onchange="this.form.submit()">
 
                 <option value="">Выберите фильтр</option>
-                <option value="recent" {{ request('filter') === 'recent' ? 'selected' : '' }} >Новые
+                <option value="recent" {{ request('filter') === 'recent' ? 'selected' : '' }} >Сначала новые
                 </option>
-                <option value="old" {{ request('filter') === 'old' ? 'selected' : '' }}> Старые
+                <option value="old" {{ request('filter') === 'old' ? 'selected' : '' }}> Сначала старые
                 </option>
                 <option value="popular" {{ request('filter') === 'popular' ? 'selected' : '' }}>Самые популярные
                                 </option>
@@ -29,6 +29,7 @@
     {{--FILTER--}}
 
     @include('includes/card')
+
 
 {{--    SCRIPTS--}}
     <script>

@@ -75,14 +75,18 @@
 <body style="background-color: #f2f2f2">
 
 <div class="container" style="margin-top: 80px;">
-    <div class="row">
-        <div class="col-2 p-0 ms-4">
+    <div class="row ">
+        <div class="col-2 p-0 ">
             @include('menu_categories_nav',['categories'=>$categories])
 
         </div>
         <div class="col-7">
             @yield('content')
         </div>
+            <div class="col-3 ">
+                @include('sidebar')
+
+            </div>
     </div>
 </div>
 

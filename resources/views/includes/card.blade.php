@@ -28,16 +28,16 @@
                     </div>
 
                 </div>
+{{--                COMPLAIN HIDDEN--}}
                 @auth
-
-                    <div class="col-auto d-flex ">
+                    <div class="col-auto d-flex">
                         @if($post -> user -> id != Auth::id())
                             <div class="d-flex sub-button me-3" style="height: 35px; cursor: pointer;"
                                  data-author-id="{{ $post->user->id }}">
                                 <button class=" btn btn-secondary  ms-3  "></button>
                             </div>
                         @endif
-                        <div class="dropdown">
+                            <div class="dropdown" style="position: relative; z-index: 1050;">
                             <a style="cursor: pointer; color: #595959;"
                                class="custom-dropdown text-decoration-none " data-bs-toggle="dropdown"><i
                                     class="bi bi-three-dots text-center" style="font-size: 27px;"></i></a>
@@ -48,10 +48,62 @@
                                         @csrf
                                         <input class="dropdown-item" type="submit" name="hidden" value="Скрыть">
                                     </form>
-                                <li><a class="dropdown-item" href="#">Пожаловаться</a></li>
+                                <li><a data-bs-toggle="modal"
+                                       data-bs-target="#complain-post"
+                                       class="dropdown-item" href="#">Пожаловаться</a></li>
+
                             </ul>
                         </div>
                     </div>
+                    {{-- MODAL WINDOW --}}
+                    <div class="modal fade" id="complain-post" tabindex="-1" aria-labelledby="complainModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="complainModalLabel">Пожаловаться на пост</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                                </div>
+                                <form action="{{ route('admin.complains.store') }}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="post_id" value="{{ $post->id }}">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <p>Выберите причину жалобы:</p>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="name" id="reason1" value="Оскорбления и грубое общение">
+                                                <label class="form-check-label" for="reason1">Оскорбления и грубое общение</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="name" id="reason2" value="Преследование и травля">
+                                                <label class="form-check-label" for="reason2">Преследование и травля</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="name" id="reason3" value="Призывы и одобрение насилия">
+                                                <label class="form-check-label" for="reason3">Призывы и одобрение насилия</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="name" id="reason4" value="Запрещенный к публикации контент">
+                                                <label class="form-check-label" for="reason4">Запрещенный к публикации контент</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="name" id="reason5" value="Реклама и ссылки">
+                                                <label class="form-check-label" for="reason5">Реклама и ссылки</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="name" id="reason6" value="Другое">
+                                                <label class="form-check-label" for="reason6">Другое</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                        <button type="submit" class="btn btn-primary">Отправить</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- END MODAL WINDOW --}}
 
                 @endauth
             </div>
@@ -82,7 +134,6 @@
                        class="text-decoration-none">
                         <i class="fa-regular fa-comment me-1 color_grey">
                             <span class="ms-0">{{ $post->comments_count }}</span>
-
                         </i>
                     </a>
                     {{--BOOKMARKS--}}
