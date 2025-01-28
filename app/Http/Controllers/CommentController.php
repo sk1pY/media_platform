@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Like;
-use App\Models\LikeComment;
-use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,16 +12,16 @@ class CommentController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $validated = $request->validate([
             'post_id' => 'required',
             'text' => 'required|string|max:600',
         ]);
 
-        $comment = Comment::create([
-            'post_id' => $validatedData['post_id'],
-            'user_id' => Auth::user()->id,
-            'text' => $validatedData['text'],
-        ]);
+        if(Auth()->check()){
+            $comment = Comment::create($validated);
+        }
+
+
 
         return redirect()->route('posts.show', $comment->post_id);
     }
@@ -75,6 +73,18 @@ class CommentController extends Controller
                 return response()->json(['success' => true, 'dislike'=>$comment->dislike, 'disliked' => true]);
             }
         }
+    }
+
+    public function  index(Request $request)
+    {
+
+        $comments = Comment::where('user_id',Auth::user()->id)->paginate(5);
+        return view('my_comments',compact('comments'));
+    }
+
+    public function destroy(Comment $comment){
+        $comment->delete();
+        return redirect()->route('comments.index');
     }
 
 }

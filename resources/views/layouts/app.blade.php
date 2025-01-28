@@ -19,11 +19,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+body{
+    font-family: 'Roboto', 'Open Sans', Helvetica, Arial, sans-serif;
 
-        .color_grey{
-            color:#595959;
+}
+        .color_grey {
+            color: #595959;
         }
+
         .nav-link:hover {
             background-color: white;
             color: black;
@@ -32,7 +37,6 @@
         .red-heart {
             color: red;
         }
-
 
 
         .custom-dropdown {
@@ -64,15 +68,18 @@
             border-radius: 0 0 5px 5px;
         }
 
-        .sub_button_custom{
-            --bs-btn-padding-y: .25rem;!important;
-            --bs-btn-padding-x: .5rem;!important;
-            --bs-btn-font-size: .75rem;!important;
+        .sub_button_custom {
+            --bs-btn-padding-y: .25rem;
+        !important;
+            --bs-btn-padding-x: .5rem;
+        !important;
+            --bs-btn-font-size: .75rem;
+        !important;
         }
 
     </style>
 </head>
-<body style="background-color: #f2f2f2">
+<body style="background-color: #FAFAFC">
 
 <div class="container" style="margin-top: 80px;">
     <div class="row ">
@@ -83,10 +90,9 @@
         <div class="col-7">
             @yield('content')
         </div>
-            <div class="col-3 ">
-                @include('sidebar')
-
-            </div>
+        <div class="col-3 ">
+            @include('sidebar')
+        </div>
     </div>
 </div>
 

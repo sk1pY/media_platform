@@ -1,7 +1,7 @@
 @auth()
     <div class="sticky-top" style="top: 70px;">
 
-        <div class="card " style="width: 18rem;">
+        <div class="card border-0" style="width: 18rem;">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <img
@@ -13,9 +13,9 @@
                 </div>
 
                 <div class="m-0 p-0 d-flex flex-column gap-2 mt-3">
-                    <a href="#" class="btn btn-light">Комментарии</a>
-                    <a href="#" class="btn btn-light">Сохраненные</a>
-                    <a href="#" class="btn btn-light">Управление подписками</a>
+                    <a href="{{route('comments.index')}}" class="btn btn-light">Комментарии</a>
+                    <a href="{{ route('bookmarks.index') }}" class="btn btn-light">Сохраненные</a>
+                    <a href="{{ route('subscriptions.index') }}" class="btn btn-light">Управление подписками</a>
                     @role('admin')
                     <a href="{{ route('admin.index')}}" class="btn btn-light">Админ панель</a>
                     @endrole

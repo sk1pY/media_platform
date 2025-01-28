@@ -7,7 +7,14 @@
             <span class="fs-1">{{ $category->name }}</span>
         </div>
     </div>
-    @include('includes/card')
+    @forelse($posts as $post)
+        @include('includes/card')
+    @empty
+        <h3>
+            Посты отсутствуют
+            <i class="bi bi-emoji-frown"></i>
+        </h3>
+    @endforelse
 
     <script> var subAuthors = @json($subAuthors); </script>
 

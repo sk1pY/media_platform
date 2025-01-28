@@ -10,7 +10,7 @@ class Subscribe extends Model
     use HasFactory;
     protected $fillable = [
         'author_id',
-        'subscriber_id',
+        'user_id',
     ];
 
 

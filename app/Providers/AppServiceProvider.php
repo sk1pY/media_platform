@@ -50,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
                 $bookmarkPostUser = Auth::user()->bookmarks()->pluck('id')->toArray();
                 $countSubAuthors = Subscribe::where('author_id', Auth::user()->id)->count();
 
-                $subAuthors = Subscribe::where('subscriber_id', Auth::id())->pluck('author_id')->toArray();
+                $subAuthors = Subscribe::where('user_id', Auth::id())->pluck('author_id')->toArray();
             } else {
                 $countSubAuthors = 0;
                 $dislikeCommentUser = [];

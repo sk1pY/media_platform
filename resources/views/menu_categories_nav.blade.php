@@ -22,11 +22,10 @@
         @endguest
         @auth
             @can('create_posts')
-                <i class="fa-regular fa-bell fa-lg" style="width: 40px; "></i>
+{{--                <i class="fa-regular fa-bell fa-lg" style="width: 40px; "></i>--}}
                 <button type="button" class="btn me-3 bg-white rounded-4 text-start p-2" data-bs-toggle="modal"
                         data-bs-target="#createPost" data-bs-dismiss="modal">
                     <i class="bi bi-pencil-square me-1 "></i>
-
                     <span class="text-black " style="font-family: Arial, Helvetica, sans-serif;">Создать</span>
                 </button>
             @endcan
@@ -137,7 +136,7 @@
 </div>
 {{-- END MODAL WINDOW --}}
 {{--CATEGORIES--}}
-    <div class="sticky-top" style="top: 70px;">
+    <div class="" style="top: 70px;">
 {{--    <div class="position-sticky" style="top: 75px;  background-color: #f2f2f2;">--}}
         <ul class="nav flex-column">
             <a style="font-size: 1.1rem;" class=" rounded-pill  nav-link active  text-dark" aria-current="page"

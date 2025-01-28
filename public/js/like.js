@@ -3,7 +3,7 @@ $(document).ready(function () {
         var postId = $(this).data('post-id');
         var button = $(this);
         var likeCountSpan = button.closest('.post').find('.like-count');
-        var heartIcon = button.find('.fa-heart');
+        var heartIcon = button.find('.red-heart');
 
         $.ajax({
             method: 'post',
@@ -16,9 +16,9 @@ $(document).ready(function () {
                 if (response.success) {
                     likeCountSpan.text(response.likes);
                     if (response.liked) {
-                        heartIcon.addClass('fa-solid red-heart');
+                        heartIcon.addClass('bi-heart-fill ').removeClass('bi-heart');
                     } else {
-                        heartIcon.removeClass('fa-solid ');
+                        heartIcon.removeClass('bi-heart-fill').addClass('bi-heart');
                     }
                 } else {
                     $('#message').text(response.message).css('color', 'red');

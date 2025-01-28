@@ -146,7 +146,7 @@ class PostController extends Controller
 
     public function my_feed()
     {
-        $authors_ids = Subscribe::where('subscriber_id', Auth::id())->pluck('author_id');
+        $authors_ids = Subscribe::where('user_id', Auth::id())->pluck('author_id');
 
         $posts = Post::whereIn('user_id', $authors_ids)->withCount(['comments', 'likes'])->get();
 

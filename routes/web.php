@@ -22,12 +22,12 @@ Route::controller(PostController::class)->group(function () {
     Route::delete('/delete/{id}', 'delete')->name('delete')->where('id', '[0-9]+');
     Route::get('/hidden_posts', 'hidden_posts')->name('hidden_posts');
     Route::post('/posts/{post}/hide', 'hide')->name('posts.hide');
-
-
 });
 //COMMENTARIES
 Route::post('/store_comment', [CommentController::class, 'store'])->name('comment.store');
 Route::post('/comments/like_dislike', [CommentController::class, 'like_dislike'])->name('comments.like');
+Route::get('/my_comments', [CommentController::class, 'index'])->name('comments.index');
+Route::delete('/my_comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 //LIKES
 Route::post('/like-post', [LikeController::class, 'like'])->name('like_post');
 //SEARCH
@@ -74,6 +74,7 @@ Route::post('/bookmarks/add', [BookmarksController::class, 'add'])->name('bookma
 Route::post('/bookmarks/destroy/{id}', [BookmarksController::class, 'destroy'])->name('bookmarks.destroy');
 
 //SUBSCRIBE
+Route::get('/subscriptions', [SubscribeController::class, 'index'])->name('subscriptions.index');
 Route::post('/subscribe', [SubscribeController::class, 'add'])->name('subscribe');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
