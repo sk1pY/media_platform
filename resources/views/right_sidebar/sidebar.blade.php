@@ -16,6 +16,7 @@
                     <a href="{{route('comments.index')}}" class="btn btn-light">Комментарии</a>
                     <a href="{{ route('bookmarks.index') }}" class="btn btn-light">Сохраненные</a>
                     <a href="{{ route('subscriptions.index') }}" class="btn btn-light">Управление подписками</a>
+                    <a href="{{ route('hidden_posts') }}" class="btn btn-light"> Скрытые посты  </a>
                     @role('admin')
                     <a href="{{ route('admin.index')}}" class="btn btn-light">Админ панель</a>
                     @endrole
