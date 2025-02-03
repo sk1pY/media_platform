@@ -8,7 +8,7 @@
 
         {{--        SEARCH--}}
         <div class="d-flex justify-content-center align-items-center me-auto search-container">
-            <div class="input-group rounded" style="width: 600px; margin-left: 165px; position: relative;">
+            <div class="input-group rounded" style="width: 500px; margin-left: 165px; position: relative;">
                 <input type="search" class="form-control rounded" placeholder="Поиск" aria-label="Search"
                        aria-describedby="search-addon" id="search" name="search">
                 <ul class="list-group search-result"
@@ -22,12 +22,14 @@
         @endguest
         @auth
             @can('create_posts')
-{{--                <i class="fa-regular fa-bell fa-lg" style="width: 40px; "></i>--}}
-                <button type="button" class="btn me-3 bg-white rounded-4 text-start p-2" data-bs-toggle="modal"
-                        data-bs-target="#createPost" data-bs-dismiss="modal">
-                    <i class="bi bi-pencil-square me-1 "></i>
-                    <span class="text-black " style="font-family: Arial, Helvetica, sans-serif;">Создать</span>
-                </button>
+<!-- {{--                <i class="fa-regular fa-bell fa-lg" style="width: 40px; "></i>--}} -->
+<button type="button" class="btn me-3 bg-white rounded-4 text-start p-2 w-100 w-auto" data-bs-toggle="modal"
+        data-bs-target="#createPost" data-bs-dismiss="modal">
+    
+    <i class="bi bi-pencil-square me-1"></i>
+    <span class="text-black">Создать</span>
+    
+</button>
             @endcan
             {{--DROPDOWN MENU PROFILE--}}
             <div class="dropdown">

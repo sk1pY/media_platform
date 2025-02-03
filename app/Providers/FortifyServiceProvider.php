@@ -33,9 +33,9 @@ class FortifyServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Fortify::loginView(function () {
-            return response()->json(['message' => 'Login page not available. Use POST /login for API.'], 404);
-        });
+        // Fortify::loginView(function () {
+        //     return response()->json(['message' => 'Login page not available. Use POST /login for API.'], 404);
+        // });
         Fortify::loginView(function () {
             return view('auth.login');
         });
