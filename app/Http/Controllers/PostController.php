@@ -58,7 +58,7 @@ class PostController extends Controller
 
         $posts = $category->posts()->orderBy('created_at', 'DESC')->withCount(['comments', 'likes'])->get();
 
-        return view('category', compact('posts', 'category'));
+        return view('left_sidebar.category_show', compact('posts', 'category'));
     }
 
     public function post(Request $request, Post $post)
@@ -150,7 +150,7 @@ class PostController extends Controller
 
         $posts = Post::whereIn('user_id', $authors_ids)->withCount(['comments', 'likes'])->get();
 
-        return view('myfeed', compact('posts'));
+        return view('left_sidebar.myFeed_show', compact('posts'));
     }
 
     public function newest()
@@ -159,7 +159,7 @@ class PostController extends Controller
         $posts = Post::where('created_at', '>=', Carbon::now()->subDay())
             ->withCount(['comments', 'likes'])->get();
 
-        return view('myfeed', compact('posts'));
+        return view('left_sidebar.newest_show', compact('posts'));
     }
 
     public function popular()
@@ -167,7 +167,7 @@ class PostController extends Controller
 
         $posts = Post::orderBy('views', 'DESC')->withCount(['comments', 'likes'])->get();
 
-        return view('popular', compact('posts'));
+        return view('left_sidebar.popular_show', compact('posts'));
     }
 
     public function incrementViews(Post $post)
@@ -211,7 +211,7 @@ class PostController extends Controller
     {
         $postsIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id');
         $posts = Post::whereIn('id',$postsIds)->withCount(['comments', 'likes'])->get();
-        return view('hidden_posts', compact('posts'));
+        return view('right_sidebar.hiddenPosts_show', compact('posts'));
     }
 
     public function sidebar()
@@ -219,8 +219,7 @@ class PostController extends Controller
 
         $user  = User::where('id', Auth::id())->first();
 
-
         $countSubAuthors = Subscribe::where('author_id', $id)->count();
-        return view('sidebar', compact('countSubAuthors', 'user'));
+        return view('right_sidebar.sidebar', compact('countSubAuthors', 'user'));
     }
 }

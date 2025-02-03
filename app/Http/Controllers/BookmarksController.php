@@ -16,7 +16,7 @@ class BookmarksController extends Controller
     public function index(): View|Factory|Application
     {
         $bookmarks = Bookmark::with('user', 'post')->get();
-        return view('bookmarks', compact('bookmarks'));
+        return view('right_sidebar.bookmarks', compact('bookmarks'));
 
 
     }

@@ -91,7 +91,7 @@ body{
             @yield('content')
         </div>
         <div class="col-3 ">
-            @include('sidebar')
+            @include('right_sidebar.sidebar')
         </div>
     </div>
 </div>

@@ -59,22 +59,8 @@
                             </div>
                         </li>
                     </a>
-                    <a href="{{ route('bookmarks.index') }}" class="link-secondary text-decoration-none text-dark">
-
-                        <li class="d-flex align-items-center">
-
-                            <i class="fa-regular fa-bookmark me-2"></i>
-                            Закладки
-                        </li>
-                    </a>
-                    <a href="{{ route('hidden_posts') }}" class="link-secondary text-decoration-none text-dark">
-
-                        <li class="d-flex align-items-center">
-
-                            <i class="bi bi-eye-slash me-2"></i>
-                            Скрытые посты
-                        </li>
-                    </a>
+                   
+                    
 
                     <li class="d-flex align-items-center" style="cursor: pointer"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

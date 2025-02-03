@@ -15,10 +15,10 @@
                 <div class="col col-lg-9 col-xl-8">
                     <div class="card">
                         <div class="rounded-top text-white d-flex flex-column z-1 overflow-hidden"
-                             style="background-color: #444444; height: 200px;">
+                             style="background-color: #444444; height: 250px;">
                             <img class=""
                                  src="{{ $user->image_cover? Storage::url('profile_cover_images/'.$user->image_cover): asset('default_images/default.png') }}"
-                                 style="height: 200px"
+                                 style="height: 250px"
                                  alt="123">
                         </div>
                     </div>

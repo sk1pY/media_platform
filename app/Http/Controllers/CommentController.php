@@ -18,11 +18,8 @@ class CommentController extends Controller
         ]);
 
         if(Auth()->check()){
-            $comment = Comment::create($validated);
+            $comment = Comment::create(array_merge($validated,['user_id'=> Auth::user()->id]));
         }
-
-
-
         return redirect()->route('posts.show', $comment->post_id);
     }
 
@@ -79,7 +76,7 @@ class CommentController extends Controller
     {
 
         $comments = Comment::where('user_id',Auth::user()->id)->paginate(5);
-        return view('my_comments',compact('comments'));
+        return view('right_sidebar.my_comments',compact('comments'));
     }
 
     public function destroy(Comment $comment){
