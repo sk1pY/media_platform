@@ -1,36 +1,33 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<h1>Register</h1>
-<form method="POST" action="{{ route('register') }}">
-    @csrf
-    <div>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="{{ old('name') }}" required>
-    </div>
+@extends('layouts.app')
+@section('content')
 
-    <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="{{ old('email') }}" required>
-    </div>
+<div class="vh-100 d-flex justify-content-center align-items-center">
+    <form method="POST" action="{{ route('register') }}" class="p-4 bg-white rounded shadow-sm w-100" style="max-width: 400px;">
+        @csrf
+        <h2 class="mb-4 text-center">Регистрация</h2>
 
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-    </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">Имя</label>
+            <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" required>
+        </div>
 
-    <div>
-        <label for="password_confirmation">Confirm Password:</label>
-        <input type="password" id="password_confirmation" name="password_confirmation" required>
-    </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Почта</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" required>
+        </div>
 
-    <button type="submit">Register</button>
-</form></body>
-</html>
+        <div class="mb-3">
+            <label for="password" class="form-label">Пароль</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+
+        <div class="mb-4">
+            <label for="password_confirmation" class="form-label">Подтвердите пароль</label>
+            <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Register</button>
+    </form>
+</div>
+    
+@endsection

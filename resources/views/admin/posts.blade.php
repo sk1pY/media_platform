@@ -39,7 +39,7 @@
                             <input
                                 data-id="{{$post->id}}"
                                 class="js-switch form-check-input" type="checkbox" role="switch"
-                                 {{$post->status? "checked":"   "}}>
+                                 {{$post->status? "checked":""}}>
                         </div>
                     </form>
                 </td>
@@ -117,7 +117,7 @@
             window.url = url;
         });
     </script>
-    <script src="{{asset('js/table.js')}}"></script>
+    {{-- <script src="{{asset('js/table.js')}}"></script> --}}
     <script src="{{asset('js/switch.js')}}"></script>
 
 @endsection

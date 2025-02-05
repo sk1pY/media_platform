@@ -9,20 +9,19 @@
             </ul>
         </div>
     @endif
-    {{--FILTER--}}
+    {{-- FILTER --}}
     <div class="mb-2">
         <form action="{{ route('index') }}" id="filterForm" method="get">
-
-            <select class="form-select w-25 text-decoration-none" id="rating" name="filter" form="filterForm"
-                    onchange="this.form.submit()">
+            <select style="width:200px" class="form-select  text-decoration-none" id="rating" name="filter" form="filterForm"
+                onchange="this.form.submit()">
 
                 <option value="">Выберите фильтр</option>
-                <option value="recent" {{ request('filter') === 'recent' ? 'selected' : '' }} >Сначала новые
+                <option value="recent" {{ request('filter') === 'recent' ? 'selected' : '' }}>Сначала новые
                 </option>
                 <option value="old" {{ request('filter') === 'old' ? 'selected' : '' }}> Сначала старые
                 </option>
                 <option value="popular" {{ request('filter') === 'popular' ? 'selected' : '' }}>Самые популярные
-                                </option>
+                </option>
             </select>
         </form>
     </div>
@@ -36,13 +35,15 @@
     @endforelse
 
 
-{{--    SCRIPTS--}}
+    {{--    SCRIPTS --}}
     <script>
-        var likePostUrl = '{{ route("like_post") }}';
+        var likePostUrl = '{{ route('like_post') }}';
     </script>
     <script src="{{ asset('js/like.js') }}"></script>
     <script src="{{ asset('js/bookmark.js') }}"></script>
-    <script> var subAuthors = @json($subAuthors); </script>
+    <script>
+        var subAuthors = @json($subAuthors);
+    </script>
     <script src="{{ asset('js/subscribe.js') }}"></script>
 
 @endsection

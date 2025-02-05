@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Subscribe;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +15,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index($id)
+    public function show($id)
     {
         $user = User::where('id', $id)->first();
         $posts = Post::where('user_id', $id)->get();

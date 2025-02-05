@@ -5,7 +5,6 @@ $(document).ready(function () {
         "info": false
     });
 
-    // Инициализация сортировки строк таблицы
     $("#tablecontents").sortable({
         items: "tr",
         cursor: 'move',

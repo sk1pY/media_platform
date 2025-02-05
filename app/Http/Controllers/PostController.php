@@ -9,6 +9,7 @@ use App\Models\Subscribe;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
@@ -29,10 +30,9 @@ class PostController extends Controller
             $resultArrayIds = collect($postIds)->reject(function ($value) use ($hiddenPostIds) {
                 return in_array($value, $hiddenPostIds);
             })->all();
-            $posts = Post::whereIn('id', $resultArrayIds)->where('status', 1)->withCount(['comments', 'likes'])->orderBy('created_at','desc')->get();
+            $posts = Post::whereIn('id', $resultArrayIds)->where('status', 1)->withCount(['comments', 'likes'])->orderBy('created_at', 'desc')->get();
             $postsForFilters = Post::whereIn('id', $resultArrayIds)->where('status', 1);
-
-        }else{
+        } else {
             $postsForFilters = Post::where('status', 1);
         }
 
@@ -61,11 +61,14 @@ class PostController extends Controller
         return view('left_sidebar.category_show', compact('posts', 'category'));
     }
 
-    public function post(Request $request, Post $post)
+    public function show(Request $request, Post $post)
     {
-//        if ($post == null) {
-//            abort(404, 'error');
-//        }
+
+               if ($post->status === 0) {
+                // return view('error.error');
+                   abort(404, 'error.error');
+               }
+
         $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->get();
 
         $post = Post::withCount(['comments', 'likes'])->find($post->id);
@@ -73,9 +76,9 @@ class PostController extends Controller
             $query = Comment::query();
 
             switch ($request->input('filter_comments')) {
-//                  case 'popular':
-//                      $query->orderBy('created_at', 'desc');
-//                      break;
+                    //                  case 'popular':
+                    //                      $query->orderBy('created_at', 'desc');
+                    //                      break;
                 case 'recent':
                     $query->orderBy('created_at', 'desc');
                     break;
@@ -83,7 +86,6 @@ class PostController extends Controller
                     $query->orderBy('created_at', 'asc');
             }
             $comments = $query->get();
-
         }
 
 
@@ -118,12 +120,13 @@ class PostController extends Controller
             $category_id = $category_obj->id;
         }
 
-        Auth::user()->posts()->create(array_merge(
-                $validated,
-                ['image' => $fileName, 'category_id' => $category_id])
-        );
-
-
+            $user = User::find(Auth::id());
+            $user->posts()->create(
+                array_merge(
+                    $validated,
+                    ['image' => $fileName, 'category_id' => $category_id]
+                )
+            );
         return redirect()->route('index');
     }
 
@@ -137,25 +140,19 @@ class PostController extends Controller
     public function update($id)
     {
         $post = Post::findOrFail($id);
-
-        Post::update(['title' => true]);
-        return redirect()->route('index',
-            $post->id);
-
+        $post->update(['title' => true]);
+        return redirect()->route('index', $post->id);
     }
 
     public function my_feed()
     {
         $authors_ids = Subscribe::where('user_id', Auth::id())->pluck('author_id');
-
         $posts = Post::whereIn('user_id', $authors_ids)->withCount(['comments', 'likes'])->get();
-
         return view('left_sidebar.myFeed_show', compact('posts'));
     }
 
     public function newest()
     {
-
         $posts = Post::where('created_at', '>=', Carbon::now()->subDay())
             ->withCount(['comments', 'likes'])->get();
 
@@ -164,15 +161,12 @@ class PostController extends Controller
 
     public function popular()
     {
-
         $posts = Post::orderBy('views', 'DESC')->withCount(['comments', 'likes'])->get();
-
         return view('left_sidebar.popular_show', compact('posts'));
     }
 
     public function incrementViews(Post $post)
     {
-
         $post->increment('views');
         return response()->json(['views' => $post->views]);
     }
@@ -180,7 +174,6 @@ class PostController extends Controller
 
     public function hide(Request $request, Post $post)
     {
-
         if ($request['hidden']) {
             $hiddenPost = HiddenPost::where(['user_id' => Auth::id(), 'post_id' => $post->id])->first();
             if ($hiddenPost) {
@@ -210,16 +203,8 @@ class PostController extends Controller
     public function hidden_posts()
     {
         $postsIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id');
-        $posts = Post::whereIn('id',$postsIds)->withCount(['comments', 'likes'])->get();
+        $posts = Post::whereIn('id', $postsIds)->withCount(['comments', 'likes'])->get();
         return view('right_sidebar.hiddenPosts_show', compact('posts'));
     }
 
-    public function sidebar()
-    {
-
-        $user  = User::where('id', Auth::id())->first();
-
-        $countSubAuthors = Subscribe::where('author_id', $id)->count();
-        return view('right_sidebar.sidebar', compact('countSubAuthors', 'user'));
-    }
 }

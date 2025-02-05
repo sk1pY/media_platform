@@ -14,7 +14,7 @@ use App\Http\Controllers\Admin\RolePermissionController;
 Route::controller(PostController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/categories/{category}', 'categories')->name('categories.show');
-    Route::get('/posts/{post}', 'post')->name('posts.show');
+    Route::get('/posts/{post}', 'show')->name('posts.show');
     Route::post('/posts', 'store')->name('posts.store');
     Route::get('/my_feed', 'my_feed')->name('my_feed');
     Route::get('/newest', 'newest')->name('newest');
@@ -33,11 +33,11 @@ Route::post('/like-post', [LikeController::class, 'like'])->name('like_post');
 //SEARCH
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 //VIEW
-Route::post('/posts/{post}/incrementViews',[PostController::class,'incrementViews'])->name('posts.incrementViews');
+Route::post('/posts/{post}/incrementViews', [PostController::class, 'incrementViews'])->name('posts.incrementViews');
 
 //HOME
 Route::name('home.')->prefix('home')->group(function () {
-    Route::get('/{user}', [HomeController::class, 'index'])->name('profile.show');
+    Route::get('/{user}', [HomeController::class, 'show'])->name('profile.show');
     Route::put('/update_profile/{id}', [HomeController::class, 'update_profile'])->name('update.profile');
     Route::put('/update_post/{post}', [HomeController::class, 'update_post'])->name('update.post');
     Route::delete('/delete/{id}', [HomeController::class, 'destroy'])->name('delete.task');
@@ -57,11 +57,11 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     Route::delete('/role_for_user/{user}', [RolePermissionController::class, 'role_for_user'])->name('role_for_user.update');
 
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
-    Route::put('/posts/{user}/update-status', [\App\Http\Controllers\Admin\UserController::class,'update_status'])->name('users.update.status');
+    Route::put('/users/{user}/update-status', [\App\Http\Controllers\Admin\UserController::class, 'update_status'])->name('users.update.status');
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
     Route::resource('posts', \App\Http\Controllers\Admin\PostController::class);
-    Route::put('/posts/{post}/update-status', [\App\Http\Controllers\Admin\PostController::class,'update_status'])->name('posts.update.status');
-    Route::resource('/comments',\App\Http\Controllers\Admin\CommentController::class );
+    Route::put('/posts/{post}/update-status', [\App\Http\Controllers\Admin\PostController::class, 'update_status'])->name('posts.update.status');
+    Route::resource('/comments', \App\Http\Controllers\Admin\CommentController::class);
 
     //Complains
     Route::resource('complains', \App\Http\Controllers\admin\ComplainController::class);
