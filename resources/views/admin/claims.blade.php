@@ -20,24 +20,24 @@
         </tr>
         </thead>
         <tbody id="tablecontents">
-        @foreach($complains as $complain)
+        @foreach($claims as $claim)
             <tr class="align-middle">
                 <td class="text-center">
-                    {{ $complain->id }}
+                    {{ $claim->id }}
                 </td>
                 <td class="text-center">
-                    {{ $complain->post->title }}
+                    <a href="{{route('posts.show',$claim->post->id)}}">{{ $claim->post->title }}</a>
                 </td>
                 <td class="text-center">
-                    {{ $complain->name }}
+                    {{ $claim->name }}
                 </td>
                 <td class="text-center">
-                    <form action="{{ route('admin.complains.update',$complain->id) }}" method="post">
+                    <form action="{{ route('admin.claims.update',$claim->id) }}" method="post">
                         @csrf
                         @method('put')
                         <select name="status">
                             @foreach($statuses as $stat)
-                                <option value="{{$stat}}" {{$complain->status == $stat? 'selected':''}}>{{$stat}}</option>
+                                <option value="{{$stat}}" {{$claim->status == $stat? 'selected':''}}>{{$stat}}</option>
                             @endforeach
                         </select>
                         <input type="submit" >
@@ -45,7 +45,7 @@
                 </td>
                 <td class="text-center">
 
-                    <form action="{{ route('admin.complains.destroy', $complain->id) }}" method="post"
+                    <form action="{{ route('admin.claims.destroy', $claim->id) }}" method="post"
                           style="display: inline;">
                         @csrf
                         @method('delete')
@@ -59,9 +59,9 @@
         @endforeach
         </tbody>
     </table>
-    {{--    <div class="mt-4">--}}
-    {{--        {{ $posts->links('pagination::bootstrap-5') }}--}}
-    {{--    </div>--}}
+{{--        <div class="mt-4">--}}
+{{--            {{ $claims->links('pagination::bootstrap-5') }}--}}
+{{--        </div>--}}
 
     <script src="{{asset('js/table.js')}}"></script>
 

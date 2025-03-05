@@ -21,21 +21,17 @@ class BookmarksController extends Controller
 
     }
 
-    public function add(Request $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $postId = $request->input('bookmark_id');
-
-
         $bookmark = Bookmark::where(['user_id' => Auth::id(), 'post_id' => $postId])->first();
         if ($bookmark) {
             $bookmark->delete();
             return response()->json(['success' => true, 'bookmark' => false]);
         }
-
-            Bookmark::create([
-                'user_id' => Auth::id(),
-                'post_id' => $postId]);
-
+        Bookmark::create([
+            'user_id' => Auth::id(),
+            'post_id' => $postId]);
 
         return response()->json(['success' => true, 'bookmark' => true]);
 

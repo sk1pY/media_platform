@@ -22,7 +22,9 @@
                         @csrf
                         @method('PUT')
                         <select name="role" class="form-select form-select-sm">
-                            @foreach($roles as $role)
+                            data-url="{{route('admin.users.update.status',$user->id)}}"
+
+                        @foreach($roles as $role)
                                 <option value="{{ $role->name }}"
                                     {{ $user->roles->contains('name', $role->name) ? 'selected' : '' }}>
                                     {{ $role->name ?? 'without role' }}
@@ -33,16 +35,14 @@
                     </form>
                 </td>
                 <td class="">
-                    <form action="{{route('admin.users.update.status',$user->id)}}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <div class="form-check form-switch ">
-                            <input
-                                data-id="{{$user->id}}"
-                                class="js-switch form-check-input" type="checkbox" role="switch"
-                                {{$user->status? "checked":"   "}}>
-                        </div>
-                    </form>
+                    <div class="form-check form-switch ">
+                        <input
+                            data-id="{{$user->id}}"
+                            data-url="{{route('admin.users.update.status',$user->id)}}"
+
+                            class="js-switch form-check-input" type="checkbox" role="switch"
+                            {{$user->status? "checked":""}}>
+                    </div>
                 </td>
                 <td>
                     <form action="{{ route('admin.users.destroy',['user'=> $user->id]) }}" method="post">
@@ -61,16 +61,7 @@
         {{ $users->links('pagination::bootstrap-5') }}
     </div>
 
-    <script>
-        $('.js-switch').click(function () {
-            let id = $(this).data('id');
-
-            const url = "{{ route('admin.users.update.status', ':id') }}".replace(':id', id);
-            window.url = url;
-        });
-    </script>
     <script src="{{asset('js/switch.js')}}"></script>
-
     <script src="{{asset('js/table.js')}}"></script>
 
 @endsection

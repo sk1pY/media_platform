@@ -3,21 +3,22 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Claim;
 use App\Models\Complain;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ComplainController extends Controller
+class ClaimController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $statuses = ['Accepted', 'Deleted'];
-        $complains = Complain::all();
-        return view('admin.complains',compact('complains','statuses'));
+        $statuses = ['Pending', 'Accepted', 'Rejected'];
+        $claims = Claim::get();
+        return view('admin.claims',compact('claims','statuses'));
     }
 
     /**
@@ -33,13 +34,15 @@ class ComplainController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
+       // dd($request->all());
 
-        Complain::create([
-            'name' => $request['name'],
+        $validate = $request->validate([
+            'name' => 'required',
+        ]);
+        Claim::create([
+            'title' => $request['name'],
             'user_id' => Auth::user()->id,
             'post_id' => $request['post_id'],
-            'status' => 'accepted',
         ]);
         return redirect()->route('index');
     }
@@ -63,28 +66,30 @@ class ComplainController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Complain $complain)
+    public function update(Request $request, Claim $claim)
     {
-        if($request['status'] == 'Deleted'){
-          $post =   Post::find($complain->post_id)->first();
+
+        if($request['status'] == 'Rejected'){
+            $post =   Post::find($claim->post_id);
+
             $post->status =  0;
             $post->save();
         }
 
-            $complain->update([
-                'status' => $request['status'],
-            ]);
+        $claim->update([
+            'status' => $request['status'],
+        ]);
 
-        return redirect()->route('admin.complains.index');
+        return redirect()->route('admin.claims.index');
 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Complain $complain)
+    public function destroy(Claim $claim)
     {
-        $complain->delete();
-        return redirect()->route('admin.complains.index');
+        $claim->delete();
+        return redirect()->route('admin.claims.index');
     }
 }

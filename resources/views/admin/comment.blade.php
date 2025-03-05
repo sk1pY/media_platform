@@ -12,11 +12,11 @@
     <table id="table" class="table table-sm table-bordered table-striped small">
         <thead>
         <tr class="text-center align-middle">
-            <th scope="col" class="col-2">Пост</th>
+            <th scope="col" class="col-5">Пост</th>
             <th scope="col" class="col-2">Комментатор</th>
-            <th scope="col" class="col-6">Комментарий</th>
-            <th scope="col" class="col-6">Дата</th>
-            <th scope="col" class="col-2">Действия</th>
+            <th scope="col" class="col-2">Комментарий</th>
+            <th scope="col" class="col-2">Дата</th>
+            <th scope="col" class="col-1">Действия</th>
         </tr>
         </thead>
         <tbody table="tablecontents">
@@ -36,7 +36,7 @@
                 <td class="text-center" style="max-width: 300px;" >
                     {{ $comment->created_at }}
                 </td>
-                <td>
+                <td class=" text-center ">
                     <form action="{{ route('admin.comments.destroy', ['comment' => $comment->id]) }}" method="post" class="ms-2">
                         @csrf
                         @method('delete')

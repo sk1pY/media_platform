@@ -14,9 +14,16 @@ class PermissionsSeeder extends Seeder
      */
     public function run(): void
     {
+        Permission::create(['name' => 'admin_panel']);
         Permission::create(['name' => 'view_content']);
         Permission::create(['name' => 'create_posts']);
         Permission::create(['name' => 'delete_posts']);
+        Permission::create(['name' => 'update_posts']);
+        Permission::create(['name' => 'create_comments']);
+        Permission::create(['name' => 'like_posts']);
+        Permission::create(['name' => 'hidden_posts']);
+        Permission::create(['name' => 'complain_posts']);
+        Permission::create(['name' => 'bookmark_posts']);
         Permission::create(['name' => 'manage_users']);
         Permission::create(['name' => 'moderate_comments']);
 
@@ -25,5 +32,9 @@ class PermissionsSeeder extends Seeder
 
         $adminRole = Role::where(['name' => 'admin'])->first();
         $adminRole->givePermissionTo(Permission::all());
+
+        $guestRole = Role::where(['name' => 'guest'])->first();
+        $guestRole->givePermissionTo('view_content','update_posts');
+
     }
 }

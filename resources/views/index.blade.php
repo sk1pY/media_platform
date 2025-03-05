@@ -34,6 +34,7 @@
         </h3>
     @endforelse
 
+    {{ $posts->links('pagination::bootstrap-5') }}
 
     {{--    SCRIPTS --}}
     <script>

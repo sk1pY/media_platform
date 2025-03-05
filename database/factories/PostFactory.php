@@ -22,10 +22,7 @@ class PostFactory extends Factory
         if (!File::exists($destinationPath)) {
             File::makeDirectory($destinationPath, 0755, true);
         }
-
         $files = File::files($sourcePath);
-
-
         foreach ($files as $file) {
             $destination = $destinationPath . '/' . basename($file);
             File::copy($file->getPathname(), $destination);

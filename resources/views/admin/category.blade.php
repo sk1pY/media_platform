@@ -9,7 +9,8 @@
             </ul>
         </div>
     @endif
-    <form action="{{route('admin.categories.store')}}" method="post" class="d-flex g-2 m-2 w-50" enctype="multipart/form-data">
+    <form action="{{route('admin.categories.store')}}" method="post" class="d-flex g-2 m-2 w-50"
+          enctype="multipart/form-data">
         @csrf
         <div class="d-flex flex-column m-3">
             <label for="name">Категория</label>
@@ -26,7 +27,7 @@
         <thead>
         <tr class="align-middle">
             <th scope="col" class="col-8 text-center">имя</th>
-            <th scope="col" class="col-8 text-center">дата </th>
+            <th scope="col" class="col-8 text-center">дата</th>
             <th scope="col" class="col-3 text-center">Изменить/Удалить</th>
         </tr>
         </thead>
@@ -34,17 +35,19 @@
         @foreach( $categories as $category )
             <tr class="align-middle ">
                 <td class="ps-3 "><a href="{{ route('categories.show',['category' => $category->id]) }}"
-                                class="text-decoration-none text-dark ">{{$category -> name}}</a>
+                                     class="text-decoration-none text-dark ">{{$category -> name}}</a>
                 </td>
                 <td>
                     {{$category->created_at}}
                 </td>
                 <td class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#modal-{{ $category->id }}">
+                    <button type="button" class="btn btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#modal-{{ $category->id }}">
                         <i class="bi bi-pencil-square"></i>
                     </button>
 
-                    <form action="{{ route('admin.categories.destroy', ['category' => $category->id]) }}" method="post" class="ms-2">
+                    <form action="{{ route('admin.categories.destroy', ['category' => $category->id]) }}" method="post"
+                          class="ms-2">
                         @csrf
                         @method('delete')
                         <button class="btn btn-sm text-danger">
@@ -83,16 +86,12 @@
                         </div>
                     </div>
                 </td>
-
             </tr>
-            <div class="mt-4">
-            </div>
-
         @endforeach
         </tbody>
     </table>
     {{ $categories->links('pagination::bootstrap-5') }}
- <script src="{{asset('js/table.js')}}"></script>
+    <script src="{{asset('js/table.js')}}"></script>
 
 @endsection
 

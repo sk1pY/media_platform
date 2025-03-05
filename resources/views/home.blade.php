@@ -90,11 +90,11 @@
                                                                     </a>
                                                                 @endif
                                                                 <?php
-                                                                
+
                                                                 $date_string = strval($post->created_at);
                                                                 $date = new DateTime($date_string);
                                                                 $current_date = new DateTime();
-                                                                
+
                                                                 // Сравниваем дату с текущей датой
                                                                 if ($date->format('Y-m-d') == $current_date->format('Y-m-d')) {
                                                                     echo $date->format('H:i');
@@ -103,7 +103,7 @@
                                                                 } else {
                                                                     echo $date->format('d F');
                                                                 }
-                                                                
+
                                                                 ?>
                                                             </div>
                                                         </div>
@@ -122,7 +122,7 @@
                                             @auth()
                                                 @if (Auth::user()->id == $user->id)
                                                     <div class="card-footer">
-                                                        <form action="{{ route('home.delete.task', $post->id) }}"
+                                                        <form action="{{ route('posts.destroy', $post->id) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
@@ -149,7 +149,7 @@
             </div>
         </div>
     </section>
-    {{-- MODAL EDIT PROFILE WINDOW --}}
+    {{-- MODAL EDIT PROFILE  --}}
     <div class="modal fade" id="editProfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -188,7 +188,7 @@
             </div>
         </div>
     </div>
-    {{-- END MODAL EDIT PROFILE WINDOW --}}
+    {{-- END MODAL EDIT PROFILE  --}}
     <!-- MODAL UPDATE POST-->
     @foreach ($posts as $post)
         <div class="modal fade" id="editPostModal{{ $post->id }}" tabindex="-1"
@@ -200,7 +200,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('home.update.post', $post->id) }}" method="POST"
+                        <form action="{{ route('posts.update', $post->id) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             @method('put')

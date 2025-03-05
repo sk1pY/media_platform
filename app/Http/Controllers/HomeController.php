@@ -24,29 +24,6 @@ class HomeController extends Controller
         return view('home', compact('user', 'posts','countSubAuthors'));
 
     }
-
-    public function update_post(Request $request, Post $post)
-    {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:50',
-            'description' => 'required|string',
-            'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            ]);
-
-        if ($request->hasFile('image')) {
-            if ($post->image) {
-                Storage::disk('public')->delete($post->image);
-            }
-            $path = $request->file('image')->store('postImages', 'public');
-            $fileName = basename($path);
-            $validatedData['image'] = $fileName;
-        } else {
-            unset($validatedData['image']);
-        }
-        $post->update(array_merge($validatedData, ['user_id' => Auth::id()]));
-            return redirect()->route('home.profile.show',Auth::id());
-    }
-
     public function update_profile(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -87,10 +64,4 @@ class HomeController extends Controller
 
     }
 
-    public function destroy($id)
-    {
-        Post::find($id)->delete();
-
-        return redirect('/home/'.Auth::id());
-    }
 }

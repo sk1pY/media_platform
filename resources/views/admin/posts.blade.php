@@ -31,17 +31,14 @@
                 <td class="text-center">
                     {{ $post->user ? $post->user->surname . ' ' . $post->user->name : 'Без автора' }}
                 </td>
-                <td class="">
-                    <form action="{{route('admin.posts.update.status',$post->id)}}" method="POST">
-                        @csrf
-                        @method('PUT')
+                <td class="text-center">
                         <div class="form-check form-switch ">
                             <input
                                 data-id="{{$post->id}}"
+                                data-url="{{route('admin.posts.update.status',$post->id)}}"
                                 class="js-switch form-check-input" type="checkbox" role="switch"
-                                 {{$post->status? "checked":""}}>
+                                {{$post->status? "checked":""}}>
                         </div>
-                    </form>
                 </td>
                 <td class="text-center">
                     <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal"
@@ -60,7 +57,7 @@
             <!-- Modal -->
             <div class="modal fade" id="update{{ $post->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
                  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-sm">
+                <div class="modal-dialog ">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title" id="staticBackdropLabel">Изменить данные</h6>
@@ -109,15 +106,8 @@
     <div class="mt-4">
         {{ $posts->links('pagination::bootstrap-5') }}
     </div>
-    <script>
-        $('.js-switch').click(function () {
-            let id = $(this).data('id');
 
-            const url = "{{ route('admin.posts.update.status', ':id') }}".replace(':id', id);
-            window.url = url;
-        });
-    </script>
-    {{-- <script src="{{asset('js/table.js')}}"></script> --}}
+     <script src="{{asset('js/table.js')}}"></script>
     <script src="{{asset('js/switch.js')}}"></script>
 
 @endsection

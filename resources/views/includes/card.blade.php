@@ -61,7 +61,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Закрыть"></button>
                             </div>
-                            <form action="{{ route('admin.complains.store') }}" method="post">
+                            <form action="{{ route('admin.claims.store') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="post_id" value="{{ $post->id }}">
                                 <div class="modal-body">
@@ -124,13 +124,14 @@
         <p class="card-text ">{{ substr($post->description, 0, 250) }}...</p>
         <div class="card-img-container">
             <img src="{{ Storage::url('postImages/' . $post->image) }}" style="width: 100%; height: 290px"
-                class="card-img-top rounded-3" alt="...">
+                alt="{{ Storage::url('postImages/' . $post->image) }}"
+                 class="card-img-top rounded-3" alt="...">
         </div>
         {{--       LIKE --}}
         <div class="d-flex justify-content-between align-items-center mt-3 ms-2 ">
             <div id="post-{{ $post->id }}" class="post d-flex align-items-center">
                 <div style="cursor: pointer" class="like-button me-3" data-post-id="{{ $post->id }}">
-                    <i
+                    <i style="user-select: none;"
                         class="bi  red-heart
                         {{ in_array($post->id, $likedPostUser) ? 'bi-heart-fill' : 'bi-heart' }}">
                         <span class="like-count">{{ $post->likes }}</span>
@@ -154,7 +155,7 @@
 
             </div>
             {{--                            VIEWS --}}
-            <i style="font-size: 1.2rem" class=" bi bi-eye-fill me-2">
+            <i style="user-select: none; font-size: 1.2rem" class=" bi bi-eye-fill me-2">
                 <span id="view-number">{{ $post->views }}</span>
             </i>
         </div>

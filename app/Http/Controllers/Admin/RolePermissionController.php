@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolePermissionController extends Controller
 {
@@ -21,10 +22,7 @@ class RolePermissionController extends Controller
 
     public function role_for_user(Request $request, User $user)
     {
-
         $role = Role::where('name', $request->input('role'))->first();
-
-
         $user->syncRoles($role);
 
         return redirect()->route('admin.users.index');
@@ -71,9 +69,13 @@ class RolePermissionController extends Controller
 
         if ($request['status']) {
             $role->permissions()->attach($permission);
+
         } else {
             $role->permissions()->detach($permission);
+
         }
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
         return response()->json();
 
     }

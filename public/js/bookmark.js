@@ -4,7 +4,7 @@ $(document).ready(function () {
         var bookmarkButton = $(this).find('.bookmark_button ');
 
         $.ajax({
-            url: '/bookmarks/add',
+            url: '/bookmarks',
             method: 'POST',
             data: {
                 bookmark_id: bookmarkId

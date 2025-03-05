@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
@@ -21,53 +23,41 @@ class PostController extends Controller
     {
 
         $categories = Category::get();
-        $posts = Post::where('status', 1)->withCount(['comments', 'likes'])->get();
+        $postQuery = Post::where('status', 1)->withCount(['comments', 'likes'])->orderBy('created_at','desc');
 
         if (Auth::check()) {
-            $postIds = $posts->pluck('id')->toArray();
             $hiddenPostIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id')->toArray();
-
-            $resultArrayIds = collect($postIds)->reject(function ($value) use ($hiddenPostIds) {
-                return in_array($value, $hiddenPostIds);
-            })->all();
-            $posts = Post::whereIn('id', $resultArrayIds)->where('status', 1)->withCount(['comments', 'likes'])->orderBy('created_at', 'desc')->get();
-            $postsForFilters = Post::whereIn('id', $resultArrayIds)->where('status', 1);
-        } else {
-            $postsForFilters = Post::where('status', 1);
+            $postQuery->wherenotin('id', $hiddenPostIds);
         }
 
         if ($request->filled('filter')) {
             switch ($request->input('filter')) {
                 case 'popular':
-                    $postsForFilters->orderBy('views', 'desc');
+                    $postQuery->orderBy('views', 'desc');
                     break;
                 case 'recent':
-                    $postsForFilters->orderBy('created_at', 'desc');
+                    $postQuery->orderBy('created_at', 'desc');
                     break;
                 case 'old':
-                    $postsForFilters->orderBy('created_at', 'asc');
+                    $postQuery->orderBy('created_at', 'asc');
             }
-
-            $posts = $postsForFilters->withCount(['comments', 'likes'])->get();
         }
+
+        $posts = $postQuery->paginate(5);
         return view('index', compact('posts', 'categories'));
     }
 
     public function categories(Category $category)
     {
-
         $posts = $category->posts()->orderBy('created_at', 'DESC')->withCount(['comments', 'likes'])->get();
-
         return view('left_sidebar.category_show', compact('posts', 'category'));
     }
 
     public function show(Request $request, Post $post)
     {
-
-               if ($post->status === 0) {
-                // return view('error.error');
-                   abort(404, 'error.error');
-               }
+        if (!$post->status ) {
+            abort(404, 'error.error');
+        }
 
         $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->get();
 
@@ -76,9 +66,9 @@ class PostController extends Controller
             $query = Comment::query();
 
             switch ($request->input('filter_comments')) {
-                    //                  case 'popular':
-                    //                      $query->orderBy('created_at', 'desc');
-                    //                      break;
+                //                  case 'popular':
+                //                      $query->orderBy('created_at', 'desc');
+                //                      break;
                 case 'recent':
                     $query->orderBy('created_at', 'desc');
                     break;
@@ -94,22 +84,21 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', Post::class);
+
         $validated = $request->validate([
             'title' => 'required|max:100',
             'description' => 'required|max:500',
             'image' => 'image|mimes:jpg,png,jpeg',
             'cat_name' => 'nullable'
-        ],);
+        ]);
 
         if ($request->hasFile('image')) {
-
             $path = $request->file('image')->store('postImages', 'public');
             $fileName = basename($path);
         } else {
             $localPath = public_path('default_images/default.png');
             $newPath = Storage::disk('public')->putFile('postImages', $localPath);
-
-
             $fileName = basename($newPath);
         }
 
@@ -119,7 +108,7 @@ class PostController extends Controller
             $category_obj = Category::where('name', $validated['cat_name'])->first();
             $category_id = $category_obj->id;
         }
-
+        try {
             $user = User::find(Auth::id());
             $user->posts()->create(
                 array_merge(
@@ -127,23 +116,45 @@ class PostController extends Controller
                     ['image' => $fileName, 'category_id' => $category_id]
                 )
             );
+        } catch (\Exception $e) {
+            Log::error('Ошибка при создании поста: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Произошла ошибка при создании поста.');
+        }
+
         return redirect()->route('index');
     }
-
-
-    public function delete($id)
+    public function destroy(Post $post)
     {
-        Post::find($id)->delete();
-        return redirect()->route('home');
-    }
+        $this->authorize('destroy',$post);
 
-    public function update($id)
+        $post->delete();
+        return redirect()->back();
+    }
+    public function update(Request $request, Post $post)
     {
-        $post = Post::findOrFail($id);
-        $post->update(['title' => true]);
-        return redirect()->route('index', $post->id);
-    }
 
+        $this->authorize('update',$post);
+
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:50',
+            'description' => 'required|string',
+            'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
+            $path = $request->file('image')->store('postImages', 'public');
+            $fileName = basename($path);
+            $validatedData['image'] = $fileName;
+        } else {
+            unset($validatedData['image']);
+        }
+        $post->update(array_merge($validatedData, ['user_id' => Auth::id()]));
+
+        return redirect()->route('home.profile.show',Auth::id());
+    }
     public function my_feed()
     {
         $authors_ids = Subscribe::where('user_id', Auth::id())->pluck('author_id');
@@ -167,7 +178,7 @@ class PostController extends Controller
 
     public function incrementViews(Post $post)
     {
-        $post->increment('views');
+        $post->query()->increment('views');
         return response()->json(['views' => $post->views]);
     }
 

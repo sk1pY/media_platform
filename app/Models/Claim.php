@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Complain extends Model
+class Claim extends Model
 {
-    protected $fillable = ['name','user_id','post_id','status'];
-
+    protected $fillable = ['title','user_id','post_id','status'];
+    protected $table = 'users_claim_posts';
 
     function post(){
         return $this->belongsTo(Post::class);

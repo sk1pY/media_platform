@@ -9,40 +9,51 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SubscribeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\RolePermissionController;
+use App\Http\Controllers\admin\ComplainController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\CommentController as AdminCommentController;
+use App\Http\Controllers\admin\ClaimController;
 
+//POSTS
 Route::controller(PostController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/categories/{category}', 'categories')->name('categories.show');
     Route::get('/posts/{post}', 'show')->name('posts.show');
     Route::post('/posts', 'store')->name('posts.store');
+    Route::delete('/posts/{post}', 'destroy')->name('posts.destroy')->where('id', '[0-9]+');
+    Route::put('/posts/{post}', 'update')->name('posts.update');
     Route::get('/my_feed', 'my_feed')->name('my_feed');
     Route::get('/newest', 'newest')->name('newest');
     Route::get('/popular', 'popular')->name('popular');
-    Route::delete('/delete/{id}', 'delete')->name('delete')->where('id', '[0-9]+');
     Route::get('/hidden_posts', 'hidden_posts')->name('hidden_posts');
     Route::post('/posts/{post}/hide', 'hide')->name('posts.hide');
 });
-//COMMENTARIES
-Route::post('/store_comment', [CommentController::class, 'store'])->name('comment.store');
-Route::post('/comments/like_dislike', [CommentController::class, 'like_dislike'])->name('comments.like');
-Route::get('/my_comments', [CommentController::class, 'index'])->name('comments.index');
-Route::delete('/my_comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
-//LIKES
-Route::post('/like-post', [LikeController::class, 'like'])->name('like_post');
-//SEARCH
-Route::get('/search', [SearchController::class, 'search'])->name('live.search');
-//VIEW
-Route::post('/posts/{post}/incrementViews', [PostController::class, 'incrementViews'])->name('posts.incrementViews');
 
 //HOME
 Route::name('home.')->prefix('home')->group(function () {
     Route::get('/{user}', [HomeController::class, 'show'])->name('profile.show');
     Route::put('/update_profile/{id}', [HomeController::class, 'update_profile'])->name('update.profile');
     Route::put('/update_post/{post}', [HomeController::class, 'update_post'])->name('update.post');
-    Route::delete('/delete/{id}', [HomeController::class, 'destroy'])->name('delete.task');
 });
 
+
+//COMMENTARIES
+Route::post('/comments', [CommentController::class, 'store'])->name('comment.store');
+Route::post('/comments/like_dislike', [CommentController::class, 'like_dislike'])->name('comments.like');
+Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+//LIKES
+Route::post('/like-post', [LikeController::class, 'like'])->name('like_post');
+
+//SEARCH
+Route::get('/search', [SearchController::class, 'search'])->name('live.search');
+
+//VIEW
+Route::post('/posts/{post}/incrementViews', [PostController::class, 'incrementViews'])->name('posts.incrementViews');
 
 //ADMIN_PANEL
 Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(function () {
@@ -56,26 +67,29 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     Route::put('/role_for_user/{user}', [RolePermissionController::class, 'role_for_user'])->name('role_for_user.update');
     Route::delete('/role_for_user/{user}', [RolePermissionController::class, 'role_for_user'])->name('role_for_user.update');
 
-    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
-    Route::put('/users/{user}/update-status', [\App\Http\Controllers\Admin\UserController::class, 'update_status'])->name('users.update.status');
-    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
-    Route::resource('posts', \App\Http\Controllers\Admin\PostController::class);
-    Route::put('/posts/{post}/update-status', [\App\Http\Controllers\Admin\PostController::class, 'update_status'])->name('posts.update.status');
-    Route::resource('/comments', \App\Http\Controllers\Admin\CommentController::class);
+    Route::resource('users', AdminUserController::class);
+    Route::put('/users/{user}/update-status', [AdminUserController::class, 'update_status'])->name('users.update.status');
+    Route::resource('categories', AdminCategoryController::class);
+    Route::resource('posts', AdminPostController::class);
+    Route::put('/posts/{post}/update-status', [AdminPostController::class, 'update_status'])->name('posts.update.status');
+    Route::resource('comments', AdminCommentController::class);
 
-    //Complains
-    Route::resource('complains', \App\Http\Controllers\admin\ComplainController::class);
+    //CLAIMS
+    Route::resource('claims', ClaimController::class);
 });
 
 
 //BOOKMARKS
-Route::get('/bookmarks', [BookmarksController::class, 'index'])->name('bookmarks.index');
-Route::post('/bookmarks/add', [BookmarksController::class, 'add'])->name('bookmarks.add');
-Route::post('/bookmarks/destroy/{id}', [BookmarksController::class, 'destroy'])->name('bookmarks.destroy');
+Route::name('bookmarks.')->prefix('bookmarks')->group(function () {
+    Route::get('/', [BookmarksController::class, 'index'])->name('index');
+    Route::post('/', [BookmarksController::class, 'store']);
+    Route::delete('/{bookmark}', [BookmarksController::class, 'destroy'])->name('destroy');
+});
+
 
 //SUBSCRIBE
 Route::get('/subscriptions', [SubscribeController::class, 'index'])->name('subscriptions.index');
-Route::post('/subscribe', [SubscribeController::class, 'add'])->name('subscribe');
+Route::post('/subscriptions', [SubscribeController::class, 'add']);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Route::fallback(function(){

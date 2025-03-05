@@ -12,7 +12,7 @@ $(document).ready(function () {
         var subId = $(this).data('author-id');
 
         $.ajax({
-            url: '/subscribe',
+            url: '/subscriptions',
             method: 'POST',
             data: {
                 sub_id: subId

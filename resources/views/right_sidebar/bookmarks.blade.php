@@ -18,6 +18,7 @@
                     <th>
                         <form action="{{ route('bookmarks.destroy', ['id' => $bookmark->id]) }}" method="post">
                             @csrf
+                            @method('delete')
                             <input class="btn btn-danger" type="submit" value="Удалить">
                         </form>
                     </th>
