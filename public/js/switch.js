@@ -1,20 +1,20 @@
-$(document).ready(function () {
-    $('.js-switch').change(function () {
-        let status = $(this).is(':checked') ? 1 : 0;
-        let url = $(this).data('url');
-        $.ajax({
-            url: url,
-            method: 'PUT',
-            data: {
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.js-switch').forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+
+            let status = this.checked ? 1 : 0;
+            let url = this.dataset.url;w
+
+            axios.put(url, {
                 status: status,
-                _token: $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (response) {
-                console.log('Status updated successfully.');
-            },
-            error: function (error) {
-                console.error('Error updating status.', error);
-            }
-        })
+            })
+                .then(response => {
+                    console.log('status update success')
+                })
+                .catch(error => {
+                    console.error('Error updating status.', error);
+                });
+        });
     });
 });
+

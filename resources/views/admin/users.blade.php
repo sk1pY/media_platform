@@ -17,22 +17,17 @@
                 <th scope="row">{{$user -> id}}</th>
                 <td>{{$user -> name}}</td>
                 <td>
-                    <form action="{{ route('admin.role_for_user.update',['user'=>$user->id] ) }}" method="post"
-                          class="d-flex align-items-center gap-2">
-                        @csrf
-                        @method('PUT')
-                        <select name="role" class="form-select form-select-sm">
-                            data-url="{{route('admin.users.update.status',$user->id)}}"
-
+                        <select
+                            name="role"
+                            class="role-update form-select form-select-sm"
+                            data-url="{{route('admin.users.update.role',$user->id)}}">
                         @foreach($roles as $role)
                                 <option value="{{ $role->name }}"
-                                    {{ $user->roles->contains('name', $role->name) ? 'selected' : '' }}>
-                                    {{ $role->name ?? 'without role' }}
+                                    {{ $user->hasRole($role->name) ? 'selected' : '' }}>
+                                    {{$role->name}}
                                 </option>
                             @endforeach
                         </select>
-                        <button class="btn btn-secondary btn-sm" type="submit">ok</button>
-                    </form>
                 </td>
                 <td class="">
                     <div class="form-check form-switch ">
@@ -61,6 +56,7 @@
         {{ $users->links('pagination::bootstrap-5') }}
     </div>
 
+    <script src="{{asset('js/role_update.js')}}"></script>
     <script src="{{asset('js/switch.js')}}"></script>
     <script src="{{asset('js/table.js')}}"></script>
 

@@ -97,7 +97,6 @@
                         @method('PUT')
                         <input type="text" hidden value="{{$role->id}}" name="name">
                         @foreach($permissions as $permission)
-
                             <div class="form-check form-check-inline">
                                 <input class=" js-role-update form-check-input"
                                        data-id ="{{$role->id}}"

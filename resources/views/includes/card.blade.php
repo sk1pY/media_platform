@@ -146,7 +146,9 @@
                     </i>
                 </a>
                 {{-- BOOKMARKS --}}
-                <div style="cursor: pointer" class="bookmark-button " data-bookmark-id="{{ $post->id }}">
+                <div style="cursor: pointer" class="bookmark-button "
+                     data-bookmark-id="{{ $post->id }}"
+                     data-url="{{route('bookmarks.store')}}">
                     <i class="bookmark_button ms-3 bi {{ in_array($post->id, $bookmarkPostUser) ? 'bi-bookmark-fill color_grey' : 'bi-bookmark' }}"></i>
                 </div>
                 <a class="b ms-3" href="#" onclick="copyPostLink('{{ route('posts.show', $post->id) }}')">

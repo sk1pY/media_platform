@@ -43,7 +43,8 @@ Route::name('home.')->prefix('home')->group(function () {
 //COMMENTARIES
 Route::post('/comments', [CommentController::class, 'store'])->name('comment.store');
 Route::post('/comments/like_dislike', [CommentController::class, 'like_dislike'])->name('comments.like');
-Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
+//rightsidebar
+Route::get('/comments', [CommentController::class, 'user_comments'])->name('comments.index');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
 //LIKES
@@ -57,6 +58,7 @@ Route::post('/posts/{post}/incrementViews', [PostController::class, 'incrementVi
 
 //ADMIN_PANEL
 Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(function () {
+    //ROLEPERMISSIONS
     Route::get('/', [AdminController::class, 'index'])->name('index');
     Route::post('/roles', [RolePermissionController::class, 'roles_store'])->name('roles.store');
     Route::delete('/roles/{role}', [RolePermissionController::class, 'roles_destroy'])->name('roles.destroy');
@@ -64,16 +66,17 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     Route::delete('/permissions/{permission}', [RolePermissionController::class, 'permissions_destroy'])->name('permissions.destroy');
     Route::get('/roles_and_permissions', [RolePermissionController::class, 'index'])->name('roles_and_permissions.index');
     Route::put('/roles_and_permissions/{role}', [RolePermissionController::class, 'roles_and_permissions_update'])->name('roles_and_permissions.update');
-    Route::put('/role_for_user/{user}', [RolePermissionController::class, 'role_for_user'])->name('role_for_user.update');
-    Route::delete('/role_for_user/{user}', [RolePermissionController::class, 'role_for_user'])->name('role_for_user.update');
-
+    //Users
     Route::resource('users', AdminUserController::class);
     Route::put('/users/{user}/update-status', [AdminUserController::class, 'update_status'])->name('users.update.status');
+    Route::put('/users/{user}/update-role', [AdminUserController::class, 'update_role'])->name('users.update.role');
+    //CATEGORY
     Route::resource('categories', AdminCategoryController::class);
+    //POSTS
     Route::resource('posts', AdminPostController::class);
     Route::put('/posts/{post}/update-status', [AdminPostController::class, 'update_status'])->name('posts.update.status');
+    //COMMENTS
     Route::resource('comments', AdminCommentController::class);
-
     //CLAIMS
     Route::resource('claims', ClaimController::class);
 });
@@ -82,7 +85,7 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
 //BOOKMARKS
 Route::name('bookmarks.')->prefix('bookmarks')->group(function () {
     Route::get('/', [BookmarksController::class, 'index'])->name('index');
-    Route::post('/', [BookmarksController::class, 'store']);
+    Route::post('/', [BookmarksController::class, 'store'])->name('store');
     Route::delete('/{bookmark}', [BookmarksController::class, 'destroy'])->name('destroy');
 });
 

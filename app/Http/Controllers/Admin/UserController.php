@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use     App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -65,8 +66,22 @@ class UserController extends Controller
     {
         $status = $request['status'];
         $user->update(['status' => $status]);
+
+        if($status == 0){
+            $user->posts()->update(['status'=> 0]);
+        }
+
         return response()->json(['success' => 'User status updated successfully.','status' => $status]);
     }
+
+    public function update_role(Request $request, User $user)
+    {
+        $role = $request['role'];
+        $user->syncRoles($role);
+        return response()->json(['success' => 'User role updated successfully.','role' => $role]);
+
+    }
+
     /**
      * Remove the specified resource from storage.
      */

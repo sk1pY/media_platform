@@ -11,6 +11,7 @@
                 </div>
 
                 <div class="m-0 p-0 d-flex flex-column gap-2 mt-3">
+                    <a href="{{ route('home.profile.show',Auth()->user()->id) }}" class="btn btn-light">Мой профиль</a>
                     <a href="{{ route('comments.index') }}" class="btn btn-light">Комментарии</a>
                     <a href="{{ route('bookmarks.index') }}" class="btn btn-light">Сохраненные</a>
                     <a href="{{ route('subscriptions.index') }}" class="btn btn-light">Управление подписками</a>

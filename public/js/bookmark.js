@@ -1,25 +1,26 @@
-$(document).ready(function () {
-    $('.bookmark-button').off('click').on('click', function () { // off() перед on()
-        var bookmarkId = $(this).data('bookmark-id');
-        var bookmarkButton = $(this).find('.bookmark_button ');
-
-        $.ajax({
-            url: '/bookmarks',
-            method: 'POST',
-            data: {
-                bookmark_id: bookmarkId
-            },
-            success: function (response) {
-                if (response.success) {
-                    if (response.bookmark) {
-                        bookmarkButton.addClass('bi bi-bookmark-fill color_grey').removeClass('bi bi-bookmark');
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.bookmark-button').forEach(function (button) {
+        button.addEventListener('click', function () {
+            let bookmarkId = this.dataset.bookmarkId;
+            let bookmarkButton = this.querySelector('.bookmark_button');
+            let url = this.dataset.url;
+            console.log(url);
+            axios.post(url, {bookmark_id: bookmarkId})
+                .then(response => {
+                    if (response.data.success) {
+                        if (response.data.bookmark) {
+                            bookmarkButton.classList.add('bi', 'bi-bookmark-fill', 'color_grey');
+                            bookmarkButton.classList.remove('bi-bookmark');
+                        } else {
+                            bookmarkButton.classList.add('bi', 'bi-bookmark');
+                            bookmarkButton.classList.remove('bi-bookmark-fill', 'color_grey');
+                        }
                     } else {
-                        bookmarkButton.addClass('bi bi-bookmark').removeClass('bi bi-bookmark-fill color_grey');
+                        document.getElementById('message').textContent = response.data.message;
+                        document.getElementById('message').style.color = 'red';
                     }
-                } else {
-                    $('#message').text(response.message).css('color', 'red');
-                }
-            },
+                })
+                .catch(error => console.error('Ошибка:', error));
         });
     });
 });

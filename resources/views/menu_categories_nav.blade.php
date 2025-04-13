@@ -3,7 +3,6 @@
     <div class="container-fluid " style="padding-left: 120px; padding-right: 120px;">
         <div class="d-flex">
             <a href="{{ route('index') }}" class="navbar-brand me-auto fw-bold fs-4">PROJEKT</a>
-            <img src="{{ asset('favicon.png') }}" alt="" style="height: 50px;width: 50px">
         </div>
 
         {{--        SEARCH --}}

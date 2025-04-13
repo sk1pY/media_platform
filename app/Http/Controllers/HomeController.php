@@ -15,11 +15,10 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function show($id)
+    public function show(User $user)
     {
-        $user = User::where('id', $id)->first();
-        $posts = Post::where('user_id', $id)->get();
-        $countSubAuthors = Subscribe::where('author_id', $id)->count();
+        $posts = $user->posts()->get();
+        $countSubAuthors = Subscribe::where('author_id', $user->id)->count();
 
         return view('home', compact('user', 'posts','countSubAuthors'));
 

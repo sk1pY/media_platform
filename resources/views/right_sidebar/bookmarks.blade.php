@@ -16,7 +16,7 @@
                             href="{{ route('posts.show', $bookmark->post->id) }}">{{ $bookmark->post->title }}</a>
                     </th>
                     <th>
-                        <form action="{{ route('bookmarks.destroy', ['id' => $bookmark->id]) }}" method="post">
+                        <form action="{{ route('bookmarks.destroy',$bookmark->id) }}" method="post">
                             @csrf
                             @method('delete')
                             <input class="btn btn-danger" type="submit" value="Удалить">

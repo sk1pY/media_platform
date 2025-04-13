@@ -14,24 +14,15 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::paginate(10);
+        $categories = Category::orderBy('created_at','desc')->paginate(10);
         return view('admin.category', compact('categories'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validate = $request->validate([
             'name' => 'required|string',
             'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
         ]);
@@ -42,10 +33,7 @@ class CategoryController extends Controller
             $fileName = basename($path);
         }
 
-        Category::create([
-            'name' => $request['name'],
-            'image' => $fileName,
-        ]);
+            Category::create(array_merge($validate,['image' => $fileName]));
         return redirect()->route('admin.categories.index');
     }
 
@@ -57,21 +45,12 @@ class CategoryController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Category $category)
     {
-
-
         $validated = $request->validate([
             'name' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',

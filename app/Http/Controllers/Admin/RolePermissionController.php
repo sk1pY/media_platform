@@ -19,16 +19,6 @@ class RolePermissionController extends Controller
         $rolesWithPermissions = Role::with('permissions')->get();
         return view('admin.users.roles_and_permissions', compact('roles', 'permissions', 'rolesWithPermissions'));
     }
-
-    public function role_for_user(Request $request, User $user)
-    {
-        $role = Role::where('name', $request->input('role'))->first();
-        $user->syncRoles($role);
-
-        return redirect()->route('admin.users.index');
-    }
-
-
     public function roles_store()
     {
         $validated = request()->validate([
@@ -72,7 +62,6 @@ class RolePermissionController extends Controller
 
         } else {
             $role->permissions()->detach($permission);
-
         }
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 

@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     setTimeout(function () {
         $.ajax({
             url: incrementViewsUrl,

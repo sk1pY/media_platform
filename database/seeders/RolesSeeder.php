@@ -21,10 +21,10 @@ class RolesSeeder extends Seeder
 
         $admin = User::create([
             'name' => 'Admin',
-            'email' => 'admin@admin.com',
+            'email' => 'admin@gmail.com',
             'password' => 'admin',
         ]);
-        $admin->assignRole('Admin');
+        $admin->assignRole('admin');
 
 
     }

@@ -5,9 +5,9 @@ $(document).ready(function () {
         "info": false
     });
 
-    $("#tablecontents").sortable({
-        items: "tr",
-        cursor: 'move',
-        opacity: 0.6
-    });
+    // $("#tablecontents").sortable({
+    //     items: "tr",
+    //     cursor: 'move',
+    //     opacity: 0.6
+    // });
 });

@@ -72,7 +72,7 @@ class CommentController extends Controller
         }
     }
 
-    public function  index(Request $request)
+    public function  user_comments(Request $request)
     {
 
         $comments = Comment::where('user_id',Auth::user()->id)->paginate(5);

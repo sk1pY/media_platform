@@ -29,19 +29,16 @@
                     <a href="{{route('posts.show',$claim->post->id)}}">{{ $claim->post->title }}</a>
                 </td>
                 <td class="text-center">
-                    {{ $claim->name }}
+                    {{ $claim->title }}
                 </td>
                 <td class="text-center">
-                    <form action="{{ route('admin.claims.update',$claim->id) }}" method="post">
-                        @csrf
-                        @method('put')
-                        <select name="status">
-                            @foreach($statuses as $stat)
-                                <option value="{{$stat}}" {{$claim->status == $stat? 'selected':''}}>{{$stat}}</option>
-                            @endforeach
-                        </select>
-                        <input type="submit" >
-                    </form>
+                    <select name="status"
+                            class="claim-update"
+                            data-url="{{route('admin.claims.update',$claim->id)}}">
+                        @foreach($statuses as $stat)
+                            <option value="{{ $stat }}" {{$claim->status == $stat? 'selected':''}}>{{$stat}}</option>
+                        @endforeach
+                    </select>
                 </td>
                 <td class="text-center">
 
@@ -59,10 +56,11 @@
         @endforeach
         </tbody>
     </table>
-{{--        <div class="mt-4">--}}
-{{--            {{ $claims->links('pagination::bootstrap-5') }}--}}
-{{--        </div>--}}
+    {{--        <div class="mt-4">--}}
+    {{--            {{ $claims->links('pagination::bootstrap-5') }}--}}
+    {{--        </div>--}}
 
     <script src="{{asset('js/table.js')}}"></script>
+    <script src="{{asset('js/claim_status.js')}}"></script>
 
 @endsection

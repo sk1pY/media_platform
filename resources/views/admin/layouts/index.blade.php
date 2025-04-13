@@ -1,4 +1,4 @@
-<!doctype html>
+    <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -37,7 +37,7 @@
 <body>
 
 <div class="row">
-    <div class="col-3 d-flex flex-column flex-shrink-0 p-3 " style="background-color: #273A50;">
+    <div class="col-3 d-flex flex-column flex-shrink-0 p-3 " style="background-color: #273A50;height: 100vh;">
         <a href="/" class="d-flex align-items-center mb-3 text-white text-decoration-none">
             <svg class="bi me-2" width="40" height="32"></svg>
             <span class="fs-4">Admin Panel</span>

@@ -8,6 +8,7 @@ use App\Models\Complain;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ClaimController extends Controller
 {
@@ -18,7 +19,7 @@ class ClaimController extends Controller
     {
         $statuses = ['Pending', 'Accepted', 'Rejected'];
         $claims = Claim::get();
-        return view('admin.claims',compact('claims','statuses'));
+        return view('admin.claims', compact('claims', 'statuses'));
     }
 
     /**
@@ -34,8 +35,6 @@ class ClaimController extends Controller
      */
     public function store(Request $request)
     {
-       // dd($request->all());
-
         $validate = $request->validate([
             'name' => 'required',
         ]);
@@ -68,19 +67,22 @@ class ClaimController extends Controller
      */
     public function update(Request $request, Claim $claim)
     {
+        if ($request['status'] == 'Accepted') {
+            $post = Post::find($claim->post_id);
+            $post->status = 0;
+            $post->save();
 
-        if($request['status'] == 'Rejected'){
-            $post =   Post::find($claim->post_id);
-
-            $post->status =  0;
+        }elseif($request['status'] == 'Rejected'){
+            $post = Post::find($claim->post_id);
+            $post->status = 1;
             $post->save();
         }
 
         $claim->update([
-            'status' => $request['status'],
+            'status' => $request['status']
         ]);
 
-        return redirect()->route('admin.claims.index');
+        return response()->json(['success' => 'succes update status']);
 
     }
 

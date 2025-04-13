@@ -37,10 +37,9 @@ class BookmarksController extends Controller
 
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy(Bookmark $bookmark): RedirectResponse
     {
-
-        Bookmark::find($id)->delete();
+        $bookmark->delete();
         return redirect()->route('bookmarks.index');
     }
 }
