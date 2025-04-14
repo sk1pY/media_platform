@@ -16,9 +16,9 @@ class CommentController extends Controller
             'post_id' => 'required',
             'text' => 'required|string|max:600',
         ]);
-
+        $validated['user_id'] = Auth::id();
         if(Auth()->check()){
-            $comment = Comment::create(array_merge($validated,['user_id'=> Auth::user()->id]));
+            $comment = Comment::create(array_merge($validated));
         }
         return redirect()->route('posts.show', $comment->post_id);
     }
@@ -26,7 +26,7 @@ class CommentController extends Controller
     public function like_dislike(Request $request)
     {
 
-        $commentId = $request->input('comment_id');
+        $commentId = request('comment_id');
         $userId = Auth::user()->id;
         $comment = Comment::find($commentId);
         $type = $request->input('type');
@@ -74,7 +74,8 @@ class CommentController extends Controller
 
     public function  user_comments(Request $request)
     {
-
+        $user = Auth::user();
+        $comments = $user->comments()->orderBy('created_at', 'DESC')->withCount(['likes', 'dislikes'])->paginate(10);
         $comments = Comment::where('user_id',Auth::user()->id)->paginate(5);
         return view('right_sidebar.my_comments',compact('comments'));
     }

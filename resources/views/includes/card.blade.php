@@ -16,7 +16,7 @@
                 <div>
                     @if ($post->category)
                         <a class="link-secondary active fs-7 text-dark text-decoration-none me-2"
-                            href="{{ route('categories.show', $post->category->id) }}">
+                            href="{{ route('categories.show', $post->category) }}">
                             {{ $post->category->name }}
                         </a>
                     @endif
@@ -41,7 +41,7 @@
 
                         <ul class="dropdown-menu">
                             <li>
-                                <form action="{{ route('posts.hide', $post->id) }}" method="post">
+                                <form action="{{ route('posts.hide',$post) }}" method="post">
                                     @csrf
                                     <input class="dropdown-item" type="submit" name="hidden" value="Скрыть">
                                 </form>

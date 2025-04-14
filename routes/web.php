@@ -11,26 +11,28 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\RolePermissionController;
-use App\Http\Controllers\admin\ComplainController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\admin\ClaimController;
+use App\Http\Controllers\CategoryController;
+
+
+//CATEGORIES
+Route::prefix('categories')->name('categories.')
+    ->group(function () {
+        Route::get('/{category:slug}', [CategoryController::class, 'show'])->name('show');
+        Route::get('/my_feed', [CategoryController::class, 'my_feed'])->name('my_feed');
+        Route::get('/newest', [CategoryController::class, 'newest'])->name('newest');
+        Route::get('/popular', [CategoryController::class, 'popular'])->name('popular');
+    });
 
 //POSTS
-Route::controller(PostController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
-    Route::get('/categories/{category}', 'categories')->name('categories.show');
-    Route::get('/posts/{post}', 'show')->name('posts.show');
-    Route::post('/posts', 'store')->name('posts.store');
-    Route::delete('/posts/{post}', 'destroy')->name('posts.destroy')->where('id', '[0-9]+');
-    Route::put('/posts/{post}', 'update')->name('posts.update');
-    Route::get('/my_feed', 'my_feed')->name('my_feed');
-    Route::get('/newest', 'newest')->name('newest');
-    Route::get('/popular', 'popular')->name('popular');
-    Route::get('/hidden_posts', 'hidden_posts')->name('hidden_posts');
-    Route::post('/posts/{post}/hide', 'hide')->name('posts.hide');
-});
+Route::get('/', [PostController::class, 'index'])->name('index');
+Route::resource('posts', PostController::class)->only(['show', 'store', 'update', 'destroy']);
+Route::get('posts/hidden', [PostController::class, 'hidden_posts'])->name('posts.hidden');
+Route::post('posts/{post}/hide', [PostController::class, 'hide'])->name('posts.hide');
+
 
 //HOME
 Route::name('home.')->prefix('home')->group(function () {
@@ -43,7 +45,7 @@ Route::name('home.')->prefix('home')->group(function () {
 //COMMENTARIES
 Route::post('/comments', [CommentController::class, 'store'])->name('comment.store');
 Route::post('/comments/like_dislike', [CommentController::class, 'like_dislike'])->name('comments.like');
-//rightsidebar
+//right sidebar
 Route::get('/comments', [CommentController::class, 'user_comments'])->name('comments.index');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
@@ -80,16 +82,12 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     //CLAIMS
     Route::resource('claims', ClaimController::class);
 });
-
-
 //BOOKMARKS
 Route::name('bookmarks.')->prefix('bookmarks')->group(function () {
     Route::get('/', [BookmarksController::class, 'index'])->name('index');
     Route::post('/', [BookmarksController::class, 'store'])->name('store');
     Route::delete('/{bookmark}', [BookmarksController::class, 'destroy'])->name('destroy');
 });
-
-
 //SUBSCRIBE
 Route::get('/subscriptions', [SubscribeController::class, 'index'])->name('subscriptions.index');
 Route::post('/subscriptions', [SubscribeController::class, 'add']);

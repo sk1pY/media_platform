@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
@@ -65,9 +66,10 @@ class CategoryFactory extends Factory
             "Политика",
             "Экология"
         ];
-
+        $name = $this->faker->unique()->randomElement($categories);
         return [
-            'name' => $this->faker->unique()->randomElement($categories),
+            'name' => $name,
+            'slug' => Str::slug($name),
             'image' => $files ? $files[array_rand($files)]->getFilename() : null,
         ];
     }

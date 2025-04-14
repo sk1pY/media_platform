@@ -23,7 +23,7 @@ class BookmarksController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        $postId = $request->input('bookmark_id');
+        $postId = request('bookmark_id');
         $bookmark = Bookmark::where(['user_id' => Auth::id(), 'post_id' => $postId])->first();
         if ($bookmark) {
             $bookmark->delete();
@@ -37,7 +37,7 @@ class BookmarksController extends Controller
 
     }
 
-    public function destroy(Bookmark $bookmark): RedirectResponse
+    public function destroy(Bookmark $bookmark)
     {
         $bookmark->delete();
         return redirect()->route('bookmarks.index');
