@@ -5,23 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\HiddenPost;
-use App\Models\Subscribe;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
-
 
 class PostController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-
         $categories = Category::get();
         $postQuery = Post::where('status', 1)->withCount(['comments', 'likes'])->orderBy('created_at','desc');
 
@@ -47,41 +44,17 @@ class PostController extends Controller
         return view('index', compact('posts', 'categories'));
     }
 
-    public function categories(Category $category)
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        $posts = $category->posts()->orderBy('created_at', 'DESC')->withCount(['comments', 'likes'])->get();
-        return view('left_sidebar.category_show', compact('posts', 'category'));
+        //
     }
 
-    public function show(Request $request, Post $post)
-    {
-        if (!$post->status ) {
-            abort(404, 'error.error');
-        }
-
-        $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->get();
-
-        $post = Post::withCount(['comments', 'likes'])->find($post->id);
-        if ($request->filled('filter_comments')) {
-            $query = Comment::query();
-
-            switch ($request->input('filter_comments')) {
-                //                  case 'popular':
-                //                      $query->orderBy('created_at', 'desc');
-                //                      break;
-                case 'recent':
-                    $query->orderBy('created_at', 'desc');
-                    break;
-                case 'old':
-                    $query->orderBy('created_at', 'asc');
-            }
-            $comments = $query->get();
-        }
-
-
-        return view('about_task', compact('post', 'comments'));
-    }
-
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $this->authorize('create', Post::class);
@@ -123,16 +96,50 @@ class PostController extends Controller
 
         return redirect()->route('index');
     }
-    public function destroy(Post $post)
-    {
-        $this->authorize('destroy',$post);
 
-        $post->delete();
-        return redirect()->back();
+    /**
+     * Display the specified resource.
+     */
+    public function show(Request $request,Po $post)
+    {
+        if (!$post->status ) {
+            abort(404, 'error.error');
+        }
+
+        $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->get();
+
+        $post = Post::withCount(['comments', 'likes'])->find($post->id);
+        if ($request->filled('filter_comments')) {
+            $query = Comment::query();
+
+            switch (request('filter_comments')) {
+
+                case 'recent':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                case 'old':
+                    $query->orderBy('created_at', 'asc');
+            }
+            $comments = $query->get();
+        }
+
+
+        return view('about_task', compact('post', 'comments'));
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, Post $post)
     {
-
         $this->authorize('update',$post);
 
         $validatedData = $request->validate([
@@ -155,33 +162,20 @@ class PostController extends Controller
 
         return redirect()->route('home.profile.show',Auth::id());
     }
-    public function my_feed()
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Post $post)
     {
-        $authors_ids = Subscribe::where('user_id', Auth::id())->pluck('author_id');
-        $posts = Post::whereIn('user_id', $authors_ids)->withCount(['comments', 'likes'])->get();
-        return view('left_sidebar.myFeed_show', compact('posts'));
+        $this->authorize('destroy',$post);
+
+        $post->delete();
+        return redirect()->back();
     }
 
-    public function newest()
-    {
-        $posts = Post::where('created_at', '>=', Carbon::now()->subDay())
-            ->withCount(['comments', 'likes'])->get();
 
-        return view('left_sidebar.newest_show', compact('posts'));
-    }
-
-    public function popular()
-    {
-        $posts = Post::orderBy('views', 'DESC')->withCount(['comments', 'likes'])->get();
-        return view('left_sidebar.popular_show', compact('posts'));
-    }
-
-    public function incrementViews(Post $post)
-    {
-        $post->query()->increment('views');
-        return response()->json(['views' => $post->views]);
-    }
-
+//    ----------------------------------------------------------------------------------
 
     public function hide(Request $request, Post $post)
     {
@@ -195,22 +189,6 @@ class PostController extends Controller
         }
         return redirect()->route('index');
     }
-
-    public function invitations(Request $request, $invitation, $answer)
-    {
-        if ($answer === 'yes') {
-            return response()->json([
-                'message' => 'Спасибо за принятие приглашения!',
-                'invitation_id' => $invitation,
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Вы отклонили приглашение.',
-                'invitation_id' => $invitation,
-            ]);
-        }
-    }
-
     public function hidden_posts()
     {
         $postsIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id');
@@ -218,4 +196,9 @@ class PostController extends Controller
         return view('right_sidebar.hiddenPosts_show', compact('posts'));
     }
 
+    public function incrementViews(Post $post)
+    {
+        $post->query()->increment('views');
+        return response()->json(['views' => $post->views]);
+    }
 }
