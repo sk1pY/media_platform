@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\BookmarksController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SubscribeController;
@@ -16,6 +15,17 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\admin\ClaimController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
+
+//PROFILE
+//
+//
+//
+//
+//
+//
+
+
 
 
 //CATEGORIES
@@ -29,22 +39,21 @@ Route::prefix('categories')->name('categories.')
 
 //POSTS
 Route::get('/', [PostController::class, 'index'])->name('index');
-Route::resource('posts', PostController::class)->only(['show', 'store', 'update', 'destroy']);
+Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+Route::resource('posts', PostController::class)->only(['store', 'destroy','update']);
 Route::get('posts/hidden', [PostController::class, 'hidden_posts'])->name('posts.hidden');
 Route::post('posts/{post}/hide', [PostController::class, 'hide'])->name('posts.hide');
 
 
 //HOME
-Route::name('home.')->prefix('home')->group(function () {
-    Route::get('/{user}', [HomeController::class, 'show'])->name('profile.show');
-    Route::put('/update_profile/{id}', [HomeController::class, 'update_profile'])->name('update.profile');
-    Route::put('/update_post/{post}', [HomeController::class, 'update_post'])->name('update.post');
+Route::prefix('users')->name('users.')->group(function () {
+    Route::get('/{user}', [UserController::class, 'show'])->name('show');
+    Route::put('/{user}', [UserController::class, 'updateProfile'])->name('update');
 });
-
 
 //COMMENTARIES
 Route::post('/comments', [CommentController::class, 'store'])->name('comment.store');
-Route::post('/comments/like_dislike', [CommentController::class, 'like_dislike'])->name('comments.like');
+Route::post('/comments/like-dislike', [CommentController::class, 'likeDislike'])->name('comments.like');
 //right sidebar
 Route::get('/comments', [CommentController::class, 'user_comments'])->name('comments.index');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
@@ -83,11 +92,8 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     Route::resource('claims', ClaimController::class);
 });
 //BOOKMARKS
-Route::name('bookmarks.')->prefix('bookmarks')->group(function () {
-    Route::get('/', [BookmarksController::class, 'index'])->name('index');
-    Route::post('/', [BookmarksController::class, 'store'])->name('store');
-    Route::delete('/{bookmark}', [BookmarksController::class, 'destroy'])->name('destroy');
-});
+Route::resource('bookmarks', BookmarkController::class)->only(['index', 'store', 'destroy']);
+
 //SUBSCRIBE
 Route::get('/subscriptions', [SubscribeController::class, 'index'])->name('subscriptions.index');
 Route::post('/subscriptions', [SubscribeController::class, 'add']);

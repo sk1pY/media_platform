@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 
 class PostFactory extends Factory
@@ -28,8 +29,11 @@ class PostFactory extends Factory
             File::copy($file->getPathname(), $destination);
         }
 
+
+        $title = $this->faker->sentence(5);
         return [
-            'title' => $this->faker->sentence(),
+            'title' => $title,
+            'slug' => Str::slug($title),
             'description' => $this->faker->paragraph(15, true),
             'image' => $files ? $files[array_rand($files)]->getFilename() : null,
             'category_id' => $this->faker->numberBetween(1, 10),

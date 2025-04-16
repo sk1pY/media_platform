@@ -23,11 +23,10 @@ class CommentController extends Controller
         return redirect()->route('posts.show', $comment->post_id);
     }
 
-    public function like_dislike(Request $request)
+    public function likeDislike(Request $request)
     {
-
         $commentId = request('comment_id');
-        $userId = Auth::user()->id;
+        $userId = Auth::id();
         $comment = Comment::find($commentId);
         $type = $request->input('type');
 
@@ -70,13 +69,13 @@ class CommentController extends Controller
                 return response()->json(['success' => true, 'dislike'=>$comment->dislike, 'disliked' => true]);
             }
         }
+        return response()->json(['success' => false]);
     }
 
-    public function  user_comments(Request $request)
+    public function  user_comments()
     {
         $user = Auth::user();
         $comments = $user->comments()->orderBy('created_at', 'DESC')->withCount(['likes', 'dislikes'])->paginate(10);
-        $comments = Comment::where('user_id',Auth::user()->id)->paginate(5);
         return view('right_sidebar.my_comments',compact('comments'));
     }
 

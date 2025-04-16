@@ -24,52 +24,52 @@
             <button type="button" class="btn me-3 bg-white rounded-4 text-start p-2 w-100 w-auto" data-bs-toggle="modal"
                     data-bs-target="#createPost" data-bs-dismiss="modal">
 
-                <i class="bi bi-pencil-square me-1"></i>
-                <span class="text-black">Создать</span>
+                <i class="bi bi-plus-square me-1"></i>
+                <span class="text-black">Опубликовать пост</span>
 
             </button>
-            {{-- DROPDOWN MENU PROFILE --}}
-            <div class="dropdown">
-                <div class="d-flex align-items-center link-secondary active drop" data-bs-toggle="dropdown"
-                     data-bs-offset="140,160">
-                    <img
-                        src="{{ Auth::user()->image ? Storage::url('avatarImages/' . Auth::user()->image) : asset('imageAvatar/def.jpg') }}"
-                        class="blur-image dropdown-toggle me-2 rounded-circle" style="width: 45px; height: 45px;"
-                        alt="...">
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
+{{--            --}}{{-- DROPDOWN MENU PROFILE --}}
+{{--            <div class="dropdown">--}}
+{{--                <div class="d-flex align-items-center link-secondary active drop" data-bs-toggle="dropdown"--}}
+{{--                     data-bs-offset="140,160">--}}
+{{--                    <img--}}
+{{--                        src="{{ Auth::user()->image ? Storage::url('avatarImages/' . Auth::user()->image) : asset('default_images/defaultAvatar.jpg') }}"--}}
+{{--                        class="blur-image dropdown-toggle me-2 rounded-circle" style="width: 45px; height: 45px;"--}}
+{{--                        alt="...">--}}
+{{--                    <i class="fa-solid fa-chevron-down"></i>--}}
+{{--                </div>--}}
 
-                <ul class="dropdown-menu dropdown-menu-end custom-dropdown mt-4 h-auto w-auto">
-                    <a href="{{ route('home.profile.show', ['user' => Auth::user()->id]) }}"
-                       class="link-secondary text-decoration-none text-dark">
-                        <li class="d-flex align-items-center">
-                            <img
-                                src="{{ Auth::user()->image ? Storage::url('avatarImages/' . Auth::user()->image) : asset('imageAvatar/def.jpg') }}"
-                                class="dropdown-toggle me-2 rounded-circle" style="width: 45px; height: 45px;"
-                                alt="...">
-                            <div class="d-flex flex-column">
-                                {{ Auth::user()->name }}
+{{--                <ul class="dropdown-menu dropdown-menu-end custom-dropdown mt-4 h-auto w-auto">--}}
+{{--                    <a href="{{ route('users.show', auth()->user()) }}"--}}
+{{--                       class="link-secondary text-decoration-none text-dark">--}}
+{{--                        <li class="d-flex align-items-center">--}}
+{{--                            <img--}}
+{{--                                src="{{ Auth::user()->image ? Storage::url('avatarImages/' . Auth::user()->image) : asset('imageAvatar/def.jpg') }}"--}}
+{{--                                class="dropdown-toggle me-2 rounded-circle" style="width: 45px; height: 45px;"--}}
+{{--                                alt="...">--}}
+{{--                            <div class="d-flex flex-column">--}}
+{{--                                {{ Auth::user()->name }}--}}
 
-                                <p class="mb-0">личный блог</p>
-                            </div>
-                        </li>
-                    </a>
-
-
-                    <li class="d-flex align-items-center" style="cursor: pointer"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>
-                        <form id="logout-form" action="{{ route('logout') }}" method="post"
-                              class="link-secondary d-inline">
-                            @csrf
-                            <span class="text-decoration-none text-dark">Выйти</span>
-                        </form>
-                    </li>
+{{--                                <p class="mb-0">личный блог</p>--}}
+{{--                            </div>--}}
+{{--                        </li>--}}
+{{--                    </a>--}}
 
 
-                </ul>
-            </div>
-            {{-- END DROPDOWN MENU PROFILE --}}
+{{--                    <li class="d-flex align-items-center" style="cursor: pointer"--}}
+{{--                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">--}}
+{{--                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>--}}
+{{--                        <form id="logout-form" action="{{ route('logout') }}" method="post"--}}
+{{--                              class="link-secondary d-inline">--}}
+{{--                            @csrf--}}
+{{--                            <span class="text-decoration-none text-dark">Выйти</span>--}}
+{{--                        </form>--}}
+{{--                    </li>--}}
+
+
+{{--                </ul>--}}
+{{--            </div>--}}
+{{--            --}}{{-- END DROPDOWN MENU PROFILE --}}
         @endauth
     </div>
 </nav>
@@ -97,10 +97,10 @@
                     <div class="mb-3">
                         Выберите категорию
                         @if (count($categories) > 0)
-                            <select name="cat_name" class="form-select">
+                            <select name="category_id" class="form-select">
                                 <option selected></option>
-                                @foreach ($categories as $cat)
-                                    <option>{{ $cat->name }}</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{$category->id}}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
                         @endif
@@ -141,7 +141,7 @@
         @if (count($categories) > 0)
             @foreach ($categories as $category)
                 <li class="rounded-pill nav-link d-flex align-items-center ">
-                    <img src="{{ Storage::url('categoryImages/' . $category->image) }}" alt="..."
+                    <img src="{{ $category->image?Storage::url('categoryImages/' . $category->image):asset('default_images/defaultImage.png') }}" alt="..."
                          class=" rounded-circle" style="width:30px;height: 30px">
 
                     <a style="font-size: 1.1rem;"

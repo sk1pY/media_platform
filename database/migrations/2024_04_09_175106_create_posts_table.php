@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->string('slug');
             $table->string('image')->default('public/default_images/default.png');
             $table->foreignId('category_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();

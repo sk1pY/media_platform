@@ -40,7 +40,7 @@
                             class="rounded-circle" style="width: 40px; height: 40px;" alt="...">
                         <div class=" ms-2 ">
                             <div class="fw-bold me-2"><a class="fw-bold link-dark text-decoration-none"
-                                    href="{{ route('home.profile.show', ['user' => $comment->user->id]) }}">{{ $comment->user->name }}</a>
+                                    href="{{ route('users.show', ['user' => $comment->user]) }}">{{ $comment->user->name }}</a>
                             </div>
                             <div class="text-muted">{{ $comment->created_at->diffForHumans() }}</div>
                         </div>

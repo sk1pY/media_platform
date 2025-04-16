@@ -62,45 +62,27 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => 'required|max:100',
             'description' => 'required|max:500',
-            'image' => 'image|mimes:jpg,png,jpeg',
-            'cat_name' => 'nullable'
+            'image' =>'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'category_id' => 'nullable|numeric|exists:categories,id',
         ]);
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('postImages', 'public');
-            $fileName = basename($path);
-        } else {
-            $localPath = public_path('default_images/default.png');
-            $newPath = Storage::disk('public')->putFile('postImages', $localPath);
-            $fileName = basename($newPath);
-        }
+        $validated['image'] = $request->hasfile('image')?
+            basename($request->file('image')->store('postImages', 'public')):'defaultPost.png';
 
-        $category_id = null;
-
-        if (!empty($validated['cat_name'])) {
-            $category_obj = Category::where('name', $validated['cat_name'])->first();
-            $category_id = $category_obj->id;
-        }
         try {
-            $user = User::find(Auth::id());
-            $user->posts()->create(
-                array_merge(
-                    $validated,
-                    ['image' => $fileName, 'category_id' => $category_id]
-                )
-            );
-        } catch (\Exception $e) {
-            Log::error('Ошибка при создании поста: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Произошла ошибка при создании поста.');
+            Auth::user()->posts()->create($validated);
+        }  catch (\Throwable $e) {
+            Log::error('Ошибка создания поста: ' . $e->getMessage());
+            return back()->with('error', 'Не удалось создать пост.');
         }
 
-        return redirect()->route('index');
+        return redirect()->route('users.show', Auth::id());
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request,Po $post)
+    public function show(Request $request,Post $post)
     {
         if (!$post->status ) {
             abort(404, 'error.error');
@@ -160,7 +142,7 @@ class PostController extends Controller
         }
         $post->update(array_merge($validatedData, ['user_id' => Auth::id()]));
 
-        return redirect()->route('home.profile.show',Auth::id());
+        return redirect()->route('users.show',auth()->user());
     }
 
     /**

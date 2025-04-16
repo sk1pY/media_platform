@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 
 class Post extends Model
@@ -15,6 +16,7 @@ class Post extends Model
     ];
     protected $fillable = [
         'title',
+        'slug',
         'description',
         'category_id',
         'user_id',
@@ -22,7 +24,12 @@ class Post extends Model
         'likes',
         'status'
     ];
-
+    protected  static function booted()
+    {
+        self::creating(function ($post){
+            $post->slug = Str::slug($post->title);
+        });
+    }
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsto(User::class);

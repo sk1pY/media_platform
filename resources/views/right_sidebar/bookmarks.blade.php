@@ -13,10 +13,10 @@
             @foreach ($bookmarks as $bookmark)
                 <tr>
                     <th scope="row"><a
-                            href="{{ route('posts.show', $bookmark->post->id) }}">{{ $bookmark->post->title }}</a>
+                            href="{{ route('posts.show', $bookmark->post) }}">{{ $bookmark->post->title }}</a>
                     </th>
                     <th>
-                        <form action="{{ route('bookmarks.destroy',$bookmark->id) }}" method="post">
+                        <form action="{{ route('bookmarks.destroy',$bookmark) }}" method="post">
                             @csrf
                             @method('delete')
                             <input class="btn btn-danger" type="submit" value="Удалить">
