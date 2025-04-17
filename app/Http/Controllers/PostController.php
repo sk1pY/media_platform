@@ -40,7 +40,7 @@ class PostController extends Controller
             }
         }
 
-        $posts = $postQuery->paginate(5);
+        $posts = $postQuery->get();
         return view('index', compact('posts', 'categories'));
     }
 
@@ -76,7 +76,7 @@ class PostController extends Controller
             return back()->with('error', 'Не удалось создать пост.');
         }
 
-        return redirect()->route('users.show', Auth::id());
+        return to_route('users.show', Auth::id());
     }
 
     /**
@@ -124,7 +124,7 @@ class PostController extends Controller
     {
         $this->authorize('update',$post);
 
-        $validatedData = $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:50',
             'description' => 'required|string',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -134,15 +134,15 @@ class PostController extends Controller
             if ($post->image) {
                 Storage::disk('public')->delete($post->image);
             }
-            $path = $request->file('image')->store('postImages', 'public');
-            $fileName = basename($path);
-            $validatedData['image'] = $fileName;
-        } else {
-            unset($validatedData['image']);
-        }
-        $post->update(array_merge($validatedData, ['user_id' => Auth::id()]));
+            $validated['image'] = $request->hasfile('image')?basename($request->file('image')->store('postImages', 'public')):null;
 
-        return redirect()->route('users.show',auth()->user());
+        }
+        try{
+            Auth::user()->posts()->update($validated);
+        }catch (\Throwable $e) {
+            Log::error('<UNK> <UNK> <UNK>: ' . $e->getMessage());
+        }
+        return to_route('profile.index');
     }
 
     /**
@@ -175,7 +175,7 @@ class PostController extends Controller
     {
         $postsIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id');
         $posts = Post::whereIn('id', $postsIds)->withCount(['comments', 'likes'])->get();
-        return view('right_sidebar.hiddenPosts_show', compact('posts'));
+        return view('dashboard.hidden_posts', compact('posts'));
     }
 
     public function incrementViews(Post $post)

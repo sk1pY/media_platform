@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('dashboard.layouts.app')
 @section('content')
-    <h1>Мои подписки</h1>
+    <h4>Управление подписками</h4>
     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
         @foreach ($authors as $author)
             <div class="col">
@@ -22,11 +22,8 @@
             </div>
         @endforeach
     </div>
-
-    {{--    {{ $comments->links('pagination::bootstrap-5') }} --}}
     <script>
         var subAuthors = @json($subAuthors);
     </script>
-
     <script src="{{ asset('js/subscribe.js') }}"></script>
 @endsection

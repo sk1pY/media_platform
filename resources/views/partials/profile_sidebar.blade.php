@@ -1,5 +1,5 @@
 @auth()
-    <div class="sticky-top" style="top: 70px;">
+    <div class="sticky-top" style="top: 80px;">
 
         <div class="card border-0" style="width: 18rem;">
             <div class="card-body">
@@ -11,25 +11,20 @@
                 </div>
 
                 <div class="m-0 p-0 d-flex flex-column gap-2 mt-3">
-                    <a href="{{ route('users.show',auth()->user()) }}" class="btn btn-light">Мой профиль</a>
-                    <a href="{{ route('comments.index') }}" class="btn btn-light">Комментарии</a>
-                    <a href="{{ route('bookmarks.index') }}" class="btn btn-light">Сохраненные</a>
-                    <a href="{{ route('subscriptions.index') }}" class="btn btn-light">Управление подписками</a>
-                    <a href="{{ route('posts.hidden') }}" class="btn btn-light"> Скрытые посты </a>
+                    <a href="{{ route('profile.index')}}" class="btn btn-light">Мой профиль</a>
+                    <a href="{{ route('profile.comments.index') }}" class="btn btn-light">Комментарии</a>
+                    <a href="{{ route('profile.bookmarks.index') }}" class="btn btn-light">Закладки</a>
+                    <a href="{{ route('profile.subscriptions.index') }}" class="btn btn-light">Управление подписками</a>
+                    <a href="{{ route('profile.hiddenPosts') }}" class="btn btn-light"> Скрытые посты </a>
                     @role('admin')
                         <a href="{{ route('admin.index') }}" class="btn btn-light">Админ панель</a>
                     @endrole
-                    <a href="{{ route('posts.hidden') }}" class="btn btn-light"> Скрытые посты </a>
-
 
                     <form id="logout-form" action="{{ route('logout') }}" method="post" class="d-inline">
                         @csrf
                         <button type="submit" class="btn btn-light w-100">Выйти</button>
                     </form>
-
                 </div>
-
-
             </div>
 
 

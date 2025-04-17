@@ -11,19 +11,8 @@ use Illuminate\Support\Str;
 class Post extends Model
 {
     use HasFactory;
-    protected $attributes = [
-        'image' => 'public/default_images/default.png',
-    ];
     protected $fillable = [
-        'title',
-        'slug',
-        'description',
-        'category_id',
-        'user_id',
-        'image',
-        'likes',
-        'status'
-    ];
+        'title','slug','description','category_id','user_id','image','likes','status'];
     protected  static function booted()
     {
         self::creating(function ($post){

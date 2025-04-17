@@ -83,7 +83,7 @@ class PostController extends Controller
         $post->update(array_merge($validated,
             ['user_id' => $request->input('user_id')]));
 
-        return redirect()->route('admin.posts.index');
+        return to_route('admin.posts.index');
     }
 
     public function update_status(Request $request, Post $post)

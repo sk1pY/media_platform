@@ -20,7 +20,7 @@ class LikeController extends Controller
     public function like(Request $request)
     {
         $postId = $request->input('post_id');
-        $userId = Auth::user()->id;
+        $userId = Auth::id();
 
         $post = Post::find($postId);
 
@@ -31,7 +31,6 @@ class LikeController extends Controller
             $post->decrement('likes');
             return response()->json(['success' => true, 'likes' => $post->likes, 'liked' => false]);
         } else {
-
             $post->likes()->create(['user_id'=>$userId,'is_liked' => true]);
             $post->increment('likes');
 

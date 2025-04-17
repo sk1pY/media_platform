@@ -14,9 +14,7 @@
 
         }
 
-        .color_grey {
-            color: #595959;
-        }
+
 
         .nav-link:hover {
             background-color: white;
@@ -60,32 +58,31 @@
 
         .sub_button_custom {
             --bs-btn-padding-y: .25rem;
-            !important;
+        !important;
             --bs-btn-padding-x: .5rem;
-            !important;
+        !important;
             --bs-btn-font-size: .75rem;
-            !important;
+        !important;
         }
     </style>
 </head>
 
 <body style="background-color: #FAFAFC">
 
-    <div class="container" style="margin-top: 80px;">
-        <div class="row ">
-            <div class="col-2 p-0 ">
-                @include('menu_categories_nav', ['categories' => $categories])
-
-            </div>
-            <div class="col-7">
-                @yield('content')
-
-            </div>
-            <div class="col-3 ">
-                @include('right_sidebar.sidebar')
-            </div>
+<div class="container" style="margin-top: 80px;">
+    @include('partials.nav')
+    <div class="row">
+        <div class="col-2">
+            @include('partials.categories_sidebar')
+        </div>
+        <div class="col-7 ms-4">
+            @yield('content')
+        </div>
+        <div class="col-2">
+            @include('partials.profile_sidebar')
         </div>
     </div>
+</div>
 
 </body>
 

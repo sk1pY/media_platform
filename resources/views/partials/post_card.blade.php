@@ -48,13 +48,24 @@
                                 </form>
                             <li><a data-bs-toggle="modal" data-bs-target="#complain_post" class="dropdown-item"
                                    href="#">Пожаловаться</a></li>
-                            @if($homeFlag ?? null)
-                                <li><a data-bs-toggle="modal" data-bs-target="#update_post{{$post->id}}" class="dropdown-item"
+                            @if($profileFlag ?? null)
+                                <li><a data-bs-toggle="modal" data-bs-target="#update_post{{$post->id}}"
+                                       class="dropdown-item"
                                        href="#">Изменить</a></li>
-                                <li><form action="{{ route('posts.destroy',$post) }}" method="post">
+                                <li>
+                                    <form action="{{ route('posts.destroy',$post) }}" method="post">
                                         @csrf
                                         @method('delete')
-                                        <input class="dropdown-item" type="submit"  value="Удалить">
+                                        <input class="dropdown-item" type="submit" value="Удалить">
+                                    </form>
+                                </li>
+                            @endif
+                            @if($bookmarkFlag ?? null)
+                                <li>
+                                    <form action="{{ route('profile.bookmarks.destroy',$bookmark) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <input class="dropdown-item"  type="submit" value="Удалить закладку">
                                     </form>
                                 </li>
                             @endif
@@ -137,7 +148,7 @@
         <p class="card-text">{{ substr($post->description, 0, 250) }}...</p>
         <div class="card-img-container">
             <img
-                src="{{ $post->user->image?Storage::url('postImages/' . $post->image):asset('default_images/defaultImage.png') }}"
+                src="{{ $post->image?Storage::url('postImages/' . $post->image):asset('default_images/defaultImage.png') }}"
                 style="width: 100%; height: 290px"
                 alt="image_not_found"
                 class="card-img-top rounded-3">
@@ -163,7 +174,7 @@
                 {{-- BOOKMARKS --}}
                 <div style="cursor: pointer" class="bookmark-button "
                      data-bookmark-id="{{ $post->id }}"
-                     data-url="{{route('bookmarks.store')}}">
+                     data-url="{{route('profile.bookmarks.store')}}">
                     <i class="bookmark_button ms-3 bi {{ in_array($post->id, $bookmarkPostUser) ? 'bi-bookmark-fill color_grey' : 'bi-bookmark' }}"></i>
                 </div>
                 <a class="b ms-3" href="#" onclick="copyPostLink('{{ route('posts.show', $post->id) }}')">

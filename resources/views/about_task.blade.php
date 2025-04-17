@@ -1,13 +1,12 @@
 @extends('layouts.app')
 @section('content')
-    @include('includes/card')
-
+    @include('partials/post_card')
     {{--        FILTER --}}
     <div class="m-2">
         <form action="{{ route('posts.show', $post->id) }}" id="filterForm" method="get">
 
             <select class="form-select w-25 text-decoration-none" id="rating" name="filter_comments" form="filterForm"
-                onchange="this.form.submit()">
+                    onchange="this.form.submit()">
                 <option value="">Выберите фильтр</option>
                 <option value="recent" {{ request('filter') === 'recent' ? 'selected' : '' }}>Самые новые
                 </option>
@@ -36,11 +35,12 @@
             <div class="card-body">
                 <div class="row align-items-center ">
                     <div class="d-flex align-items-center">
-                        <img src="{{ $comment->user->image ? Storage::url('avatarImages/' . $comment->user->image) : asset('imageAvatar/def.jpg') }}"
+                        <img
+                            src="{{ $comment->user->image ? Storage::url('avatarImages/' . $comment->user->image) : asset('imageAvatar/def.jpg') }}"
                             class="rounded-circle" style="width: 40px; height: 40px;" alt="...">
                         <div class=" ms-2 ">
                             <div class="fw-bold me-2"><a class="fw-bold link-dark text-decoration-none"
-                                    href="{{ route('users.show', ['user' => $comment->user]) }}">{{ $comment->user->name }}</a>
+                                                         href="{{ route('users.show', ['user' => $comment->user]) }}">{{ $comment->user->name }}</a>
                             </div>
                             <div class="text-muted">{{ $comment->created_at->diffForHumans() }}</div>
                         </div>
@@ -50,22 +50,20 @@
                     <div class="mt-2 me-3">{{ $comment->text }}</div>
                     @auth
                         <div class="d-flex m-2 fs-5 comment">
-                            <div class="likedislike-comment-button" data-comment-id="{{ $comment->id }}">
-                                <i class="me-2 like_button bi bi-hand-thumbs-up" data-type="like"
-                                    data-comment-id="{{ $comment->id }}" style="cursor: pointer">
-                                    <span class="like-count">{{ $comment->like }}</span>
-                                </i>
-                            </div>
-                            <div class="likedislike-comment-button" data-comment-id="{{ $comment->id }}">
-                                <i class="dislike_button bi bi-hand-thumbs-down" data-type="dislike"
-                                    data-comment-id="{{ $comment->id }}" style="cursor: pointer">
-                                    <span class="dislike-count">{{ $comment->dislike }}</span>
-                                </i>
-                            </div>
+                            <div class="like-comment-button"
+                                 data-comment-id="{{ $comment->id }}"
+                                 data-url="{{route('like_comment')}}">
+                            <i class="me-2 like_button bi bi-heart"
+                               data-comment-id="{{ $comment->id }}"
+                               style="cursor: pointer">
+                                <span class="like-count">{{ $comment->like }}</span>
+                            </i>
                         </div>
-                    @endauth
+
                 </div>
+                @endauth
             </div>
+        </div>
         </div>
     @endforeach
 
@@ -74,7 +72,7 @@
     <script>
         var likeUrl = "{{ route('comments.like') }}";
     </script>
-    <script src="{{ asset('js/like_dislike_comment.js') }}"></script>
+    <script src="{{ asset('js/like_comment.js') }}"></script>
     <script>
         var incrementViewsUrl = "{{ route('posts.incrementViews', $post->id) }}";
     </script>

@@ -27,8 +27,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-        View::composer('layouts.app', function ($view) {
-            $view->with('categories', Category::all());
+        View::composer(['partials.nav','partials.categories_sidebar'], function ($view) {
+            $view->with('categories', Category::get());
         });
 
         Carbon::setLocale('ru');
@@ -48,8 +48,7 @@ class AppServiceProvider extends ServiceProvider
                     ->pluck('likeable_id')
                     ->toArray();
                 $bookmarkPostUser = Auth::user()->bookmarks()->pluck('id')->toArray();
-                $countSubAuthors = Subscribe::where('author_id', Auth::user()->id)->count();
-
+                $countSubAuthors = Subscribe::where('author_id', Auth::user())->count();
                 $subAuthors = Subscribe::where('user_id', Auth::id())->pluck('author_id')->toArray();
             } else {
                 $countSubAuthors = 0;

@@ -39,44 +39,20 @@ class CommentController extends Controller
                 $comment->likes()->where('user_id', $userId)->delete();
                 $comment->decrement('like');
                 return response()->json(['success' => true, 'like' => $comment->like,'liked' => false]);
-            } elseif ($dislike) {
-                $comment->decrement('dislike');
-                $comment->increment('like');
-                $like_dislike->is_liked = true;
-                $like_dislike->save();
-
-                return response()->json(['success' => true, 'like' => $comment->like, 'dislike'=>$comment->dislike,'liked' => true]);
-            } else {
+            }  else {
                 $comment->increment('like');
                 $comment->likes()->create(['user_id' => $userId,'is_liked' => true]);
                 return response()->json(['success' => true, 'like' => $comment->like, 'liked' => true]);
-            }
-        } elseif ($type == 'dislike') {
-            if ($dislike) {
-                $comment->likes()->where('user_id', $userId)->delete();
-                $comment->decrement('dislike');
-                return response()->json(['success' => true,'dislike' => $comment->dislike, 'disliked' => false]);
-            } elseif ($like){
-                $comment->decrement('like');
-                $comment->increment('dislike');
-                $like_dislike->is_liked = false;
-                $like_dislike->save();
-                return response()->json(['success' => true, 'like' => $comment->like,'dislike'=>$comment->dislike, 'disliked' => true]);
-            } else {
-                $comment->increment('dislike');
-                $comment->likes()->create(['user_id' => $userId,'is_liked' => false]);
-
-                return response()->json(['success' => true, 'dislike'=>$comment->dislike, 'disliked' => true]);
             }
         }
         return response()->json(['success' => false]);
     }
 
-    public function  user_comments()
+    public function  comments()
     {
         $user = Auth::user();
-        $comments = $user->comments()->orderBy('created_at', 'DESC')->withCount(['likes', 'dislikes'])->paginate(10);
-        return view('right_sidebar.my_comments',compact('comments'));
+        $comments = $user->comments()->orderBy('created_at', 'DESC')->withCount(['likes'])->paginate(10);
+        return view('dashboard.comments',compact('comments'));
     }
 
     public function destroy(Comment $comment){

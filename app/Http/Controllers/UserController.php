@@ -5,10 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Subscribe;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
+
+    public function index(){
+       $posts = Auth::user()->posts()->get();
+       $user = Auth::user();
+        return view('dashboard.posts',compact('posts','user'));
+    }
     public function show(User $user)
     {
         $posts = $user->posts()->get();
@@ -18,7 +25,7 @@ class UserController extends Controller
 
     }
 
-    public function updateProfile(Request $request, User $user)
+    public function update(Request $request, User $user)
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:50',

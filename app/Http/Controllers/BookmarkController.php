@@ -14,7 +14,7 @@ class BookmarkController extends Controller
     public function index()
     {
         $bookmarks = Bookmark::with('user', 'post')->get();
-        return view('right_sidebar.bookmarks', compact('bookmarks'));
+        return view('dashboard.bookmarks', compact('bookmarks'));
     }
 
     /**
@@ -73,6 +73,6 @@ class BookmarkController extends Controller
     public function destroy(Bookmark $bookmark)
     {
         $bookmark->delete();
-        return redirect()->route('bookmarks.index');
+        return to_route('profile.bookmarks.index');
     }
 }
