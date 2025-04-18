@@ -17,8 +17,8 @@
                     <div class="card">
                         <div class="rounded-top text-white d-flex flex-column z-1 overflow-hidden"
                              style="background-color: #444444; height: 250px;">
-                            <img class=""
-                                 src="{{ $user->image_cover ? Storage::url('profile_cover_images/' . $user->image_cover) : asset('default_images/defaultImage.png') }}"
+                            <img class="object-fit-fill border rounded"
+                                 src="{{ $user->image_cover ? Storage::url('profileСoverImages/' . $user->image_cover) : asset('default_images/defaultImage.png') }}"
                                  style="height: 250px" alt="123">
                         </div>
                     </div>
@@ -28,42 +28,33 @@
                                 <div class="d-flex flex-row justify-content-center align-items-center">
                                     <img
                                         src="{{ $user->image ? Storage::url('avatarImages/' . $user->image) : asset('default_images/defaultAvatar.jpg') }}"
-                                        alt="111" class="rounded-circle border-0 img-thumbnail"
+                                        alt="111" class="object-fit-fill border rounded-circle "
                                         style="width: 90px; height: 90px;">
                                     <h5 class="mb-0 ms-3">{{ $user->name }}</h5>
                                 </div>
                                 <div class="d-flex align-items-center mt-3 ">
-                                    <div class="d-flex align-items-center">
-                                        <div>
-                                            <p class="mb-1 h5">{{ count($posts) }}</p>
-                                        </div>
-                                        <div class="ms-1">
-                                            <p class="small text-muted mb-0 ">Публикации</p>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center ms-2">
-                                        <div>
-                                            <p class="mb-1 h5 mb-0">{{ $countSubAuthors }}</p>
-                                        </div>
-                                        <div class="ms-1">
-                                            <p class="small text-muted mb-0">Подписчиков</p>
-                                        </div>
-                                    </div>
+
+
 
                                 </div>
                             </div>
-                            <div>
-                                @auth
-                                    @if (Auth::user()->id == $user->id)
-                                        <button type="button" data-bs-toggle="modal" data-bs-target="#editProfile"
-                                                data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-outline-secondary  "
-                                                data-mdb-ripple-color="red" style="z-index: 1;">
-                                            Изменить профиль
-                                        </button>
-                                    @else
-                                    @endif
-                                @endauth
+                            <div class="d-flex">
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <p class="mb-1 h5">{{ count($posts) }}</p>
+                                    </div>
+                                    <div class="ms-1">
+                                        <p class="small text-muted mb-0 ">Публикации</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center ms-2">
+                                    <div>
+                                        <p class="mb-1 h5 mb-0">{{ $countSubAuthors }}</p>
+                                    </div>
+                                    <div class="ms-1">
+                                        <p class="small text-muted mb-0">Подписчиков</p>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>

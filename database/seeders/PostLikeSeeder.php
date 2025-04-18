@@ -18,14 +18,14 @@ class PostLikeSeeder extends Seeder
     {
 
 
-        $users = User::all();
-        $posts = Post::all();
+        $users = User::get();
+        $posts = Post::get();
 
         foreach ($posts as $post) {
             $userIds = $users->random(rand(1, 5))->pluck('id')->toArray();
 
             foreach ($userIds as $userId) {
-                $post->likes()->create(['user_id' => $userId,'is_liked' => true]);
+                $post->likes()->create(['user_id' => $userId]);
                 $post->increment('likes');
 
 

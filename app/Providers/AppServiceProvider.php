@@ -40,11 +40,11 @@ class AppServiceProvider extends ServiceProvider
                     ->pluck('likeable_id')
                     ->toArray();
                 $likeCommentUser = Auth::user()->likes()
-                    ->where(['likeable_type'=> Comment::class, 'is_liked'=> true])
+                    ->where(['likeable_type'=> Comment::class])
                     ->pluck('likeable_id')
                     ->toArray();
                 $dislikeCommentUser = Auth::user()->likes()
-                    ->where(['likeable_type'=> Comment::class, 'is_liked'=> false])
+                    ->where(['likeable_type'=> Comment::class])
                     ->pluck('likeable_id')
                     ->toArray();
                 $bookmarkPostUser = Auth::user()->bookmarks()->pluck('id')->toArray();

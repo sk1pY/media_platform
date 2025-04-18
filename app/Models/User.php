@@ -68,7 +68,10 @@ class User extends Authenticatable
         return $this->hasMany(Bookmark::class);
     }
 
-
+    public function subscribes()
+    {
+        return $this->belongsToMany(User::class, 'subscribes', 'user_id', 'author_id');
+    }
 
 
 }

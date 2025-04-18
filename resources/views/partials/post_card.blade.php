@@ -75,7 +75,7 @@
                 </div>
                 {{--          END  3 POINTS--}}
 
-                {{-- MODAL WINDOW --}}
+                {{-- MODAL CLAIM WINDOW --}}
                 <div class="modal fade" id="complain_post" tabindex="-1" aria-labelledby="complainModalLabel"
                      aria-hidden="true">
                     <div class="modal-dialog modal-lg">
@@ -148,7 +148,7 @@
         <p class="card-text">{{ substr($post->description, 0, 250) }}...</p>
         <div class="card-img-container">
             <img
-                src="{{ $post->image?Storage::url('postImages/' . $post->image):asset('default_images/defaultImage.png') }}"
+                src="{{ $post->image?Storage::url('postImages/'.$post->image):asset('default_images/defaultImage.png') }}"
                 style="width: 100%; height: 290px"
                 alt="image_not_found"
                 class="card-img-top rounded-3">

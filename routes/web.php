@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentController;
@@ -22,7 +21,9 @@ use App\Http\Controllers\UserController;
 //PROFILE
 Route::prefix('profile')->name('profile.')->group(function () {
     Route::get('/',[UserController::class,'index'])->name('index');
+    Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
     Route::put('/{user}', [UserController::class, 'update'])->name('update');
+    Route::get('/posts',[PostController::class,'profilePosts'])->name('posts');
     Route::get('/comments', [CommentController::class, 'comments'])->name('comments.index');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     //BOOKMARKS
@@ -39,6 +40,7 @@ Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show')
 
 
 //CATEGORIES
+Route::get('/categories-special/{slug}',[CategoryController::class,'specialCategories'])->whereIn('slug', ['popular', 'fresh', 'myFeed'])->name('specialCategories.show');
 Route::prefix('categories')->name('categories.')
     ->group(function () {
         Route::get('/{category:slug}', [CategoryController::class, 'show'])->name('show');

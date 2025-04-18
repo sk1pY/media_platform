@@ -69,9 +69,9 @@
 
 
     {{-- END MAIN CARDS CONTENT --}}
-    <script>
-        var likeUrl = "{{ route('comments.like') }}";
-    </script>
+{{--    <script>--}}
+{{--        var likeUrl = "{{ route('comments.like') }}";--}}
+{{--    </script>--}}
     <script src="{{ asset('js/like_comment.js') }}"></script>
     <script>
         var incrementViewsUrl = "{{ route('posts.incrementViews', $post->id) }}";

@@ -20,7 +20,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $categories = Category::get();
-        $postQuery = Post::where('status', 1)->withCount(['comments', 'likes'])->orderBy('created_at','desc');
+        $postQuery = Post::where('status', 1)->withCount(['comments', 'likes'])->orderBy('created_at', 'desc');
 
         if (Auth::check()) {
             $hiddenPostIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id')->toArray();
@@ -62,29 +62,30 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => 'required|max:100',
             'description' => 'required|max:500',
-            'image' =>'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'category_id' => 'nullable|numeric|exists:categories,id',
         ]);
 
-        $validated['image'] = $request->hasfile('image')?
-            basename($request->file('image')->store('postImages', 'public')):'defaultPost.png';
+        $validated['image'] = $request->hasfile('image') ?
+            basename($request->file('image')->store('postImages', 'public')) : null;
 
         try {
             Auth::user()->posts()->create($validated);
-        }  catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             Log::error('Ошибка создания поста: ' . $e->getMessage());
             return back()->with('error', 'Не удалось создать пост.');
         }
 
-        return to_route('users.show', Auth::id());
+        return back()->with('success', 'Пост успешно создан');
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request,Post $post)
+    public function show(Request $request, Post $post)
     {
-        if (!$post->status ) {
+        if (!$post->status) {
             abort(404, 'error.error');
         }
 
@@ -122,8 +123,8 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $this->authorize('update',$post);
-
+        $this->authorize('update', $post);
+        $user = Auth::user();
         $validated = $request->validate([
             'title' => 'required|string|max:50',
             'description' => 'required|string',
@@ -134,12 +135,14 @@ class PostController extends Controller
             if ($post->image) {
                 Storage::disk('public')->delete($post->image);
             }
-            $validated['image'] = $request->hasfile('image')?basename($request->file('image')->store('postImages', 'public')):null;
+            $validated['image'] = $request->hasfile('image') ? basename($request->file('image')->store('postImages', 'public')) : null;
 
         }
-        try{
-            Auth::user()->posts()->update($validated);
-        }catch (\Throwable $e) {
+        try {
+            $user->posts()->update($validated);
+            return to_route('profile.index')->with('success', 'Пост успешно обновлен.');
+
+        } catch (\Throwable $e) {
             Log::error('<UNK> <UNK> <UNK>: ' . $e->getMessage());
         }
         return to_route('profile.index');
@@ -150,10 +153,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $this->authorize('destroy',$post);
+        $this->authorize('destroy', $post);
 
         $post->delete();
-        return redirect()->back();
+        return to_route('profile.index')->with('success', 'Пост успешно удален.');
     }
 
 
@@ -171,6 +174,7 @@ class PostController extends Controller
         }
         return redirect()->route('index');
     }
+
     public function hidden_posts()
     {
         $postsIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id');
@@ -182,5 +186,12 @@ class PostController extends Controller
     {
         $post->query()->increment('views');
         return response()->json(['views' => $post->views]);
+    }
+
+    public function profilePosts()
+    {
+        $posts = auth()->user()->posts()->with('comments', 'likes')->latest()->get();
+        $user = Auth::user();
+        return view('dashboard.posts', compact('posts', 'user'));
     }
 }

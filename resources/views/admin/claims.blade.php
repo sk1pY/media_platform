@@ -26,7 +26,7 @@
                     {{ $claim->id }}
                 </td>
                 <td class="text-center">
-                    <a href="{{route('posts.show',$claim->post->id)}}">{{ $claim->post->title }}</a>
+                    <a href="{{route('posts.show',$claim->post)}}">{{ $claim->post->title }}</a>
                 </td>
                 <td class="text-center">
                     {{ $claim->title }}

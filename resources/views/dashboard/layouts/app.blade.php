@@ -16,6 +16,8 @@
             @include('partials.profile_sidebar')
         </div>
         <div class="col-6">
+            @include('partials.alert.error')
+            @include('partials.alert.success')
             @yield('content')
         </div>
     </div>

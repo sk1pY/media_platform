@@ -12,10 +12,12 @@ class UserController extends Controller
 {
 
     public function index(){
-       $posts = Auth::user()->posts()->get();
-       $user = Auth::user();
-        return view('dashboard.posts',compact('posts','user'));
+//       $posts = Auth::user()->posts()->get();
+//       $user = Auth::user();
+//        return view('dashboard.posts',compact('posts','user'));
     }
+
+
     public function show(User $user)
     {
         $posts = $user->posts()->get();
@@ -24,12 +26,18 @@ class UserController extends Controller
         return view('home', compact('user', 'posts', 'countSubAuthors'));
 
     }
+    public function edit(User $user)
+    {
+        return view('dashboard.profile_edit', compact('user'));
+
+    }
 
     public function update(Request $request, User $user)
     {
+
         $validatedData = $request->validate([
-            'name' => 'required|string|max:50',
-            'email' => 'required|string|max:50',
+            'name' => 'required|string|max:50|unique:users,name,'.$user->id,
+            'email' => 'required|string|max:50|unique:users,email,'.$user->id,
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'image_cover' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -38,18 +46,18 @@ class UserController extends Controller
                 Storage::disk('public')->delete($user->image);
             }
             $validatedData['image'] = $request->hasFile('image') ?
-                basename($request->file('image')->store('images', 'public')) : null;
+                basename($request->file('image')->store('avatarImages', 'public')) : null;
         }
 
         if ($request->hasFile('image_cover')) {
             if ($user->image_cover) {
                 Storage::disk('public')->delete($user->image_cover);
             }
-            $validatedData['image_cover'] = $request->hasFile('image_cover') ? $request->file('image_cover')->store('profile_cover_images', 'public') : null;
+            $validatedData['image_cover'] = $request->hasFile('image_cover') ? basename($request->file('image_cover')->store('profileСoverImages', 'public')) : null;
         }
         $user->update($validatedData);
 
-        return to_route('users.show', $user);
+        return to_route('users.show', $user)->with('success', 'Профиль успешно обновлен');
 
     }
 }

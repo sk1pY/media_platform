@@ -8,7 +8,7 @@
         </div>
     </div>
     @forelse($posts as $post)
-        @include('includes/card')
+        @include('partials.post_card')
     @empty
         <h3>
             Посты отсутствуют
