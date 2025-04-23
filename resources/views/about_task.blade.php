@@ -3,9 +3,9 @@
     @include('partials/post_card')
     {{--        FILTER --}}
     <div class="m-2">
-        <form action="{{ route('posts.show', $post->id) }}" id="filterForm" method="get">
+        <form action="{{ route('posts.show', $post) }}" id="filterForm" method="get">
 
-            <select class="form-select w-25 text-decoration-none" id="rating" name="filter_comments" form="filterForm"
+            <select class="form-select w-25 text-decoration-none" id="rating" name="filter" form="filterForm"
                     onchange="this.form.submit()">
                 <option value="">Выберите фильтр</option>
                 <option value="recent" {{ request('filter') === 'recent' ? 'selected' : '' }}>Самые новые
@@ -36,7 +36,7 @@
                 <div class="row align-items-center ">
                     <div class="d-flex align-items-center">
                         <img
-                            src="{{ $comment->user->image ? Storage::url('avatarImages/' . $comment->user->image) : asset('imageAvatar/def.jpg') }}"
+                            src="{{ $comment->user->image ? Storage::url('avatarImages/' . $comment->user->image) : asset('default_images/defaultAvatar.jpg') }}"
                             class="rounded-circle" style="width: 40px; height: 40px;" alt="...">
                         <div class=" ms-2 ">
                             <div class="fw-bold me-2"><a class="fw-bold link-dark text-decoration-none"
@@ -66,24 +66,4 @@
         </div>
         </div>
     @endforeach
-
-
-    {{-- END MAIN CARDS CONTENT --}}
-{{--    <script>--}}
-{{--        var likeUrl = "{{ route('comments.like') }}";--}}
-{{--    </script>--}}
-    <script src="{{ asset('js/like_comment.js') }}"></script>
-    <script>
-        var incrementViewsUrl = "{{ route('posts.incrementViews', $post->id) }}";
-    </script>
-    <script src="{{ asset('js/view.js') }}"></script>
-    <script src="{{ asset('js/bookmark.js') }}"></script>
-    <script>
-        var likePostUrl = '{{ route('like_post') }}';
-    </script>
-    <script src="{{ asset('js/like.js') }}"></script>
-    <script>
-        var subAuthors = @json($subAuthors);
-    </script>
-    <script src="{{ asset('js/subscribe.js') }}"></script>
 @endsection

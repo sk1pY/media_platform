@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\RolePermissionController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
-use App\Http\Controllers\admin\ClaimController;
+use App\Http\Controllers\admin\ClaimController as AdminClaimController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 
@@ -63,7 +63,7 @@ Route::post('/like-comment', [CommentController::class, 'likeComment'])->name('l
 
 
 //LIKES
-Route::post('/like-post', [LikeController::class, 'likePost'])->name('like_post');
+Route::post('/like-post', [LikeController::class, 'like'])->name('posts.like');
 
 //SEARCH
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
@@ -93,7 +93,7 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     //COMMENTS
     Route::resource('comments', AdminCommentController::class);
     //CLAIMS
-    Route::resource('claims', ClaimController::class);
+    Route::resource('claims', AdminClaimController::class);
 });
 
 

@@ -155,10 +155,11 @@
         </div>
         {{--       LIKE --}}
         <div class="d-flex justify-content-between align-items-center mt-3 ms-2 ">
-            <div id="post-{{ $post->id }}" class="post d-flex align-items-center">
-                <div style="cursor: pointer" class="like-button me-3" data-post-id="{{ $post->id }}">
-                    <i style="user-select: none;"
-                       class="bi  red-heart
+            <div  class="post d-flex align-items-center">
+                <div style="cursor: pointer" class="like-button me-3"
+                     data-post-id="{{ $post->id }}"
+                     data-url = "{{route('posts.like')}}">
+                    <i class="bi like_button text-danger
                         {{ in_array($post->id, $likedPostUser) ? 'bi-heart-fill' : 'bi-heart' }}">
                         <span class="like-count">{{ $post->likes }}</span>
                     </i>

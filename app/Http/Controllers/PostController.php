@@ -26,7 +26,6 @@ class PostController extends Controller
             $hiddenPostIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id')->toArray();
             $postQuery->wherenotin('id', $hiddenPostIds);
         }
-
         if ($request->filled('filter')) {
             switch ($request->input('filter')) {
                 case 'popular':
@@ -92,17 +91,15 @@ class PostController extends Controller
         $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->get();
 
         $post = Post::withCount(['comments', 'likes'])->find($post->id);
-        if ($request->filled('filter_comments')) {
+        if ($request->filled('filter')) {
             $query = Comment::query();
 
-            switch (request('filter_comments')) {
+            match ($request->input('filter')) {
+                'recent' => $query->latest(),
+                'old' => $query->oldest(),
+                'popular' => $query->orderBy('likew', 'desc'),
+            };
 
-                case 'recent':
-                    $query->orderBy('created_at', 'desc');
-                    break;
-                case 'old':
-                    $query->orderBy('created_at', 'asc');
-            }
             $comments = $query->get();
         }
 

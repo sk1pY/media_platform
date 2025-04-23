@@ -74,5 +74,5 @@
             </div>
         </div>
     </section>
-
+<script src="{{asset('js/subscribe.js')}}"></script>
 @endsection

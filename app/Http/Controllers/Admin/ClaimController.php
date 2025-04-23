@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Claim;
-use App\Models\Complain;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class ClaimController extends Controller
 {
@@ -40,7 +38,7 @@ class ClaimController extends Controller
         ]);
         Claim::create([
             'title' => $request['name'],
-            'user_id' => Auth::user()->id,
+            'user_id' => Auth::id(),
             'post_id' => $request['post_id'],
         ]);
         return redirect()->route('index');
@@ -67,12 +65,12 @@ class ClaimController extends Controller
      */
     public function update(Request $request, Claim $claim)
     {
-        if ($request['status'] == 'Accepted') {
+        if ($request['status'] === 'Accepted') {
             $post = Post::find($claim->post_id);
             $post->status = 0;
             $post->save();
 
-        }elseif($request['status'] == 'Rejected'){
+        }elseif($request['status'] === 'Rejected'){
             $post = Post::find($claim->post_id);
             $post->status = 1;
             $post->save();
