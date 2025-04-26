@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
         checkbox.addEventListener('change', function () {
 
             let status = this.checked ? 1 : 0;
-            let url = this.dataset.url;w
+            let url = this.dataset.url;
 
             axios.put(url, {
                 status: status,

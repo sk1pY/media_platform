@@ -23,7 +23,7 @@
         <form action="{{ route('comment.store') }}" method="POST">
             @csrf
             <input type="hidden" name="post_id" value="{{ $post->id }}">
-            <div class="mb-3 mt-3">
+            <div  class="mb-3 mt-3">
                 <textarea class="form-control" id="comment-text" name="text" rows="3"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Отправить</button>
@@ -31,7 +31,8 @@
     @endauth
     {{--         COMMENTS SECTION --}}
     @foreach ($comments as $comment)
-        <div class="card border-0 m-2 rounded-4 " style="background-color:whitesmoke">
+
+        <div  id ="comment_section"  class="card border-0 m-2 rounded-4 " style="background-color:whitesmoke;scroll-margin-top: 250px;">
             <div class="card-body">
                 <div class="row align-items-center ">
                     <div class="d-flex align-items-center">

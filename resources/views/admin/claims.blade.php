@@ -60,7 +60,5 @@
     {{--            {{ $claims->links('pagination::bootstrap-5') }}--}}
     {{--        </div>--}}
 
-    <script src="{{asset('js/table.js')}}"></script>
-    <script src="{{asset('js/claim_status.js')}}"></script>
 
 @endsection

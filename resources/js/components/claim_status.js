@@ -3,8 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
         select.addEventListener('change', function () {
             let selectedStatus = this.value;
             let url = this.dataset.url;
-                console.log(selectedStatus);
-                console.log(url);
+
             axios.put(url, { status: selectedStatus })
                 .then(response => {
                     console.log('Role updated successfully.', response.data);

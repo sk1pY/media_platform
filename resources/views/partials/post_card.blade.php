@@ -22,19 +22,26 @@
                         </a>
                     @endif
                     <small class="text-muted">{{ $post->created_at->diffForHumans() }}</small>
-
                 </div>
-
             </div>
-            {{--                3 POINTS --}}
+
+
             @auth
                 <div class="col-auto d-flex">
+                    {{--                SUBSCRIBE BUTTON--}}
+
                     @if ($post->user->id != auth()->id())
                         <div class="d-flex sub-button me-3" style="height: 35px; cursor: pointer;"
-                             data-author-id="{{ $post->user->id }}">
-                            <button class=" btn btn-secondary  ms-3  "></button>
+                             data-author-id="{{ $post->user->id }}"
+                             data-url="{{route('subscribe')}}"
+                        >
+                            <button class=" btn btn-secondary  ms-3">
+                                {{in_array($post->user->id,$subAuthors)?'Отписаться':'Подписаться'}}</button>
                         </div>
                     @endif
+                    {{--                SUBSCRIBE BUTTON END--}}
+
+                    {{--                3 POINTS --}}
                     <div class="dropdown" style="position: relative; z-index: 1050;">
                         <a style="cursor: pointer; color: #595959;" class="custom-dropdown text-decoration-none "
                            data-bs-toggle="dropdown"><i class="bi bi-three-dots text-center"
@@ -65,7 +72,7 @@
                                     <form action="{{ route('profile.bookmarks.destroy',$bookmark) }}" method="post">
                                         @csrf
                                         @method('delete')
-                                        <input class="dropdown-item"  type="submit" value="Удалить закладку">
+                                        <input class="dropdown-item" type="submit" value="Удалить закладку">
                                     </form>
                                 </li>
                             @endif
@@ -153,39 +160,39 @@
                 alt="image_not_found"
                 class="card-img-top rounded-3">
         </div>
-        {{--       LIKE --}}
+
         <div class="d-flex justify-content-between align-items-center mt-3 ms-2 ">
-            <div  class="post d-flex align-items-center">
-                <div style="cursor: pointer" class="like-button me-3"
+            <div class="d-flex align-items-center">
+                {{--       LIKE --}}
+                <div class=" like-button me-3"
                      data-post-id="{{ $post->id }}"
-                     data-url = "{{route('posts.like')}}">
-                    <i class="bi like_button text-danger
-                        {{ in_array($post->id, $likedPostUser) ? 'bi-heart-fill' : 'bi-heart' }}">
-                        <span class="like-count">{{ $post->likes }}</span>
-                    </i>
+                     data-url="{{ route('posts.like') }}">
+                    <i class="bi text-danger {{ in_array($post->id, $likedPostUser, true) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                    <span class="like-count">{{ $post->likes }}</span>
                 </div>
-                {{--                    LIKE --}}
-                {{--                            COMMENTS --}}
-                <a href="{{ route('posts.show', ['post' => $post->id]) }}#comment_section" style="cursor: pointer"
+                {{--       LIKE --}}
+                {{--     COMMENTS --}}
+                <a href="{{ route('posts.show', $post) }}#comment_section" style="cursor: pointer"
                    class="text-decoration-none">
                     <i class="bi bi-chat-left-text  color_grey">
                         <span>{{ $post->comments_count }}</span>
                     </i>
                 </a>
-                {{-- BOOKMARKS --}}
-                <div style="cursor: pointer" class="bookmark-button "
-                     data-bookmark-id="{{ $post->id }}"
-                     data-url="{{route('profile.bookmarks.store')}}">
-                    <i class="bookmark_button ms-3 bi {{ in_array($post->id, $bookmarkPostUser) ? 'bi-bookmark-fill color_grey' : 'bi-bookmark' }}"></i>
-                </div>
-                <a class="b ms-3" href="#" onclick="copyPostLink('{{ route('posts.show', $post->id) }}')">
-                    <i class="bi bi-share "></i>
-                </a>
-
+                @auth
+                    {{-- BOOKMARKS --}}
+                    <div class="bookmark-button"
+                         data-bookmark-id="{{ $post->id }}"
+                         data-url="{{route('profile.bookmarks.store')}}">
+                        <i class="ms-3 bi text-warning {{ in_array($post->id, $bookmarkPostUser, true) ? 'bi-bookmark-fill' : 'bi-bookmark' }}"></i>
+                    </div>
+                    <a class="b ms-3" href="#" onclick="copyPostLink('{{ route('posts.show', $post->id) }}')">
+                        <i class="bi bi-share "></i>
+                    </a>
+                @endauth
             </div>
             {{--                            VIEWS --}}
             <i style="user-select: none; font-size: 1.2rem" class=" bi bi-eye-fill me-2">
-                <span id="view-number">{{ $post->views }}</span>
+                <span class="view-count">{{ $post->views }}</span>
             </i>
         </div>
 

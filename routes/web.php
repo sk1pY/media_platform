@@ -34,8 +34,7 @@ Route::prefix('profile')->name('profile.')->group(function () {
 
 });
 
-
-Route::post('/subscriptions', [SubscribeController::class, 'add']);
+Route::post('/subscribe', [SubscribeController::class, 'subscribe'])->name('subscribe');
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
 
@@ -69,7 +68,7 @@ Route::post('/like-post', [LikeController::class, 'like'])->name('posts.like');
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 
 //VIEW
-Route::post('/posts/{post}/incrementViews', [PostController::class, 'incrementViews'])->name('posts.incrementViews');
+Route::post('/posts/{post:slug}/increment-views', [PostController::class, 'incrementViews'])->name('posts.incrementViews');
 
 //ADMIN_PANEL
 Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(function () {

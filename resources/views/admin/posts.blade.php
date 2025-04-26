@@ -24,7 +24,7 @@
                 <td>
                     <img alt="logo" src="{{ Storage::url('postImages/' . $post->image) }}"
                          style="width: 30px; height: 30px;">
-                    <a class="text-decoration-none text-black" href="{{ route('posts.show', ['post' => $post->id]) }}">
+                    <a class="text-decoration-none text-black" href="{{ route('posts.show', $post) }}">
                         {{ $post->title }}
                     </a>
                 </td>
@@ -107,7 +107,5 @@
         {{ $posts->links('pagination::bootstrap-5') }}
     </div>
 
-     <script src="{{asset('js/table.js')}}"></script>
-    <script src="{{asset('js/switch.js')}}"></script>
 
 @endsection

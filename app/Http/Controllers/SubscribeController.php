@@ -17,20 +17,18 @@ class SubscribeController extends Controller
 
         return view('dashboard.subscriptions', compact('authors'));
     }
-        public function add(Request $request){
-            $author_id = $request->input('sub_id');
+        public function subscribe(Request $request){
+            $author_id = $request->input('author_id');
             $user_id = Auth::id();
             $sub = Subscribe::where('author_id',$author_id)->where('user_id',$user_id)->first();
             $subAuthors = Subscribe::where('user_id', Auth::id())->pluck('author_id')->toArray();
 
-            // dd($sub);
             if($sub){
                 $sub->delete();
-                return response()->json(['subAuthors'=>$subAuthors,'success' => true, 'sub' => false]);
-
+                return response()->json(['success' => true, 'sub' => false]);
             }
                 $sub =  Subscribe::create(['author_id' => $author_id, 'user_id' => $user_id]);
-            return response()->json(['subAuthors'=>$subAuthors,'success' => true, 'sub' => true]);
+            return response()->json(['success' => true, 'sub' => true]);
 
 
         }

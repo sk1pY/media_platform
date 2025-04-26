@@ -56,8 +56,5 @@
         {{ $users->links('pagination::bootstrap-5') }}
     </div>
 
-    <script src="{{asset('js/role_update.js')}}"></script>
-    <script src="{{asset('js/switch.js')}}"></script>
-    <script src="{{asset('js/table.js')}}"></script>
 
 @endsection

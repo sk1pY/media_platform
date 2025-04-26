@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Subscribe;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -35,24 +36,21 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('*', function ($view) {
             if (Auth::check()) {
-                $likedPostUser = Auth::user()->likes()
+                $user = Auth::user();
+                $likedPostUser = $user->likes()
                     ->where('likeable_type', Post::class)
                     ->pluck('likeable_id')
                     ->toArray();
-                $likeCommentUser = Auth::user()->likes()
+                $likeCommentUser = $user->likes()
                     ->where(['likeable_type'=> Comment::class])
                     ->pluck('likeable_id')
                     ->toArray();
-                $dislikeCommentUser = Auth::user()->likes()
-                    ->where(['likeable_type'=> Comment::class])
-                    ->pluck('likeable_id')
-                    ->toArray();
-                $bookmarkPostUser = Auth::user()->bookmarks()->pluck('id')->toArray();
-                $countSubAuthors = Subscribe::where('author_id', Auth::user())->count();
-                $subAuthors = Subscribe::where('user_id', Auth::id())->pluck('author_id')->toArray();
+
+                $bookmarkPostUser = $user->bookmarks()->pluck('post_id')->toArray();
+                $countSubAuthors = Subscribe::where('author_id', $user)->count();
+                $subAuthors = Subscribe::where('user_id', $user->id)->pluck('author_id')->toArray();
             } else {
                 $countSubAuthors = 0;
-                $dislikeCommentUser = [];
                 $likedPostUser = [];
                 $bookmarkPostUser = [];
                 $subAuthors = [];
@@ -65,7 +63,6 @@ class AppServiceProvider extends ServiceProvider
                 'bookmarkPostUser' => $bookmarkPostUser,
                 'subAuthors' => $subAuthors,
                 'likeCommentUser' => $likeCommentUser,
-                'dislikeCommentUser' => $dislikeCommentUser,
             ]);
 
         });

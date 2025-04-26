@@ -91,7 +91,7 @@
         </tbody>
     </table>
     {{ $categories->links('pagination::bootstrap-5') }}
-    <script src="{{asset('js/table.js')}}"></script>
+
 
 @endsection
 

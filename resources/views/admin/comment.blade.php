@@ -19,7 +19,7 @@
             <th scope="col" class="col-1">Действия</th>
         </tr>
         </thead>
-        <tbody table="tablecontents">
+        <tbody class="tablecontents">
         @foreach( $comments as $comment )
             <tr class="align-middle">
 
@@ -53,6 +53,5 @@
     <div class="mt-4">
         {{ $comments->links('pagination::bootstrap-5') }}
     </div>
-    <script src="{{asset('js/table.js')}}"></script>
 
 @endsection

@@ -1,29 +1,32 @@
 @extends('dashboard.layouts.app')
-@section('content')
-    <h4>Управление подписками</h4>
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-3">
-        @foreach ($authors as $author)
-            <div class="col">
-                <div class="card h-100">
-                    <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
-                        <img src="{{ Storage::url('avatarImages/' . $author->image) }}" class="card-img-top img-fluid"
-                            alt="..." style="max-width: 80px;">
-                    </div>
-                    <div class="card-body p-2">
-                        <h5 class="card-title mb-1">{{ $author->name }}</h5>
-                        @if ($author->id != Auth::id())
-                            <div class="d-flex sub-button " style="height: 30px; cursor: pointer;"
-                                data-author-id="{{ $author->id }}">
-                                <button class="btn btn-secondary btn-sm ms-2 "></button>
-                            </div>
-                        @endif
+    @section('content')
+        <h4>Управление подписками</h4>
+        <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+            @foreach ($authors as $author)
+                <div class="col">
+                    <div class="card h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-center align-items-center" >
+                            <img src="{{ Storage::url('avatarImages/' . $author->image) }}"
+                                 class="img-fluid w-75"
+
+                                 alt="...">
+                        </div>
+                        <div class="card-body d-flex flex-column text-center flex-grow-1">
+                            <h5 class="card-title fs-6">{{ $author->name }}</h5>
+                            @if ($author->id != auth()->id())
+                                <div class="mt-auto sub-button"
+                                     data-author-id="{{ $author->id }}"
+                                     data-url = "{{route('subscribe')}}">
+                                    <button
+                                        class="btn btn-secondary w-100">
+                                        {{ in_array($author->id, $subAuthors) ? 'Отписаться' : 'Подписаться' }}
+                                    </button>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
-    </div>
-    <script>
-        var subAuthors = @json($subAuthors);
-    </script>
-    <script src="{{ asset('js/subscribe.js') }}"></script>
-@endsection
+            @endforeach
+        </div>
+    @endsection
+

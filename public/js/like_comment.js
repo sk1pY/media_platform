@@ -1,4 +1,4 @@
-// LIKE
+
 $(document).ready(function () {
     $('.like-comment-button').off('click').on('click', function () {
         const commentId = this.getAttribute('data-comment-id');

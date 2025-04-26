@@ -181,8 +181,8 @@ class PostController extends Controller
 
     public function incrementViews(Post $post)
     {
-        $post->query()->increment('views');
-        return response()->json(['views' => $post->views]);
+        $post->increment('views');
+        return response()->json(['success' =>true,'views' => $post->views]);
     }
 
     public function profilePosts()

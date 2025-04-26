@@ -29,5 +29,4 @@
             @endforelse
             {{--    END POSTS--}}
 
-
 @endsection

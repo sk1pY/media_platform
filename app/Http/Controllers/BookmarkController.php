@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bookmark;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class BookmarkController extends Controller
 {
@@ -31,13 +32,13 @@ class BookmarkController extends Controller
     public function store(Request $request)
     {
         $postId = request('bookmark_id');
-        $bookmark = Bookmark::where(['user_id' => Auth::id(), 'post_id' => $postId])->first();
+        $bookmark = Bookmark::where(['user_id' => auth()->id(), 'post_id' => $postId])->first();
         if ($bookmark) {
             $bookmark->delete();
             return response()->json(['success' => true, 'bookmark' => false]);
         }
         Bookmark::create([
-            'user_id' => Auth::id(),
+            'user_id' => auth()->id(),
             'post_id' => $postId]);
 
         return response()->json(['success' => true, 'bookmark' => true]);

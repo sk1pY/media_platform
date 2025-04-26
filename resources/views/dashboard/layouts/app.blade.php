@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Document</title>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
@@ -15,7 +17,7 @@
         <div class="col-3">
             @include('partials.profile_sidebar')
         </div>
-        <div class="col-6">
+        <div class="col">
             @include('partials.alert.error')
             @include('partials.alert.success')
             @yield('content')
