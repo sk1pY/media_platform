@@ -20,7 +20,7 @@
                         <select
                             name="role"
                             class="role-update form-select form-select-sm"
-                            data-url="{{route('admin.users.update.role',$user->id)}}">
+                            data-url="{{route('admin.users.role.update',$user)}}">
                         @foreach($roles as $role)
                                 <option value="{{ $role->name }}"
                                     {{ $user->hasRole($role->name) ? 'selected' : '' }}>
@@ -33,7 +33,7 @@
                     <div class="form-check form-switch ">
                         <input
                             data-id="{{$user->id}}"
-                            data-url="{{route('admin.users.update.status',$user->id)}}"
+                            data-url="{{route('admin.users.status.update',$user)}}"
 
                             class="js-switch form-check-input" type="checkbox" role="switch"
                             {{$user->status? "checked":""}}>

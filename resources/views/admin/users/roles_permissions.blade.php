@@ -22,13 +22,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                @forelse($roles as $role)
+                @foreach($roles as $role)
                     <tr>
                         <th scope="row">{{$role -> id}}</th>
                         <td>
                         {{$role->name}}
                         <td>
-                            <form action="{{ route('admin.roles.destroy',['role' => $role->id]) }}" method="post">
+                            <form action="{{ route('admin.roles.destroy',$role) }}" method="post">
                                 @csrf
                                 @method('delete')
                                 <input class="btn btn-sm btn-danger" type="submit" value="Удалить">
@@ -56,13 +56,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                @forelse($permissions as $permission)
+                @foreach($permissions as $permission)
                     <tr>
                         <th scope="row">{{$permission -> id}}</th>
                         <td>
                         {{$permission->name}}
                         <td>
-                            <form action="{{ route('admin.permissions.destroy',['permission' => $permission->id]) }}"
+                            <form action="{{ route('admin.permissions.destroy', $permission) }}"
                                   method="post">
                                 @csrf
                                 @method('delete')
@@ -85,45 +85,29 @@
         </tr>
         </thead>
         <tbody>
-        @forelse($rolesWithPermissions as $role)
+        @foreach($rolesWithPermissions as $role)
             <tr>
                 <td>
                     {{$role->name}}
                 </td>
                 <td>
-                    <form action="{{ route('admin.roles_and_permissions.update',['role'=>$role->id]) }}"
-                          method="post">
-                        @csrf
-                        @method('PUT')
-                        <input type="text" hidden value="{{$role->id}}" name="name">
                         @foreach($permissions as $permission)
-                            <div class="form-check form-check-inline">
-                                <input class=" js-role-update form-check-input"
-                                       data-id ="{{$role->id}}"
+                            <div class="permission-update form-check form-check-inline"
+                                 data-url ="{{route('admin.roles.permissions.update',$role)}}"
+                                 data-permission-id ="{{$permission->id}}">
+                                <input class="  form-check-input"
+
                                        type="checkbox"
                                        value="{{ $permission->id }}"
                                        @if($role->permissions->contains($permission)) checked @endif>
                                 <label class="form-check-label" for="inlineCheckbox1">{{$permission->name}}</label>
                             </div>
                         @endforeach
-                    </form>
                 </td>
 
             </tr>
-
             @endforeach
-
         </tbody>
 
     </table>
-    <script>
-        $('.js-role-update').click(function () {
-            let id = $(this).data('id');
-
-            const url = "{{ route('admin.roles_and_permissions.update', ':id') }}".replace(':id', id);
-            window.url = url;
-        });
-    </script>
-<script src="{{asset('js/role_update.js')}}"></script>
-
 @endsection

@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -18,8 +19,7 @@ class UserController extends Controller
     {
         $users = User::with('roles')->paginate(10);
         $roles = Role::get();
-        return view('admin.users', compact('users','roles'));
-
+        return view('admin.users.users', compact('users','roles'));
 
     }
 
@@ -62,30 +62,37 @@ class UserController extends Controller
     {
         //
     }
-    public function update_status(Request $request, User $user)
+    public function updateUserStatus(Request $request, User $user)
     {
-        $status = $request['status'];
+        $status = $request->input('status');
         $user->update(['status' => $status]);
 
         if($status == 0){
             $user->posts()->update(['status'=> 0]);
         }
-
         return response()->json(['success' => 'User status updated successfully.','status' => $status]);
     }
 
-    public function update_role(Request $request, User $user)
+    public function userRoleUpdate(Request $request, User $user)
     {
-        $role = $request['role'];
+        $role = $request->input('role');
         $user->syncRoles($role);
         return response()->json(['success' => 'User role updated successfully.','role' => $role]);
 
     }
 
+    public function rolePermissionUpdate(Request $request, Role $role)
+    {
+        $permission = Permission::find($request->input('permissionId'));
+        $role->hasPermissionTo($permission) ? $role->revokePermissionTo($permission) : $role->givePermissionTo($permission);
+
+        return response()->json();
+
+    }
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( User $user)
+    public function destroy(User $user)
     {
         $user->delete();
         return redirect()->route('admin.users.index');

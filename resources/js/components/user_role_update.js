@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let selectedRole = this.value;
             let url = this.dataset.url;
 
-            axios.put(url, { role: selectedRole })
+            axios.post(url, { role: selectedRole })
                 .then(response => {
                     console.log('Role updated successfully.', response.data);
                 })

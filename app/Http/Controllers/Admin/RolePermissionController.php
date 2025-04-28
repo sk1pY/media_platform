@@ -14,59 +14,10 @@ class RolePermissionController extends Controller
 {
     public function index()
     {
-        $roles = Role::all();
-        $permissions = Permission::all();
+        $roles = Role::get();
+        $permissions = Permission::get();
         $rolesWithPermissions = Role::with('permissions')->get();
-        return view('admin.users.roles_and_permissions', compact('roles', 'permissions', 'rolesWithPermissions'));
-    }
-    public function roles_store()
-    {
-        $validated = request()->validate([
-            'name' => 'required|string|unique:roles,name'
-        ]);
-
-        Role::create($validated);
-        return redirect()->route('admin.roles_and_permissions.index');
-
-    }
-
-    public function roles_destroy(Role $role)
-    {
-        $role->delete();
-        return redirect()->route('admin.roles_and_permissions.index');
-    }
-
-    public function permissions_store()
-    {
-        $validated = request()->validate([
-            'name' => 'required|string|unique:permissions,name'
-        ]);
-        Permission::create($validated);
-        return redirect()->route('admin.roles_and_permissions.index');
-
-    }
-
-    public function permissions_destroy(Permission $permission)
-    {
-        $permission->delete();
-        return redirect()->route('admin.roles_and_permissions.index');
-    }
-
-    public function roles_and_permissions_update(Request $request, Role $role)
-    {
-
-        $permission = Permission::findOrFail($request['permission_id']);
-
-        if ($request['status']) {
-            $role->permissions()->attach($permission);
-
-        } else {
-            $role->permissions()->detach($permission);
-        }
-        app()[PermissionRegistrar::class]->forgetCachedPermissions();
-
-        return response()->json();
-
+        return view('admin.users.roles_permissions', compact('roles', 'permissions', 'rolesWithPermissions'));
     }
 
 

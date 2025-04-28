@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
@@ -15,7 +16,7 @@ use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\admin\ClaimController as AdminClaimController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\admin\RoleController;
 
 
 //PROFILE
@@ -53,37 +54,29 @@ Route::get('/', [PostController::class, 'index'])->name('index');
 Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
 Route::resource('posts', PostController::class)->only(['store', 'destroy','update']);
 Route::post('posts/{post}/hide', [PostController::class, 'hide'])->name('posts.hide');
-
-
-
 //COMMENTARIES
 Route::post('/comments', [CommentController::class, 'store'])->name('comment.store');
 Route::post('/like-comment', [CommentController::class, 'likeComment'])->name('like_comment');
-
-
 //LIKES
 Route::post('/like-post', [LikeController::class, 'like'])->name('posts.like');
-
 //SEARCH
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
-
 //VIEW
 Route::post('/posts/{post:slug}/increment-views', [PostController::class, 'incrementViews'])->name('posts.incrementViews');
-
 //ADMIN_PANEL
 Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(function () {
-    //ROLEPERMISSIONS
     Route::get('/', [AdminController::class, 'index'])->name('index');
-    Route::post('/roles', [RolePermissionController::class, 'roles_store'])->name('roles.store');
-    Route::delete('/roles/{role}', [RolePermissionController::class, 'roles_destroy'])->name('roles.destroy');
-    Route::post('/permissions', [RolePermissionController::class, 'permissions_store'])->name('permissions.store');
-    Route::delete('/permissions/{permission}', [RolePermissionController::class, 'permissions_destroy'])->name('permissions.destroy');
-    Route::get('/roles_and_permissions', [RolePermissionController::class, 'index'])->name('roles_and_permissions.index');
-    Route::put('/roles_and_permissions/{role}', [RolePermissionController::class, 'roles_and_permissions_update'])->name('roles_and_permissions.update');
+
+    Route::get('/roles-permissions', [RolePermissionController::class, 'index'])->name('roles_and_permissions.index');
+    Route::resource('roles', RoleController::class)->only([ 'store', 'destroy']);
+    Route::resource('permissions', PermissionController::class)->only([ 'store', 'destroy']);
+    //UPDATE ROLE FOR USER
+    Route::post('/users/{user}/update-role', [AdminUserController::class, 'userRoleUpdate'])->name('users.role.update');
+    //UPDATE PERMISSION FOR ROLE
+    Route::post('/roles/{role}/permissions', [AdminUserController::class, 'rolePermissionUpdate'])->name('roles.permissions.update');
     //Users
     Route::resource('users', AdminUserController::class);
-    Route::put('/users/{user}/update-status', [AdminUserController::class, 'update_status'])->name('users.update.status');
-    Route::put('/users/{user}/update-role', [AdminUserController::class, 'update_role'])->name('users.update.role');
+    Route::put('/users/{user}/update-status', [AdminUserController::class, 'updateUserStatus'])->name('users.status.update');
     //CATEGORY
     Route::resource('categories', AdminCategoryController::class);
     //POSTS
@@ -94,9 +87,6 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     //CLAIMS
     Route::resource('claims', AdminClaimController::class);
 });
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Route::fallback(function(){
