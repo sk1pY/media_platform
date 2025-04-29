@@ -1,12 +1,17 @@
 import './bootstrap.js';
-import "./components/like.js"
-import "./components/subscribe.js"
-import "./components/view.js"
-import "./components/bookmark.js"
-import "./components/user_role_update.js"
-import "./components/role_permissions_update.js"
-import "./components/switch.js"
-import "./components/table.js"
-import "./components/claim_status.js"
 
-
+if (window.location.pathname.startsWith('/admin')) {
+    Promise.all([
+        import('./components/admin/table.js'),
+        import('./components/admin/user_role_update.js'),
+        import('./components/admin/role_permissions_update.js'),
+        import('./components/admin/switch.js'),
+        import('./components/admin/claim_status.js')
+    ]).then(r => console.log('loaded'));
+} else {
+    import('./components/like.js');
+    import('./components/subscribe.js');
+    import('./components/view.js');
+    import('./components/bookmark.js');
+    import('./components/search.js');
+}

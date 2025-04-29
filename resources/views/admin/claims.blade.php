@@ -34,9 +34,9 @@
                 <td class="text-center">
                     <select name="status"
                             class="claim-update"
-                            data-url="{{route('admin.claims.update',$claim->id)}}">
+                            data-url="{{route('admin.claims.update',$claim)}}">
                         @foreach($statuses as $stat)
-                            <option value="{{ $stat }}" {{$claim->status == $stat? 'selected':''}}>{{$stat}}</option>
+                            <option value="{{ $stat }}" {{$claim->status === $stat? 'selected':''}}>{{$stat}}</option>
                         @endforeach
                     </select>
                 </td>

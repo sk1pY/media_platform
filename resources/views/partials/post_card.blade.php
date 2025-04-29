@@ -1,4 +1,3 @@
-{{-- MAIN CARDS CONTENT --}}
 <div class="card border-0 mb-4">
     <div class="card-body">
         <div class="row align-items-center ">
@@ -41,7 +40,8 @@
                     @endif
                     {{--                SUBSCRIBE BUTTON END--}}
 
-                    {{--                3 POINTS --}}
+                    {{--                3 POINTS BUTTON--}}
+
                     <div class="dropdown" style="position: relative; z-index: 1050;">
                         <a style="cursor: pointer; color: #595959;" class="custom-dropdown text-decoration-none "
                            data-bs-toggle="dropdown"><i class="bi bi-three-dots text-center"
@@ -80,7 +80,7 @@
 
                     </div>
                 </div>
-                {{--          END  3 POINTS--}}
+                {{--          END  3 POINTS BUTTON--}}
 
                 {{-- MODAL CLAIM WINDOW --}}
                 <div class="modal fade" id="complain_post" tabindex="-1" aria-labelledby="complainModalLabel"
@@ -199,20 +199,3 @@
     </div>
 </div>
 
-<script>
-    function copyPostLink(url) {
-        const tempInput = document.createElement('input');
-        tempInput.value = url;
-        document.body.appendChild(tempInput);
-
-        tempInput.select();
-        tempInput.setSelectionRange(0, 99999);
-
-        document.execCommand('copy');
-
-        document.body.removeChild(tempInput);
-
-        alert('Ссылка скопирована: ' + url);
-    }
-</script>
-{{-- END MAIN CARDS CONTENT --}}
