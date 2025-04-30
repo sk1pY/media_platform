@@ -13,5 +13,4 @@ if (window.location.pathname.startsWith('/admin')) {
     import('./components/subscribe.js');
     import('./components/view.js');
     import('./components/bookmark.js');
-    import('./components/search.js');
 }
