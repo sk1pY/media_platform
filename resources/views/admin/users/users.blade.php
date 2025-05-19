@@ -1,13 +1,13 @@
 @extends('admin.layouts.index')
 @section('content')
 
-    <table id="table" class="table table-sm table-bordered table-striped ">
+    <table id="table" class="table table-sm table-bordered table-striped mt-2">
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Name</th>
+            <th scope="col">Имя</th>
             <th scope="col">Роль</th>
-            <th scope="col">#</th>
+            <th scope="col">Статус</th>
             <th scope="col">#</th>
         </tr>
         </thead>
@@ -15,7 +15,8 @@
         @foreach( $users as $user )
             <tr>
                 <th scope="row">{{$user -> id}}</th>
-                <td>{{$user -> name}}</td>
+                <td ><a href="{{route('users.show',$user)}}"
+                    class="text-decoration-none text-dark">{{$user -> name}}</a></td>
                 <td>
                         <select
                             name="role"
@@ -43,8 +44,9 @@
                     <form action="{{ route('admin.users.destroy',['user'=> $user->id]) }}" method="post">
                         @csrf
                         @method('delete')
-                        <button class="btn btn-sm btn-danger" type="submit">удалить</button>
-                    </form>
+                        <button class="btn btn-sm btn-light text-danger">
+                            <i class="bi bi-x"></i>
+                        </button>                    </form>
 
                 </td>
 

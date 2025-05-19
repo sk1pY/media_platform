@@ -1,4 +1,4 @@
-    <nav style="background-color:#D9F0FF; height: 60px;"
+<nav style="background-color:#D9F0FF; height: 60px;"
      class="navbar navbar-expand-lg navbar-light fixed-top custom-navbar">
     <div class="container-fluid " style="padding-left: 120px; padding-right: 120px;">
         <div class="d-flex">
@@ -8,10 +8,9 @@
         {{--        SEARCH --}}
         <div class="d-flex justify-content-center align-items-center me-auto search-container">
             <div class="input-group rounded" style="width: 500px; margin-left: 165px; position: relative;">
-                <input type="search" class="form-control rounded" placeholder="Поиск" aria-label="Search"
-                       aria-describedby="search-addon" id="search" name="search">
-                <ul class="list-group search-result"
-                    style="position: absolute; top: 100%; left: 0; width: 100%; z-index: 1000; display: none;"></ul>
+                <input id="search"
+                       type="search" class="form-control rounded" placeholder="Поиск" aria-label="Search"
+                       aria-describedby="search-addon" name="search">
             </div>
         </div>
 
@@ -35,27 +34,27 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title" id="exampleModalLabel">Написать новый пост</h1>
+                <h4 class="modal-title" id="exampleModalLabel">Новый пост</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('posts.store') }}" enctype="multipart/form-data" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Title</label>
+                        <label for="exampleFormControlInput1" class="form-label">Название</label>
                         <input name="title" type="text" class="form-control" id="exampleFormControlInput1"
-                               placeholder="Заголовок">
+                               placeholder="Заголовок" value="{{old('title')}}">
                     </div>
                     <div class="mb-3">
                         <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
                         <textarea name="description" class="form-control" id="exampleFormControlTextarea1"
-                                  rows="3"></textarea>
+                                  rows="3"  value="{{old('description')}}"></textarea>
                     </div>
                     <div class="mb-3">
                         Выберите категорию
                         @if (count($categories) > 0)
-                            <select name="category_id" class="form-select">
-                                <option selected></option>
+                            <select name="category_id" class="form-select" >
+                                <option value="" selected>Без категории</option>
                                 @foreach ($categories as $category)
                                     <option value="{{$category->id}}">{{ $category->name }}</option>
                                 @endforeach

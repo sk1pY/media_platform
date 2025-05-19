@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory,Searchable;
     protected $fillable = [
         'title','slug','description','category_id','user_id','image','likes','status'];
     protected  static function booted()
@@ -21,13 +20,6 @@ class Post extends Model
         });
     }
 
-//    public function scopeFilters(Builder $query, $request)
-//    {
-//        return $query
-//            ->when($request->filter === 'popular', fn($q) => $q->orderBy('views', 'desc'))
-//            ->when($request->filter === 'fresh', fn($q) => $q->latest())
-//            ->when($request->filter === 'myFeed', fn($q) => $q->where());
-//    }
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsto(User::class);

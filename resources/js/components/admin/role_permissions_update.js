@@ -1,4 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.permission-update').forEach(checkbox => {
         checkbox.addEventListener('change', function () {
             let permissionId = this.dataset.permissionId;
@@ -12,4 +11,4 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         });
     });
-});
+

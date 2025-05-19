@@ -26,9 +26,10 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'bookmark_posts']);
         Permission::create(['name' => 'manage_users']);
         Permission::create(['name' => 'moderate_comments']);
+        Permission::create(['name' => 'subscribe_users']);
 
         $userRole = Role::where(['name' => 'user'])->first();
-        $userRole->givePermissionTo('create_posts');
+        $userRole->givePermissionTo('create_posts','delete_posts','update_posts','create_comments','like_posts','hidden_posts','complain_posts','subscribe_users');
 
         $adminRole = Role::where(['name' => 'admin'])->first();
         $adminRole->givePermissionTo(Permission::all());

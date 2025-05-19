@@ -1,4 +1,4 @@
-<div class="card border-0 mb-4">
+<div id="card-{{$post->id}}" class="card border-0 mb-4">
     <div class="card-body">
         <div class="row align-items-center ">
             <div class="col-auto ">
@@ -27,35 +27,47 @@
 
             @auth
                 <div class="col-auto d-flex">
-                    {{--                SUBSCRIBE BUTTON--}}
 
-                    @if ($post->user->id != auth()->id())
-                        <div class="d-flex sub-button me-3" style="height: 35px; cursor: pointer;"
-                             data-author-id="{{ $post->user->id }}"
-                             data-url="{{route('subscribe')}}"
-                        >
-                            <button class=" btn btn-secondary  ms-3">
-                                {{in_array($post->user->id,$subAuthors)?'Отписаться':'Подписаться'}}</button>
-                        </div>
-                    @endif
+                    {{--                SUBSCRIBE BUTTON--}}
+                    @can('subscribe_users')
+                        @if ($post->user->id != auth()->id())
+                            <div class="d-flex sub-button me-3" style="height: 35px; cursor: pointer;"
+                                 data-author-id="{{ $post->user->id }}"
+                                 data-url="{{route('subscribe')}}" +>
+                                <button
+                                    class=" btn  ms-3 {{in_array($post->user->id,$subAuthors)?'btn-outline-secondary':'btn-secondary '}}">
+                                    {{in_array($post->user->id,$subAuthors)?'Отписаться':'Подписаться'}}</button>
+                            </div>
+                        @endif
+                    @endcan
                     {{--                SUBSCRIBE BUTTON END--}}
 
                     {{--                3 POINTS BUTTON--}}
 
-                    <div class="dropdown" style="position: relative; z-index: 1050;">
+                    <div class="dropdown">
                         <a style="cursor: pointer; color: #595959;" class="custom-dropdown text-decoration-none "
                            data-bs-toggle="dropdown"><i class="bi bi-three-dots text-center"
                                                         style="font-size: 27px;"></i></a>
+                        <ul class="dropdown-menu" style=" z-index: 1050;">
+                            @can('hidden_posts')
 
-                        <ul class="dropdown-menu">
-                            <li>
-                                <form action="{{ route('posts.hide',$post) }}" method="post">
-                                    @csrf
-                                    <input class="dropdown-item" type="submit" name="hidden" value="Скрыть">
-                                </form>
-                            <li><a data-bs-toggle="modal" data-bs-target="#complain_post" class="dropdown-item"
-                                   href="#">Пожаловаться</a></li>
-                            @if($profileFlag ?? null)
+                                <li>
+                                    <form action="{{ route('posts.hide',$post) }}" method="post">
+                                        @csrf
+                                        <input class="dropdown-item" type="submit" name="hidden"
+                                               value="Скрыть">
+                                    </form>
+                                </li>
+
+                            @endcan
+                            @can('complain_posts')
+
+                                <li>
+                                    <a data-bs-toggle="modal" data-bs-target="#complain_post" class="dropdown-item"
+                                       href="#">Пожаловаться</a>
+                                </li>
+                            @endcan
+                            @can('update',$post)
                                 <li><a data-bs-toggle="modal" data-bs-target="#update_post{{$post->id}}"
                                        class="dropdown-item"
                                        href="#">Изменить</a></li>
@@ -66,83 +78,12 @@
                                         <input class="dropdown-item" type="submit" value="Удалить">
                                     </form>
                                 </li>
-                            @endif
-                            @if($bookmarkFlag ?? null)
-                                <li>
-                                    <form action="{{ route('profile.bookmarks.destroy',$bookmark) }}" method="post">
-                                        @csrf
-                                        @method('delete')
-                                        <input class="dropdown-item" type="submit" value="Удалить закладку">
-                                    </form>
-                                </li>
-                            @endif
+                            @endcan
                         </ul>
 
                     </div>
                 </div>
                 {{--          END  3 POINTS BUTTON--}}
-
-                {{-- MODAL CLAIM WINDOW --}}
-                <div class="modal fade" id="complain_post" tabindex="-1" aria-labelledby="complainModalLabel"
-                     aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="complainModalLabel">Пожаловаться на пост</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Закрыть"></button>
-                            </div>
-                            <form action="{{ route('admin.claims.store') }}" method="post">
-                                @csrf
-                                <input type="hidden" name="post_id" value="{{ $post->id }}">
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <p>Выберите причину жалобы:</p>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="name" id="reason1"
-                                                   value="Оскорбления и грубое общение">
-                                            <label class="form-check-label" for="reason1">Оскорбления и грубое
-                                                общение</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="name" id="reason2"
-                                                   value="Преследование и травля">
-                                            <label class="form-check-label" for="reason2">Преследование и травля</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="name" id="reason3"
-                                                   value="Призывы и одобрение насилия">
-                                            <label class="form-check-label" for="reason3">Призывы и одобрение
-                                                насилия</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="name" id="reason4"
-                                                   value="Запрещенный к публикации контент">
-                                            <label class="form-check-label" for="reason4">Запрещенный к публикации
-                                                контент</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="name" id="reason5"
-                                                   value="Реклама и ссылки">
-                                            <label class="form-check-label" for="reason5">Реклама и ссылки</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="name" id="reason6"
-                                                   value="Другое">
-                                            <label class="form-check-label" for="reason6">Другое</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть
-                                    </button>
-                                    <button type="submit" class="btn btn-primary">Отправить</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                {{-- END MODAL WINDOW --}}
 
             @endauth
         </div>
@@ -164,7 +105,7 @@
         <div class="d-flex justify-content-between align-items-center mt-3 ms-2 ">
             <div class="d-flex align-items-center">
                 {{--       LIKE --}}
-                <div class=" like-button me-3"
+                <div class=" like-button me-3" style="cursor:pointer"
                      data-post-id="{{ $post->id }}"
                      data-url="{{ route('posts.like') }}">
                     <i class="bi text-danger {{ in_array($post->id, $likedPostUser, true) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
@@ -174,20 +115,19 @@
                 {{--     COMMENTS --}}
                 <a href="{{ route('posts.show', $post) }}#comment_section" style="cursor: pointer"
                    class="text-decoration-none">
-                    <i class="bi bi-chat-left-text  color_grey">
-                        <span>{{ $post->comments_count }}</span>
+                    <i class="bi bi-chat-left-text text-secondary">
                     </i>
+                    <span class="text-dark">{{ $post->comments_count }}</span>
+
                 </a>
                 @auth
                     {{-- BOOKMARKS --}}
-                    <div class="bookmark-button"
-                         data-bookmark-id="{{ $post->id }}"
+                    <div class="bookmark-button" style="cursor: pointer"
+                         data-post-id="{{ $post->id }}"
                          data-url="{{route('profile.bookmarks.store')}}">
                         <i class="ms-3 bi text-warning {{ in_array($post->id, $bookmarkPostUser, true) ? 'bi-bookmark-fill' : 'bi-bookmark' }}"></i>
                     </div>
-                    <a class="b ms-3" href="#" onclick="copyPostLink('{{ route('posts.show', $post->id) }}')">
-                        <i class="bi bi-share "></i>
-                    </a>
+
                 @endauth
             </div>
             {{--                            VIEWS --}}
@@ -199,3 +139,101 @@
     </div>
 </div>
 
+<!-- MODAL UPDATE POST-->
+<div class="modal fade" id="update_post{{ $post->id }}" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Post</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('posts.update', $post) }}" method="POST"
+                      enctype="multipart/form-data">
+                    @csrf
+                    @method('put')
+                    <div class="mb-3">
+                        <label for="postTitle" class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" value="{{ $post->title }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="postDescription" class="form-label">Description</label>
+                        <input type="text" name="description" class="form-control"
+                               value="{{ $post->description }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="postImage" class="form-label">Image</label>
+                        <input type="file" name="image" class="form-control"
+                               id="postImage">
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                    </button>
+                    <input type="submit" class="btn btn-warning" value="Update">
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MODAL UPDATE POST-->
+{{-- MODAL CLAIM WINDOW --}}
+<div class="modal fade" id="complain_post" tabindex="-1" aria-labelledby="complainModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="complainModalLabel">Пожаловаться на пост</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Закрыть"></button>
+            </div>
+            <form action="{{ route('posts.claims.store',$post) }}" method="post">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <p>Выберите причину жалобы:</p>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="title" id="reason1"
+                                   value="Оскорбления и грубое общение">
+                            <label class="form-check-label" for="reason1">Оскорбления и грубое
+                                общение</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="title" id="reason2"
+                                   value="Преследование и травля">
+                            <label class="form-check-label" for="reason2">Преследование и травля</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="title" id="reason3"
+                                   value="Призывы и одобрение насилия">
+                            <label class="form-check-label" for="reason3">Призывы и одобрение
+                                насилия</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="title" id="reason4"
+                                   value="Запрещенный к публикации контент">
+                            <label class="form-check-label" for="reason4">Запрещенный к публикации
+                                контент</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="title" id="reason5"
+                                   value="Реклама и ссылки">
+                            <label class="form-check-label" for="reason5">Реклама и ссылки</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="title" id="reason6"
+                                   value="Другое">
+                            <label class="form-check-label" for="reason6">Другое</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть
+                    </button>
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{-- END MODAL WINDOW --}}

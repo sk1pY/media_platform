@@ -2,69 +2,116 @@
 @section('content')
     @include('partials/post_card')
     {{--        FILTER --}}
-    <div class="m-2">
-        <form action="{{ route('posts.show', $post) }}" id="filterForm" method="get">
-
-            <select class="form-select w-25 text-decoration-none" id="rating" name="filter" form="filterForm"
-                    onchange="this.form.submit()">
-                <option value="">Выберите фильтр</option>
-                <option value="recent" {{ request('filter') === 'recent' ? 'selected' : '' }}>Самые новые
-                </option>
-                <option value="old" {{ request('filter') === 'old' ? 'selected' : '' }}> Самые старые
-                </option>
-                <option value="popular" {{ request('filter') === 'popular' ? 'selected' : '' }}>Популярные
-                </option>
-            </select>
-        </form>
-    </div>
+    @include('partials.filter')
     {{--        FILTER --}}
-    @auth
-        {{-- Comment Forma --}}
-        <form action="{{ route('comment.store') }}" method="POST">
-            @csrf
-            <input type="hidden" name="post_id" value="{{ $post->id }}">
-            <div  class="mb-3 mt-3">
-                <textarea class="form-control" id="comment-text" name="text" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Отправить</button>
-        </form>
-    @endauth
+    @can('create_comments')
+        @auth
+            {{-- Comment Form --}}
+            <form action="{{ route('posts.comments.store',$post) }}" method="POST">
+                @csrf
+                <div class="mb-3 mt-3">
+                    <textarea class="form-control" id="comment-text" name="text" rows="3" placeholder="Комментарий..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        @endauth
+    @endcan
     {{--         COMMENTS SECTION --}}
     @foreach ($comments as $comment)
 
-        <div  id ="comment_section"  class="card border-0 m-2 rounded-4 " style="background-color:whitesmoke;scroll-margin-top: 250px;">
+        <div id="comment_section" class="card border-0 m-2 rounded-4 "
+             style="background-color:whitesmoke;scroll-margin-top: 250px;">
             <div class="card-body">
-                <div class="row align-items-center ">
+                <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
                         <img
                             src="{{ $comment->user->image ? Storage::url('avatarImages/' . $comment->user->image) : asset('default_images/defaultAvatar.jpg') }}"
-                            class="rounded-circle" style="width: 40px; height: 40px;" alt="...">
-                        <div class=" ms-2 ">
-                            <div class="fw-bold me-2"><a class="fw-bold link-dark text-decoration-none"
-                                                         href="{{ route('users.show', ['user' => $comment->user]) }}">{{ $comment->user->name }}</a>
+                            class="rounded-circle" style="width: 40px; height: 40px;" alt="avatar">
+                        <div class="ms-2">
+                            <a href="{{ route('users.show', $comment->user) }}"
+                               class="fw-bold link-dark text-decoration-none">
+                                {{ $comment->user->name }}
+                            </a>
+                            <div class="text-muted small">
+                                {{$comment->updated_at != $comment->created_at?'Изменено':''}}
+
+                                {{ $comment->updated_at->diffForHumans() }}
                             </div>
-                            <div class="text-muted">{{ $comment->created_at->diffForHumans() }}</div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-flex align-items-center ">
+
+                            @can('update',$comment)
+                                <button type="button" class="btn " data-bs-toggle="modal"
+                                        data-bs-target="#updateComment-{{$comment->id}}">
+                                    <i class="bi bi-pencil-square"></i>                               </button>
+                            @endcan
+                            @can('delete', $comment)
+                                <form action="{{ route('posts.comments.destroy', [$post,$comment]) }}" method="POST" class="m-0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-link text-danger p-0"
+                                            title="Удалить комментарий">
+                                        <i class="bi bi-x fs-2"></i>
+                                    </button>
+                                </form>
+                            @endcan
+
+                       </div>
+
+                    </div>
+                    <!-- Modal  UPD comment-->
+                    <div class="modal fade" id="updateComment-{{$comment->id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="myForm" action="{{route('posts.comments.update',[$post,$comment])}}" method="post">
+                                        @csrf
+                                        @method('put')
+                                        text comment
+                                        <textarea class="form-control" rows="4" cols="50" type="text" name="text">{{ old('text',$comment->text) }}
+                                        </textarea>
+
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                    </button>
+                                    <button form="myForm" type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class=" d-flex flex-column">
+                    <div class="mt-2 me-3 ms-5">{{ $comment->text }}</div>
+
+
+                    <div class="d-flex m-2 fs-6 comment ms-5">
+                        <div class="like-comment"
+                             data-comment-id="{{ $comment->id }}"
+                             data-url="{{route('posts.comments.like')}}">
+                            <i class="bi text-danger {{in_array($comment->id,$likeCommentUser)?'bi-heart-fill':'bi-heart'}}"
+                               data-comment-id="{{ $comment->id }}"
+                               style="cursor: pointer">
+                            </i>
+                            <span class="like-count">{{ $comment->like }}</span>
+
                         </div>
                     </div>
                 </div>
-                <div class=" d-flex flex-column">
-                    <div class="mt-2 me-3">{{ $comment->text }}</div>
-                    @auth
-                        <div class="d-flex m-2 fs-5 comment">
-                            <div class="like-comment-button"
-                                 data-comment-id="{{ $comment->id }}"
-                                 data-url="{{route('like_comment')}}">
-                            <i class="me-2 like_button bi bi-heart"
-                               data-comment-id="{{ $comment->id }}"
-                               style="cursor: pointer">
-                                <span class="like-count">{{ $comment->like }}</span>
-                            </i>
-                        </div>
-
-                </div>
-                @endauth
             </div>
-        </div>
         </div>
     @endforeach
 @endsection

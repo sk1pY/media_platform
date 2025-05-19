@@ -2,26 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SearchController extends Controller
 {
     public function search(Request $request)
     {
-        if ($request->ajax()) {
-            $output = "";
-                $posts = Post::where('title', 'LIKE', '%' . $request->search . "%")->get();
+         Log::info($request->input('search'));
+         Log::info($request->input('category_slug'));
+        $category_slug = $request->input('category_slug');
 
-            if ($posts->count() > 0) {
-                foreach ($posts as $post) {
-                    $output .= '<a class=" link-secondary text-decoration-none text-dark" href="'.route('posts.show',$post->id). '"><li class="list-group-item ">'.$post->title.'</li></a>';
-                }
+        if ($category_slug) {
+
+            $category = Category::where('slug', $category_slug)->first();
+
+            if ($category) {
+                $posts = Post::where('title', 'like', '%' . $request->input('search') . '%')
+                    ->where('category_id', $category->id)
+                    ->get();
             } else {
-                $output = '<li class="list-group-item">No results found</li>';
+                $posts = collect();
             }
-            return response($output);
+
+        } else {
+            $posts = Post::where('title', 'like', '%' . $request->input('search') . '%')->get();
         }
+
+        $html = '';
+        foreach ($posts as $post) {
+
+            $html .= view('partials.post_card', compact('post'))->render();
+        }
+        return response()->json(['html' => $html]);
     }
 
 }

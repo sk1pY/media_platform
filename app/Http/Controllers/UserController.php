@@ -11,21 +11,25 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
 
-    public function index(){
-//       $posts = Auth::user()->posts()->get();
-//       $user = Auth::user();
-//        return view('dashboard.posts',compact('posts','user'));
+    public function index()
+    {
+
     }
 
 
     public function show(User $user)
     {
+        if (!$user->status) {
+            abort(404, 'error.error');
+        }
+
         $posts = $user->posts()->get();
         $countSubAuthors = Subscribe::where('author_id', $user->id)->count();
 
         return view('home', compact('user', 'posts', 'countSubAuthors'));
 
     }
+
     public function edit(User $user)
     {
         return view('dashboard.profile_edit', compact('user'));
@@ -36,8 +40,7 @@ class UserController extends Controller
     {
 
         $validatedData = $request->validate([
-            'name' => 'required|string|max:50|unique:users,name,'.$user->id,
-            'email' => 'required|string|max:50|unique:users,email,'.$user->id,
+            'name' => 'nullable|string|max:50|unique:users,name,' . $user->id,
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'image_cover' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -57,7 +60,14 @@ class UserController extends Controller
         }
         $user->update($validatedData);
 
-        return to_route('users.show', $user)->with('success', 'Профиль успешно обновлен');
+        return redirect()->back()->with('success', 'Профиль успешно обновлен');
+
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return to_route('index');
 
     }
 }

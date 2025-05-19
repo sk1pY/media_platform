@@ -1,15 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <section class="h-100 gradient-custom-2">
         <div class="container h-100 " style="width: 1000px">
             <div class="row d-flex ">
@@ -21,6 +11,7 @@
                                  src="{{ $user->image_cover ? Storage::url('profileСoverImages/' . $user->image_cover) : asset('default_images/defaultImage.png') }}"
                                  style="height: 250px" alt="123">
                         </div>
+
                     </div>
                     <div class="p-4 text-black bg-body-tertiary">
                         <div class="d-flex justify-content-between align-items-center text-center py-1 text-body">
@@ -33,7 +24,6 @@
                                     <h5 class="mb-0 ms-3">{{ $user->name }}</h5>
                                 </div>
                                 <div class="d-flex align-items-center mt-3 ">
-
 
 
                                 </div>
@@ -55,6 +45,7 @@
                                         <p class="small text-muted mb-0">Подписчиков</p>
                                     </div>
                                 </div>
+
                             </div>
 
                         </div>
@@ -64,7 +55,7 @@
                         <div class=" text-body">
                             {{-- MAIN CARDS CONTENT --}}
                             @foreach ($posts as $post)
-                                @include('partials.post_card',['homeFlag' => true])
+                                @include('partials.post_card')
                             @endforeach
                             {{-- END MAIN CARDS CONTENT --}}
                         </div>
@@ -74,5 +65,4 @@
             </div>
         </div>
     </section>
-<script src="{{asset('js/subscribe.js')}}"></script>
 @endsection

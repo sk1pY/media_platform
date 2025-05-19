@@ -19,8 +19,9 @@
                     <td >
                         {{ $comment->like }}
                     </td>
+{{--                    @can('delete',$comment)--}}
                     <td class="d-flex justify-content-center">
-                        <form action="{{ route('profile.comments.destroy','comment') }}" method="post"
+                        <form action="{{ route('posts.comments.destroy',[$comment->post,$comment]) }}" method="post"
                             class="ms-2">
                             @csrf
                             @method('delete')
@@ -28,8 +29,8 @@
                                 <i class="bi bi-x"></i>
                             </button>
                         </form>
-
                     </td>
+{{--                    @endcan--}}
 
                 </tr>
                 <div class="mt-4">

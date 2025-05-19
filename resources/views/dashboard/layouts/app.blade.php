@@ -18,6 +18,8 @@
             @include('partials.profile_sidebar')
         </div>
         <div class="col">
+            @include('partials.alert.auth')
+            @include('partials.alert.validation')
             @include('partials.alert.error')
             @include('partials.alert.success')
             @yield('content')

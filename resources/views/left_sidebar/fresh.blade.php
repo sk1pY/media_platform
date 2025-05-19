@@ -2,7 +2,10 @@
 @section('title', 'Новое')
 @section('content')
     <h4 class="d-flex justify-content-center">Свежее за 24ч</h4>
-@forelse($posts as $post)
+    {{-- FILTER --}}
+    @include('partials.filter')
+    {{-- END FILTER --}}
+    @forelse($posts as $post)
         @include('partials.post_card')
     @empty
         <h3>

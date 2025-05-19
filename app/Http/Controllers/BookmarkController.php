@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -29,9 +30,11 @@ class BookmarkController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store()
     {
-        $postId = request('bookmark_id');
+        $postId = request('post_id');
+        $post = Post::find($postId);
+        $this->authorize('bookmark', $post);
         $bookmark = Bookmark::where(['user_id' => auth()->id(), 'post_id' => $postId])->first();
         if ($bookmark) {
             $bookmark->delete();

@@ -1,4 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.claim-update').forEach(select => {
         select.addEventListener('change', function () {
             let selectedStatus = this.value;
@@ -13,4 +12,3 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         });
     });
-});

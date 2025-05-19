@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\HiddenPost;
 use App\Models\Post;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -23,7 +22,7 @@ class PostController extends Controller
         $postQuery = Post::where('status', 1)->withCount(['comments', 'likes'])->orderBy('created_at', 'desc');
 
         if (Auth::check()) {
-            $hiddenPostIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id')->toArray();
+            $hiddenPostIds = HiddenPost::where('user_id', Auth::id())->pluck('post_id')->toArray();
             $postQuery->wherenotin('id', $hiddenPostIds);
         }
         if ($request->filled('filter')) {
@@ -71,11 +70,11 @@ class PostController extends Controller
         try {
             Auth::user()->posts()->create($validated);
         } catch (\Throwable $e) {
-            Log::error('Ошибка создания поста: ' . $e->getMessage());
-            return back()->with('error', 'Не удалось создать пост.');
+            report($e);
+            return back()->with('error', 'Ошибка создания поста');
         }
 
-        return back()->with('success', 'Пост успешно создан');
+        return to_route('index')->with('success', 'Пост успешно создан');
 
     }
 
@@ -97,7 +96,7 @@ class PostController extends Controller
             match ($request->input('filter')) {
                 'recent' => $query->latest(),
                 'old' => $query->oldest(),
-                'popular' => $query->orderBy('likew', 'desc'),
+                'popular' => $query->orderBy('likes', 'desc'),
             };
 
             $comments = $query->get();
@@ -137,12 +136,11 @@ class PostController extends Controller
         }
         try {
             $user->posts()->update($validated);
-            return to_route('profile.index')->with('success', 'Пост успешно обновлен.');
+            return redirect()->back()->with('success', 'Пост успешно обновлен.');
 
         } catch (\Throwable $e) {
             Log::error('<UNK> <UNK> <UNK>: ' . $e->getMessage());
         }
-        return to_route('profile.index');
     }
 
     /**
@@ -153,7 +151,7 @@ class PostController extends Controller
         $this->authorize('destroy', $post);
 
         $post->delete();
-        return to_route('profile.index')->with('success', 'Пост успешно удален.');
+        return redirect()->back()->with('success', 'Пост успешно удален.');
     }
 
 
@@ -161,28 +159,39 @@ class PostController extends Controller
 
     public function hide(Request $request, Post $post)
     {
+        $this->authorize('hidden_posts', $post);
+
         if ($request['hidden']) {
             $hiddenPost = HiddenPost::where(['user_id' => Auth::id(), 'post_id' => $post->id])->first();
             if ($hiddenPost) {
                 $post->hiddenPosts()->detach(Auth::id());
+                return redirect()->back()->with('success', 'Пост успешно вернулся в ленту');
+
             } else {
                 $post->hiddenPosts()->attach(Auth::id());
+                return redirect()->back()->with('success', 'Пост успешно скрыт');
+
             }
         }
-        return redirect()->route('index');
     }
 
     public function hidden_posts()
     {
         $postsIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id');
         $posts = Post::whereIn('id', $postsIds)->withCount(['comments', 'likes'])->get();
-        return view('dashboard.hidden_posts', compact('posts'));
+        $flag = true;
+        return view('dashboard.hidden_posts', compact('posts','flag'));
+    }
+
+    public function f(Request $request, Post $post)
+    {
+
     }
 
     public function incrementViews(Post $post)
     {
         $post->increment('views');
-        return response()->json(['success' =>true,'views' => $post->views]);
+        return response()->json(['success' => true, 'views' => $post->views]);
     }
 
     public function profilePosts()

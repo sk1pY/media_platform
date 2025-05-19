@@ -1,4 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.like-button').forEach(button => {
         button.addEventListener('click', function () {
             let postId = this.dataset.postId;
@@ -19,11 +18,11 @@ document.addEventListener("DOMContentLoaded", function () {
                             icon.classList.add('bi-heart');
                         }
                     } else {
+
                         document.getElementById('message').textContent = response.data.message;
                         document.getElementById('message').style.color = 'red';
                     }
                 })
-                .catch(error => console.error('Ошибка:', error));
         });
     });
-});
+

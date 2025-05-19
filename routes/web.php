@@ -1,5 +1,5 @@
 <?php
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentController;
@@ -8,11 +8,11 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SubscribeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\Admin\PostController as AdminPostController;
-use App\Http\Controllers\Admin\RolePermissionController;
-use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
-use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Http\Controllers\Admin\CommentController as AdminCommentController;
+use App\Http\Controllers\admin\PostController as AdminPostController;
+use App\Http\Controllers\admin\RolePermissionController;
+use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\admin\UserController as AdminUserController;
+use App\Http\Controllers\admin\CommentController as AdminCommentController;
 use App\Http\Controllers\admin\ClaimController as AdminClaimController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
@@ -25,8 +25,10 @@ Route::prefix('profile')->name('profile.')->group(function () {
     Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
     Route::put('/{user}', [UserController::class, 'update'])->name('update');
     Route::get('/posts',[PostController::class,'profilePosts'])->name('posts');
-    Route::get('/comments', [CommentController::class, 'comments'])->name('comments.index');
-    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::delete('/{user}',[UserController::class,'destroy'])->name('destroy');
+
+    Route::get('/comments', [CommentController::class, 'allCommentsInProfile'])->name('comments.index');
+//    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     //BOOKMARKS
     Route::resource('bookmarks', BookmarkController::class)->only(['index', 'store', 'destroy']);
     //subscriptions
@@ -36,6 +38,7 @@ Route::prefix('profile')->name('profile.')->group(function () {
 });
 
 Route::post('/subscribe', [SubscribeController::class, 'subscribe'])->name('subscribe');
+//PUBLIC PAGE USER
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
 
@@ -54,15 +57,22 @@ Route::get('/', [PostController::class, 'index'])->name('index');
 Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
 Route::resource('posts', PostController::class)->only(['store', 'destroy','update']);
 Route::post('posts/{post}/hide', [PostController::class, 'hide'])->name('posts.hide');
-//COMMENTARIES
-Route::post('/comments', [CommentController::class, 'store'])->name('comment.store');
-Route::post('/like-comment', [CommentController::class, 'likeComment'])->name('like_comment');
+
+//COMMENTS
+//Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+//Route::put('/posts/{post}/comments', [CommentController::class, 'update'])->name('comments.update');
+Route::resource('posts.comments', CommentController::class)->only(['destroy','index','store','update']);
+Route::post('/like-comment', [LikeController::class, 'likeComment'])->name('posts.comments.like');
+
 //LIKES
-Route::post('/like-post', [LikeController::class, 'like'])->name('posts.like');
+Route::post('/like-post', [LikeController::class, 'likePost'])->name('posts.like');
 //SEARCH
 Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 //VIEW
 Route::post('/posts/{post:slug}/increment-views', [PostController::class, 'incrementViews'])->name('posts.incrementViews');
+//CLAIM STORE
+Route::post('/posts/{post}/claims',[AdminClaimController::class, 'store'])->name('posts.claims.store');
+
 //ADMIN_PANEL
 Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
@@ -87,6 +97,7 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     //CLAIMS
     Route::resource('claims', AdminClaimController::class);
 });
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Route::fallback(function(){

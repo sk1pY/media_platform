@@ -1,4 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.sub-button').forEach(button => {
         button.addEventListener('click', function () {
             let authorId = this.dataset.authorId;
@@ -7,10 +6,17 @@ document.addEventListener("DOMContentLoaded", function () {
             axios.post(url, {author_id: authorId})
                 .then(response => {
                     if (response.data.success) {
+                        const subCardUser = document.getElementById(`subscribe-card-user-${authorId}`);
                         if (response.data.sub) {
                             buttonElement.textContent = 'Отписаться'
+                            buttonElement.classList.add('btn-outline-secondary');
+                            buttonElement.classList.remove('btn-secondary');
+
                         } else {
+                            subCardUser.remove();
                             buttonElement.textContent = 'Подписаться'
+                            buttonElement.classList.add('btn-secondary');
+                            buttonElement.classList.remove('btn-outline-secondary');
                         }
                     } else {
                         document.getElementById('message').textContent = response.data.message;
@@ -20,6 +26,5 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch(error => console.error('Ошибка:', error));
         });
     });
-});
 
 

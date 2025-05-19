@@ -32,17 +32,24 @@ class ClaimController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Post $post)
     {
+
+        $this->authorize('complain', $post);
+
         $validate = $request->validate([
-            'name' => 'required',
+            'title' => 'required',
         ]);
+
+
         Claim::create([
-            'title' => $request['name'],
+            'title' => $validate['title'],
             'user_id' => Auth::id(),
-            'post_id' => $request['post_id'],
+            'post_id' => $post->id,
+            'status' => 'На рассмотрениии',
         ]);
-        return redirect()->route('index');
+
+        return redirect()->route('index')->with('success','жалоба отправлена');
     }
 
     /**
@@ -66,13 +73,13 @@ class ClaimController extends Controller
      */
     public function update(Request $request, Claim $claim)
     {
-        Log::info($request->input('status'));
+        // Log::info($request->input('status'));
         if ($request['status'] === 'Принято') {
             $post = Post::find($claim->post_id);
             $post->status = 0;
             $post->save();
 
-        }elseif($request['status'] === 'Отклонено'){
+        } elseif ($request['status'] === 'Отклонено') {
             $post = Post::find($claim->post_id);
             $post->status = 1;
             $post->save();

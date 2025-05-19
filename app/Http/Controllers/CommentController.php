@@ -3,63 +3,83 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
-use App\Models\Like;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
 
-    public function store(Request $request)
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request, Post $post)
     {
         $validated = $request->validate([
-            'post_id' => 'required',
             'text' => 'required|string|max:600',
         ]);
-        $validated['user_id'] = Auth::id();
-        if(Auth()->check()){
-            $comment = Comment::create(array_merge($validated));
-        }
-        return redirect()->route('posts.show', $comment->post_id);
+
+        $post->comments()->create([
+            'text' => $validated['text'],
+            'user_id' => Auth::id(),
+        ]);
+
+        return redirect()->route('posts.show', $post);
     }
 
-    public function likeDislike(Request $request)
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
-        $commentId = request('comment_id');
-        $userId = Auth::id();
-        $comment = Comment::find($commentId);
-        $type = $request->input('type');
-
-        $like_dislike = Like::where(['user_id' => $userId, 'likeable_type' => Comment::class, 'likeable_id' => $commentId])->first();
-        $like = Like::where(['user_id' => $userId, 'likeable_type' => Comment::class, 'likeable_id' => $commentId, 'is_liked' => true])->first();
-        $dislike = Like::where(['user_id' => $userId, 'likeable_type' => Comment::class, 'likeable_id' => $commentId, 'is_liked' => false])->first();
-
-        if ($type == 'like') {
-            if ($like) {
-                $comment->likes()->where('user_id', $userId)->delete();
-                $comment->decrement('like');
-                return response()->json(['success' => true, 'like' => $comment->like,'liked' => false]);
-            }  else {
-                $comment->increment('like');
-                $comment->likes()->create(['user_id' => $userId,'is_liked' => true]);
-                return response()->json(['success' => true, 'like' => $comment->like, 'liked' => true]);
-            }
-        }
-        return response()->json(['success' => false]);
+        //
     }
 
-    public function  comments()
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Post $post, Comment $comment)
     {
-        $user = Auth::user();
-        $comments = $user->comments()->orderBy('created_at', 'DESC')->withCount(['likes'])->paginate(10);
-        return view('dashboard.comments',compact('comments'));
+        $this->authorize('update', $comment);
+        $validated = $request->validate([
+            'text' => 'required|string|max:600',
+
+        ]);
+
+        $comment->update([
+            'text' => $validated['text'],
+            'user_id' => Auth::id(),
+            'post_id' => $post->id,
+            'updated_at' => now(),
+        ]);
+
+
+        return redirect()->route('posts.show', $post)->with('success', 'успешно обновлен');
+
+
     }
 
-    public function destroy(Comment $comment){
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Post $post,Comment $comment)
+    {
+        $this->authorize('delete', $comment);
+
         $comment->delete();
-        return redirect()->route('comments.index');
+        return redirect()->back()->with('success', 'Успешно удален');
     }
-
+     public function allCommentsInProfile()
+     {
+         $user = Auth::user();
+         $comments = $user->comments()->orderBy('created_at', 'DESC')->withCount(['likes'])->paginate(10);
+         return view('dashboard.comments', compact('comments'));
+     }
 }
-
-

@@ -1,13 +1,13 @@
-$(document).ready(function () {
-    $("#table").DataTable({
-        "paging": false,
-        "searching": true,
-        "info": false
-    });
+import $ from "jquery";
+import DataTable from 'datatables.net-dt';
+import language from "datatables.net-plugins/i18n/ru.mjs";
 
-    // $("#tablecontents").sortable({
-    //     items: "tr",
-    //     cursor: 'move',
-    //     opacity: 0.6
-    // });
+$(document).ready(function() {
+    new DataTable('#table', {
+        paging: false,
+        searching: true,
+        ordering: true,
+        info:false,
+        language
+    });
 });

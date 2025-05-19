@@ -23,7 +23,7 @@ class CategoryController extends Controller
     {
         $query = Post::query();
         $user = Auth::user();
-        $subscriptionsIds = $user->subscribes()->pluck('author_id');
+        $subscriptionsIds = Auth::check()?$user->subscribes()->pluck('author_id'):null;
         match ($slug) {
             'popular' => $query->orderBy('views', 'desc'),
             'fresh' => $query->where('created_at', '>', Carbon::now()->subDay(1))->latest(),

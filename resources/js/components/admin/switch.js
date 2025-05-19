@@ -1,4 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.js-switch').forEach(function (checkbox) {
         checkbox.addEventListener('change', function () {
 
@@ -16,5 +15,5 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         });
     });
-});
+
 

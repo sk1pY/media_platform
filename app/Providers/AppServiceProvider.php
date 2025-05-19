@@ -8,9 +8,10 @@ use App\Models\Post;
 use App\Models\Subscribe;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
         View::composer(['partials.nav','partials.categories_sidebar'], function ($view) {
             $view->with('categories', Category::get());
         });

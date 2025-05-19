@@ -72,6 +72,7 @@
             @include('partials.categories_sidebar')
         </div>
         <div class="col-7 ms-4">
+            @include('partials.alert.validation')
             @include('partials.alert.error')
             @include('partials.alert.success')
             @yield('content')

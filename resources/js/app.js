@@ -10,7 +10,9 @@ if (window.location.pathname.startsWith('/admin')) {
     ]).then(r => console.log('loaded'));
 } else {
     import('./components/like.js');
+    import('./components/like_comment.js');
     import('./components/subscribe.js');
     import('./components/view.js');
     import('./components/bookmark.js');
+    import('./components/search.js');
 }
