@@ -14,11 +14,11 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $sortColumn = $request->input('sort','id');
+        $sortColumn = $request->input('sort', 'id');
         if (empty($sortColumn)) {
             $sortColumn = 'id';
         }
-        $sortDirection = str_starts_with($sortColumn,'-')?'desc':'asc';
+        $sortDirection = str_starts_with($sortColumn, '-') ? 'desc' : 'asc';
         $sortColumn = ltrim($sortColumn, '-');
 
 
@@ -29,11 +29,9 @@ class PostController extends Controller
             });
         });
 
-        $posts = $query->with('category')->orderBy($sortColumn,$sortDirection)->paginate(10);
+        $posts = $query->with('category')->orderBy($sortColumn, $sortDirection)->paginate(10);
 
-
-
-        return response()->json($query->paginate(10));
+        return response()->json($posts);
     }
 
     /**
@@ -98,12 +96,8 @@ class PostController extends Controller
             $validatedData['image'] = basename($path);
         }
 
-      $updated =   $post->update($validatedData);
-        if ($updated) {
-            \Log::info('Post updated successfully.');
-        } else {
-            \Log::error('Post update failed.');
-        }
+         $post->update($validatedData);
+
         return response()->json(['message' => 'Post updated successfully', 'post' => $post], 200);
 
     }

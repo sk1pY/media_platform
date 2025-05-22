@@ -32,6 +32,8 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        $this->authorize('update', $user);
+
         return view('dashboard.profile_edit', compact('user'));
 
     }
@@ -39,6 +41,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
 
+        $this->authorize('update', $user);
         $validatedData = $request->validate([
             'name' => 'nullable|string|max:50|unique:users,name,' . $user->id,
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -66,6 +69,7 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        $this->authorize('update', $user);
         $user->delete();
         return to_route('index');
 

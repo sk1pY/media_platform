@@ -1,6 +1,5 @@
 @auth()
     <div class="sticky-top" style="top: 80px;">
-
         <div class="card border-0" style="width: 18rem;">
             <div class="card-body">
                 <div class="d-flex align-items-center">

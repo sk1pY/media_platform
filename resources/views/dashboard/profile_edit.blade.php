@@ -12,6 +12,11 @@
                        value="{{ $user->name }}">
             </div>
             <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Почта</label>
+                <input type="text" class="form-control" id="exampleFormControlInput1" disabled
+                       value="{{ $user->email }}">
+            </div>
+            <div class="mb-3">
                 <label for="exampleFormControlInput3" class="form-label">Фото профиля</label>
                 <input name="image" type="file" class="form-control" id="exampleFormControlInput3">
             </div>
@@ -34,7 +39,8 @@
         <div class="d-flex align-items-center rounded-pill p-2">
             <form action="{{route('logout')}}" id="logout-form" method="post">
                 @csrf
-                <button type="submit" class="btn  p-0" style="font-size: 1rem; text-decoration: none;">
+                <button type="submit" class="btn  p-0" style="font-size: 1rem; text-decoration: none;"
+                onclick="return confirm('Точно выйти из аккаунта?')">
                     Выйти из аккаунта
                 </button>
             </form>

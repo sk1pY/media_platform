@@ -11,6 +11,7 @@
         body {
             font-family: 'Roboto', 'Open Sans', Helvetica, Arial, sans-serif;
 
+
         }
         .nav-link:hover {
             background-color: white;
@@ -39,45 +40,26 @@
             font-size: 1.2rem;
         }
 
-        .blur-image:hover {
-            opacity: 0.7;
-            /* Полупрозрачный белый налет */
-        }
 
-        .search-result {
-            max-height: 200px;
-            overflow-y: auto;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 0 0 5px 5px;
-        }
 
-        .sub_button_custom {
-            --bs-btn-padding-y: .25rem;
-        !important;
-            --bs-btn-padding-x: .5rem;
-        !important;
-            --bs-btn-font-size: .75rem;
-        !important;
-        }
     </style>
 </head>
 
-<body style="background-color: #FAFAFC">
+<body style="background-color: #F2F2F2">
 
 <div class="container" style="margin-top: 80px;">
-    @include('partials.nav')
     <div class="row">
-        <div class="col-2">
+        <div class="col-3 ">
+            @include('partials.nav')
             @include('partials.categories_sidebar')
         </div>
-        <div class="col-7 ms-4">
+        <div class="col-6 p-0">
             @include('partials.alert.validation')
             @include('partials.alert.error')
             @include('partials.alert.success')
             @yield('content')
         </div>
-        <div class="col-2">
+        <div class="col-3">
             @include('partials.profile_sidebar')
         </div>
     </div>

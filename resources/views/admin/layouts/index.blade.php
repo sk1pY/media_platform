@@ -1,4 +1,4 @@
-    <!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,6 +14,12 @@
 
     <title>Admin</title>
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Roboto', sans-serif;
             font-size: 16px;
@@ -35,13 +41,16 @@
 
 </head>
 <body>
-
-<div class="row">
-    <div class="col-3 d-flex flex-column flex-shrink-0 p-3 " style="background-color: #273A50;height: 100vh;">
-        <a href="/" class="d-flex align-items-center mb-3 text-white text-decoration-none">
-            <svg class="bi me-2" width="40" height="32"></svg>
-            <span class="fs-4">Admin Panel</span>
-        </a>
+<div class="row min-vh-100">
+    <div class="col-3 d-flex flex-column flex-shrink-0 p-3" style="background-color: #273A50;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a href="/admin" class="text-white text-decoration-none ms-2">
+                <span class="fs-4">Admin Panel</span>
+            </a>
+            <a href="/" class="text-white text-decoration-none">
+                выйти
+            </a>
+        </div>
         <hr class="bg-white">
         <ul class="according nav nav-pills flex-column mb-auto ">
             <div class="accordion-item">
@@ -52,7 +61,8 @@
                         Управление пользователями
                     </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse ms-4 show" data-bs-parent="#accordionExample">
+                <div id="collapseOne" class="accordion-collapse collapse ms-4 show"
+                     data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <li>
                             <a href="{{ route('admin.users.index') }}" class="nav-link text-white">
@@ -76,7 +86,8 @@
                         Модерация контента
                     </button>
                 </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse ms-4 show" data-bs-parent="#accordionExample">
+                <div id="collapseTwo" class="accordion-collapse collapse ms-4 show"
+                     data-bs-parent="#accordionExample">
 
                     <div class="accordion-body ">
                         <li>
@@ -179,10 +190,14 @@
 
     </div>
 
-    <div class="col-8">
+    <div class="col-9">
+        @include('partials.alert.validation')
+        @include('partials.alert.error')
+        @include('partials.alert.success')
         @yield('content')
     </div>
 </div>
+
 
 </body>
 </html>

@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\BookmarkController;
@@ -19,16 +20,16 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\admin\RoleController;
 
 
+//PUBLIC PAGE USER
+Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 //PROFILE
 Route::prefix('profile')->name('profile.')->group(function () {
-    Route::get('/',[UserController::class,'index'])->name('index');
+    Route::get('/', [UserController::class, 'index'])->name('index');
     Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
     Route::put('/{user}', [UserController::class, 'update'])->name('update');
-    Route::get('/posts',[PostController::class,'profilePosts'])->name('posts');
-    Route::delete('/{user}',[UserController::class,'destroy'])->name('destroy');
-
+    Route::get('/posts', [PostController::class, 'profilePosts'])->name('posts');
+    Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
     Route::get('/comments', [CommentController::class, 'allCommentsInProfile'])->name('comments.index');
-//    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
     //BOOKMARKS
     Route::resource('bookmarks', BookmarkController::class)->only(['index', 'store', 'destroy']);
     //subscriptions
@@ -37,53 +38,46 @@ Route::prefix('profile')->name('profile.')->group(function () {
 
 });
 
-Route::post('/subscribe', [SubscribeController::class, 'subscribe'])->name('subscribe');
-//PUBLIC PAGE USER
-Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
-
+//SEARCH
+Route::get('/search', [SearchController::class, 'search'])->name('live.search');
 
 //CATEGORIES
-Route::get('/categories-special/{slug}',[CategoryController::class,'specialCategories'])->whereIn('slug', ['popular', 'fresh', 'myFeed'])->name('specialCategories.show');
-Route::prefix('categories')->name('categories.')
-    ->group(function () {
-        Route::get('/{category:slug}', [CategoryController::class, 'show'])->name('show');
-        Route::get('/my_feed', [CategoryController::class, 'my_feed'])->name('my_feed');
-        Route::get('/newest', [CategoryController::class, 'newest'])->name('newest');
-        Route::get('/popular', [CategoryController::class, 'popular'])->name('popular');
-    });
+Route::get('/categories-special/{slug}', [CategoryController::class, 'specialCategories'])->whereIn('slug', ['popular', 'fresh', 'myFeed'])->name('specialCategories.show');
+Route::get('categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
 
 //POSTS
 Route::get('/', [PostController::class, 'index'])->name('index');
 Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
-Route::resource('posts', PostController::class)->only(['store', 'destroy','update']);
+Route::resource('posts', PostController::class)->only(['store', 'destroy', 'update']);
 Route::post('posts/{post}/hide', [PostController::class, 'hide'])->name('posts.hide');
 
-//COMMENTS
-//Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
-//Route::put('/posts/{post}/comments', [CommentController::class, 'update'])->name('comments.update');
-Route::resource('posts.comments', CommentController::class)->only(['destroy','index','store','update']);
-Route::post('/like-comment', [LikeController::class, 'likeComment'])->name('posts.comments.like');
 
-//LIKES
-Route::post('/like-post', [LikeController::class, 'likePost'])->name('posts.like');
-//SEARCH
-Route::get('/search', [SearchController::class, 'search'])->name('live.search');
-//VIEW
-Route::post('/posts/{post:slug}/increment-views', [PostController::class, 'incrementViews'])->name('posts.incrementViews');
-//CLAIM STORE
-Route::post('/posts/{post}/claims',[AdminClaimController::class, 'store'])->name('posts.claims.store');
+//COMMENTS
+Route::resource('posts.comments', CommentController::class)->only(['destroy', 'index', 'store', 'update']);
+Route::middleware('auth')->group(function () {
+    //SUBSCRIBE
+    Route::post('/subscribe', [SubscribeController::class, 'subscribe'])->name('subscribe');
+    Route::post('/like-comment', [LikeController::class, 'likeComment'])->name('posts.comments.like');
+    //LIKES
+    Route::post('/like-post', [LikeController::class, 'likePost'])->name('posts.like');
+    //CLAIM STORE
+    Route::post('/posts/{post}/claims', [AdminClaimController::class, 'store'])->name('posts.claims.store');
+    //VIEW
+    Route::post('/posts/{post:slug}/increment-views', [PostController::class, 'incrementViews'])->name('posts.incrementViews');
+});
+
 
 //ADMIN_PANEL
 Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
 
     Route::get('/roles-permissions', [RolePermissionController::class, 'index'])->name('roles_and_permissions.index');
-    Route::resource('roles', RoleController::class)->only([ 'store', 'destroy']);
-    Route::resource('permissions', PermissionController::class)->only([ 'store', 'destroy']);
+    Route::resource('roles', RoleController::class)->only(['store', 'destroy']);
+    Route::resource('permissions', PermissionController::class)->only(['store', 'destroy']);
     //UPDATE ROLE FOR USER
     Route::post('/users/{user}/update-role', [AdminUserController::class, 'userRoleUpdate'])->name('users.role.update');
     //UPDATE PERMISSION FOR ROLE
-    Route::post('/roles/{role}/permissions', [AdminUserController::class, 'rolePermissionUpdate'])->name('roles.permissions.update');
+    Route::put('/roles/{role}/permissions', [AdminUserController::class, 'rolePermissionUpdate'])->name('roles.permissions.update');
     //Users
     Route::resource('users', AdminUserController::class);
     Route::put('/users/{user}/update-status', [AdminUserController::class, 'updateUserStatus'])->name('users.status.update');
@@ -100,9 +94,7 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Route::fallback(function(){
-//   return view('error.error');
-//});
+Route::fallback(fn() => view('error.error'));
 
 
 

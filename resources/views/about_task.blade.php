@@ -10,7 +10,8 @@
             <form action="{{ route('posts.comments.store',$post) }}" method="POST">
                 @csrf
                 <div class="mb-3 mt-3">
-                    <textarea class="form-control" id="comment-text" name="text" rows="3" placeholder="Комментарий..."></textarea>
+                    <textarea class="form-control" id="comment-text" name="text" rows="3"
+                              placeholder="Комментарий..."></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Отправить</button>
             </form>
@@ -46,24 +47,27 @@
                             @can('update',$comment)
                                 <button type="button" class="btn " data-bs-toggle="modal"
                                         data-bs-target="#updateComment-{{$comment->id}}">
-                                    <i class="bi bi-pencil-square"></i>                               </button>
+                                    <i class="bi bi-pencil-square"></i></button>
                             @endcan
                             @can('delete', $comment)
-                                <form action="{{ route('posts.comments.destroy', [$post,$comment]) }}" method="POST" class="m-0">
+                                <form action="{{ route('posts.comments.destroy', [$post,$comment]) }}" method="POST"
+                                      class="m-0">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-link text-danger p-0"
-                                            title="Удалить комментарий">
+                                            title="Удалить комментарий"
+                                            onclick="return confirm('Точно удалить?')">
                                         <i class="bi bi-x fs-2"></i>
                                     </button>
                                 </form>
                             @endcan
 
-                       </div>
+                        </div>
 
                     </div>
                     <!-- Modal  UPD comment-->
-                    <div class="modal fade" id="updateComment-{{$comment->id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    <div class="modal fade" id="updateComment-{{$comment->id}}" tabindex="-1"
+                         aria-labelledby="exampleModalLabel"
                          aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -73,7 +77,8 @@
                                             aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="myForm" action="{{route('posts.comments.update',[$post,$comment])}}" method="post">
+                                    <form id="myForm" action="{{route('posts.comments.update',[$post,$comment])}}"
+                                          method="post">
                                         @csrf
                                         @method('put')
                                         text comment

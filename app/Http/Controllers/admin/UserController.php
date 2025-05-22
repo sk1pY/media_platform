@@ -84,8 +84,9 @@ class UserController extends Controller
     public function rolePermissionUpdate(Request $request, Role $role)
     {
         $permission = Permission::find($request->input('permissionId'));
-        $role->hasPermissionTo($permission) ? $role->revokePermissionTo($permission) : $role->givePermissionTo($permission);
-
+        $role->hasPermissionTo($permission) ?
+            $role->revokePermissionTo($permission) :
+            $role->givePermissionTo($permission);
         return response()->json();
 
     }

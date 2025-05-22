@@ -1,4 +1,4 @@
-<div id="card-{{$post->id}}" class="card border-0 mb-4">
+<div id="card-{{$post->id}}" class="card border-0 mb-4 rounded-4">
     <div class="card-body">
         <div class="row align-items-center ">
             <div class="col-auto ">
@@ -75,7 +75,8 @@
                                     <form action="{{ route('posts.destroy',$post) }}" method="post">
                                         @csrf
                                         @method('delete')
-                                        <input class="dropdown-item" type="submit" value="Удалить">
+                                        <input class="dropdown-item" type="submit" value="Удалить"
+                                               onclick="return confirm('Вы действительно хотите удалить этот пост?')">
                                     </form>
                                 </li>
                             @endcan
