@@ -31,9 +31,8 @@ class CategoryController extends Controller
         if ($request->hasFile('image')) {
             $validate['image'] = $request->hasFile('image') ? basename($request->file('image')->store('categoryImages', 'public')) : null;
         }
-
         Category::create($validate);
-        return to_route('admin.categories.index');
+        return to_route('admin.categories.index')->with('success', 'Category created successfully');
     }
 
     /**
@@ -73,7 +72,7 @@ class CategoryController extends Controller
         ]);
 
 
-        return redirect()->route('admin.categories.index');
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully');
     }
 
     /**
@@ -82,6 +81,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('admin.categories.index');
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully');
     }
 }

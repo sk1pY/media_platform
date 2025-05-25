@@ -1,4 +1,4 @@
-<div id="card-{{$post->id}}" class="card border-0 mb-4 rounded-4">
+<div id="card-{{$post->id}}" class="card border-0 mb-3 rounded-3">
     <div class="card-body">
         <div class="row align-items-center ">
             <div class="col-auto ">
@@ -22,6 +22,7 @@
                     @endif
                     <small class="text-muted">{{ $post->created_at->diffForHumans() }}</small>
                 </div>
+
             </div>
 
 
@@ -106,7 +107,7 @@
         <div class="d-flex justify-content-between align-items-center mt-3 ms-2 ">
             <div class="d-flex align-items-center">
                 {{--       LIKE --}}
-                <div class=" like-button me-3" style="cursor:pointer"
+                <div id="like-button" class=" like-button me-3" style="cursor:pointer"
                      data-post-id="{{ $post->id }}"
                      data-url="{{ route('posts.like') }}">
                     <i class="bi text-danger {{ in_array($post->id, $likedPostUser, true) ? 'bi-heart-fill' : 'bi-heart' }}"></i>
@@ -139,7 +140,18 @@
 
     </div>
 </div>
-
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
+</div>
 <!-- MODAL UPDATE POST-->
 <div class="modal fade" id="update_post{{ $post->id }}" tabindex="-1"
      aria-labelledby="staticBackdropLabel" aria-hidden="true">

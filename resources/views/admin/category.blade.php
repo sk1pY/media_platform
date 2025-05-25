@@ -48,7 +48,6 @@
 
                     <td class="text-center">
                         <button class="btn btn-sm"
-                                onclick="return confirm('Точно удалить?')"
                                 data-bs-toggle="modal"
                                 data-bs-target="#modal-{{ $category->id }}">
                             <i type="submit" class="bi bi-pencil-square"></i>

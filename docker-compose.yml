@@ -43,6 +43,13 @@ services:
             test: [ "CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}" ]
             retries: 3
             timeout: 5s
+    mailpit:
+        image: axllent/mailpit
+        ports:
+            - '${FORWARD_MAILPIT_PORT:-8025}:8025'
+            - '1025:1025'
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge

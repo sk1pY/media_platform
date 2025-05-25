@@ -38,13 +38,13 @@ class BookmarkController extends Controller
         $bookmark = Bookmark::where(['user_id' => auth()->id(), 'post_id' => $postId])->first();
         if ($bookmark) {
             $bookmark->delete();
-            return response()->json(['success' => true, 'bookmark' => false]);
+            return response()->json(['success' => true, 'bookmarkStore' => false]);
         }
         Bookmark::create([
             'user_id' => auth()->id(),
             'post_id' => $postId]);
 
-        return response()->json(['success' => true, 'bookmark' => true]);
+        return response()->json(['success' => true, 'bookmarkStore' => true]);
     }
 
     /**

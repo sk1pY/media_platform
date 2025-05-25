@@ -1,32 +1,31 @@
 <nav style="background-color:#D9F0FF; height: 60px;"
      class="navbar navbar-expand-lg navbar-light fixed-top custom-navbar">
     <div class="container-fluid " style="padding-left: 120px; padding-right: 120px;">
-        <div class="d-flex">
+
             <a href="{{ route('index') }}" class="navbar-brand me-auto fw-bold fs-4">PROJEKT</a>
-        </div>
 
         {{--        SEARCH --}}
-        <div class="d-flex justify-content-center align-items-center me-auto search-container">
-            <div class="input-group rounded" style="width: 500px; margin-left: 165px; position: relative;">
+        <div class="d-flex justify-content-center top-50 start-20  ">
+            <div class="input-group rounded" style="width: 500px;">
                 <input id="search"
                        type="search" class="form-control rounded" placeholder="Поиск" aria-label="Search"
                        aria-describedby="search-addon" name="search">
             </div>
         </div>
+        <div class="d-flex justify-content-center align-items-center ms-auto">
+            @guest
+                <a href="{{ route('register') }}" class="btn  me-3 bg-white p-2  rounded-3">Регистрация</a>
+                <a href="{{ route('login') }}" class="btn me-3 bg-primary p-2 rounded-3 text-white">Войти</a>
+            @endguest
+            @auth
+                <button type="button" class="btn bg-white rounded-4 text-start p-2 w-100 w-auto" data-bs-toggle="modal" data-bs-target="#createPost" data-bs-dismiss="modal">
+                    <i class="bi bi-plus-square me-1"></i>
+                    <span class="text-black">Опубликовать пост</span>
 
-        @guest
-            <a href="{{ route('register') }}" class="btn  me-3 bg-white p-2  rounded-5">Регистрация</a>
-            <a href="{{ route('login') }}" class="btn me-3 bg-white p-2 rounded-5">Войти</a>
-        @endguest
-        @auth
-            <button type="button" class="btn me-3 bg-white rounded-4 text-start p-2 w-100 w-auto" data-bs-toggle="modal"
-                    data-bs-target="#createPost" data-bs-dismiss="modal">
+                </button>
+            @endauth
+        </div>
 
-                <i class="bi bi-plus-square me-1"></i>
-                <span class="text-black">Опубликовать пост</span>
-
-            </button>
-        @endauth
     </div>
 </nav>
 {{-- MODAL WINDOW --}}

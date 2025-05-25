@@ -11,8 +11,6 @@ class SearchController extends Controller
 {
     public function search(Request $request)
     {
-         Log::info($request->input('search'));
-         Log::info($request->input('category_slug'));
         $category_slug = $request->input('category_slug');
 
         if ($category_slug) {

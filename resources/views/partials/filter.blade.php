@@ -1,8 +1,8 @@
 {{--        FILTER --}}
-<div class="m-2">
+<div class="mb-2">
     <form  id="filterForm" method="get">
 
-        <select class="form-select w-25 text-decoration-none" id="rating" name="filter" form="filterForm"
+        <select class="form-select w-auto text-decoration-none rounded-3 border-0" id="rating" name="filter" form="filterForm"
                 onchange="this.form.submit()">
             <option value="">Выберите фильтр</option>
             <option value="recent" {{ request('filter') === 'recent' ? 'selected' : '' }}>Самые новые

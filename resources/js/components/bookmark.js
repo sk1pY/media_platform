@@ -9,10 +9,14 @@ document.querySelectorAll('.bookmark-button').forEach(button => {
                 if (response.data.success) {
                     let icon = bookmarkButton.querySelector('i');
                     const cardPost = document.getElementById(`card-${postId}`);
-
-                    if (response.data.bookmark) {
+                    const toastLiveExample = document.getElementById('liveToastBookmark')
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                    if (response.data.bookmarkStore) {
                         icon.classList.remove('bi-bookmark');
                         icon.classList.add('bi-bookmark-fill');
+                        // const toastTrigger = document.getElementById('liveToastBtn')
+                        toastBootstrap.show()
+
                     } else {
                         if (window.location.pathname === '/profile/bookmarks') {
                             cardPost.remove();

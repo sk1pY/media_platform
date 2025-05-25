@@ -22,10 +22,8 @@ class UserController extends Controller
         if (!$user->status) {
             abort(404, 'error.error');
         }
-
-        $posts = $user->posts()->get();
+        $posts = $user->posts()->latest()->get();
         $countSubAuthors = Subscribe::where('author_id', $user->id)->count();
-
         return view('home', compact('user', 'posts', 'countSubAuthors'));
 
     }

@@ -47,10 +47,8 @@ class AppServiceProvider extends ServiceProvider
                     ->toArray();
 
                 $bookmarkPostUser = $user->bookmarks()->pluck('post_id')->toArray();
-                $countSubAuthors = Subscribe::where('author_id', $user)->count();
                 $subAuthors = Subscribe::where('user_id', $user->id)->pluck('author_id')->toArray();
             } else {
-                $countSubAuthors = 0;
                 $likedPostUser = [];
                 $bookmarkPostUser = [];
                 $subAuthors = [];
@@ -58,7 +56,6 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $view->with([
-                'countSubAuthors' => $countSubAuthors,
                 'likedPostUser' => $likedPostUser,
                 'bookmarkPostUser' => $bookmarkPostUser,
                 'subAuthors' => $subAuthors,

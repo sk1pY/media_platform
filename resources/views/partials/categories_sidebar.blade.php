@@ -33,7 +33,7 @@
     }
 
 </style>
-<div class="scroll-wrapper sticky-top">
+<div class="scroll-wrapper sticky-top  rounded-3 bg-white p-2" style="top: 80px;">
     <div class="scroll-inner">
             <ul class="nav flex-column ">
                 <a style="font-size: 1.2rem;" class="rounded-pill nav-link active  text-dark" aria-current="page"

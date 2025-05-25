@@ -22,6 +22,8 @@
             @include('partials.alert.validation')
             @include('partials.alert.error')
             @include('partials.alert.success')
+            @include('partials.alert.toast')
+
             @yield('content')
         </div>
     </div>
