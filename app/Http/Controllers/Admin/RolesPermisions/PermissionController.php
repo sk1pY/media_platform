@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin\RolesPermisions;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
-class RoleController extends Controller
+class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,11 +30,11 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $validated = request()->validate([
-            'name' => 'required|string|unique:roles,name'
+            'name' => 'required|string|unique:permissions,name'
         ]);
+        Permission::create($validated);
+        return redirect()->back();
 
-        Role::create($validated);
-        return redirect()->route('admin.roles_and_permissions.index');
     }
 
     /**
@@ -57,18 +56,17 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,User $user)
+    public function update(Request $request, string $id)
     {
         //
     }
 
-
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(Permission $permission)
     {
-        $role->delete();
+        $permission->delete();
         return redirect()->route('admin.roles_and_permissions.index');
     }
 }

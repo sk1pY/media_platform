@@ -1,6 +1,5 @@
 import './bootstrap.js';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+
 
 if (window.location.pathname.startsWith('/admin')) {
     Promise.all([
@@ -9,7 +8,9 @@ if (window.location.pathname.startsWith('/admin')) {
         import('./components/admin/role_permissions_update.js'),
         import('./components/admin/switch.js'),
         import('./components/admin/claim_status.js')
-    ]).then(r => console.log('loaded'));
+    ]).then(response => {
+        console.log('loaded')
+    });
 } else {
     import('./components/like.js');
     import('./components/like_comment.js');

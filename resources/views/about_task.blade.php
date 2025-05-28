@@ -20,8 +20,8 @@
     {{--         COMMENTS SECTION --}}
     @foreach ($comments as $comment)
 
-        <div id="comment_section" class="card border-0 m-2 rounded-4 "
-             style="background-color:whitesmoke;scroll-margin-top: 250px;">
+        <div id="comment_section" class="card border-0 m-2 rounded-4 bg-white"
+             style="scroll-margin-top: 250px;">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
@@ -95,11 +95,9 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
 
-                <div class=" d-flex flex-column">
+                <div class=" d-flex flex-column ">
                     <div class="mt-2 me-3 ms-5">{{ $comment->text }}</div>
 
 

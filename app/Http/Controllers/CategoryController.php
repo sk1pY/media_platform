@@ -30,8 +30,13 @@ class CategoryController extends Controller
             'myFeed' => $query->wherein('user_id', $subscriptionsIds),
             default => null
         };
-
+//        $slugTitles = [
+//            'popular' => 'Популярное',
+//            'fresh' => 'Свежее за 24 часа',
+//            'myFeed' => 'Моя лента',
+//        ];
+//        $slug = $slugTitles[$slug];
         $posts = $query->get();
-        return view('left_sidebar.' . $slug, compact('posts'));
+        return view('left_sidebar.special_category_show',compact('posts','slug'));
     }
 }

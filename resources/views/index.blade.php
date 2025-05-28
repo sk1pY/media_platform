@@ -4,13 +4,6 @@
     @include('partials.filter')
     {{-- END FILTER --}}
     {{--    POSTS--}}
-{{--    <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>--}}
-
-
-
-
-
-
     <div id="search-cards">
         @forelse($posts as $post)
             @include('partials.post_card')

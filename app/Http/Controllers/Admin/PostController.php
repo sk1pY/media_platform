@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -93,9 +91,8 @@ class PostController extends Controller
         $isUpdated =   $post->update(['status' => $status]);
         if ($isUpdated) {
             return response()->json(['success' => 'Status updated successfully.']);
-        } else {
-            return response()->json(['error' => 'Failed to update status.'], 500);
         }
+            return response()->json(['error' => 'Failed to update status.'], 500);
     }
 
     /**

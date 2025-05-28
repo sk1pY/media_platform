@@ -1,23 +1,23 @@
 <?php
 
-use App\Http\Controllers\admin\AdminController;
-use App\Http\Controllers\admin\PermissionController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\ClaimController as AdminClaimController;
+use App\Http\Controllers\Admin\CommentController as AdminCommentController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\RolesPermisions\PermissionController;
+use App\Http\Controllers\Admin\RolesPermisions\RoleController;
+use App\Http\Controllers\Admin\RolesPermisions\RolePermissionController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SubscribeController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\admin\PostController as AdminPostController;
-use App\Http\Controllers\admin\RolePermissionController;
-use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
-use App\Http\Controllers\admin\UserController as AdminUserController;
-use App\Http\Controllers\admin\CommentController as AdminCommentController;
-use App\Http\Controllers\admin\ClaimController as AdminClaimController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\admin\RoleController;
+use Illuminate\Support\Facades\Route;
 
 
 //PUBLIC PAGE USER

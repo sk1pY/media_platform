@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
 
-class PermissionController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $comments = Comment::paginate(9);
+        return view('admin.comment', compact('comments'));
     }
 
     /**
@@ -29,12 +30,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = request()->validate([
-            'name' => 'required|string|unique:permissions,name'
-        ]);
-        Permission::create($validated);
-        return redirect()->back();
-
+        //
     }
 
     /**
@@ -64,9 +60,9 @@ class PermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Permission $permission)
+    public function destroy(Comment $comment)
     {
-        $permission->delete();
-        return redirect()->route('admin.roles_and_permissions.index');
+        $comment->delete();
+        return redirect()->back();
     }
 }

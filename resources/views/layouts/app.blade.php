@@ -6,26 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Main')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
     <style>
         body {
-            font-family: 'Roboto', 'Open Sans', Helvetica, Arial, sans-serif;
-
-
-        }
-        .nav-link:hover {
-            background-color: white;
-            color: black;
-        }
-
-        .red-heart {
-            color: red;
-        }
-
-
-        .custom-dropdown {
-            min-width: 200px;
-            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
         }
 
         .custom-dropdown li {
@@ -51,7 +34,9 @@
     <div class="row">
         <div class="col-3 ">
             @include('partials.nav')
-            @include('partials.categories_sidebar')
+            @if (!in_array(Route::currentRouteName(), ['register', 'login']))
+                @include('partials.categories_sidebar')
+            @endif
         </div>
         <div class="col-6 p-0">
             @include('partials.alert.validation')

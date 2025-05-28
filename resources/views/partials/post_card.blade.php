@@ -99,7 +99,7 @@
         <div class="card-img-container">
             <img
                 src="{{ $post->image?Storage::url('postImages/'.$post->image):asset('default_images/defaultImage.png') }}"
-                style="width: 100%; height: 290px"
+                style="width: 100%; height: 350px"
                 alt="image_not_found"
                 class="card-img-top rounded-3">
         </div>

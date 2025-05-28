@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin\RolesPermisions;
 
 use App\Http\Controllers\Controller;
-use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
-class CommentController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $comments = Comment::paginate(9);
-        return view('admin.comment', compact('comments'));
+        //
     }
 
     /**
@@ -30,7 +30,12 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = request()->validate([
+            'name' => 'required|string|unique:roles,name'
+        ]);
+
+        Role::create($validated);
+        return redirect()->route('admin.roles_and_permissions.index');
     }
 
     /**
@@ -52,17 +57,18 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,User $user)
     {
         //
     }
 
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy(Role $role)
     {
-        $comment->delete();
-        return redirect()->back();
+        $role->delete();
+        return redirect()->route('admin.roles_and_permissions.index');
     }
 }

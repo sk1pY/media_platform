@@ -2,6 +2,7 @@
 @section('content')
 
     <input type="hidden" id="category-slug" value="{{$category->slug }}">
+
     <div class="position-relative mb-3">
         <img style="width: 100%; height: 290px" src="{{$category->image?Storage::url('categoryImages/'.$category->image): asset('default_images/defaultImage.png')}}" alt="123">
         <div class="position-absolute top-50 start-50 translate-middle text-white fw-bold">

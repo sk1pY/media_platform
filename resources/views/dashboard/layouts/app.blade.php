@@ -9,7 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
-<body>
+<body style="background-color: #F2F2F2;font-family: 'Inter', sans-serif;">
 <div class="container" style="margin-top: 80px;">
     @include('partials.nav')
 

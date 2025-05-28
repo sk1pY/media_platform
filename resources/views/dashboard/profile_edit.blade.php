@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.app')
 @section('content')
 
-    <div class=" border rounded-5 p-4">
+    <div class=" border rounded-5 p-4 bg-white">
         <form action="{{ route('profile.update',$user) }}" enctype="multipart/form-data"
               method="POST">
             @csrf
@@ -29,30 +29,27 @@
         </form>
     </div>
     {{--   ------------------------------------------------------------------------------------------------- --}}
-    <div class="mt-4 border rounded-5 p-3 w-25">
-        <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#passwordChangeModal">
+    <div class="mt-4 border rounded-5 p-3 w-25 bg-white ">
+        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#passwordChangeModal">
             Сменить пароль
         </button>
-        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#mailChangeModal">
+        <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#mailChangeModal">
             Сменить почту
         </button>
-        <div class="d-flex align-items-center rounded-pill p-2">
-            <form action="{{route('logout')}}" id="logout-form" method="post">
-                @csrf
-                <button type="submit" class="btn  p-0" style="font-size: 1rem; text-decoration: none;"
-                onclick="return confirm('Точно выйти из аккаунта?')">
-                    Выйти из аккаунта
-                </button>
-            </form>
-        </div>
-
         <div class=" rounded-pill ">
             <button style="font-size: 1rem" type="button" class="btn " data-bs-toggle="modal"
                     data-bs-target="#deleteuser">
                 Удалить аккаунт
             </button>
-
-
+        </div>
+        <div class=" text-white">
+            <form action="{{route('logout')}}" id="logout-form" method="post">
+                @csrf
+                <button type="submit" class="btn" style="font-size: 1rem; text-decoration: none;"
+                        onclick="return confirm('Точно выйти из аккаунта?')">
+                    Выйти из аккаунта
+                </button>
+            </form>
         </div>
     </div>
     <!-- Modal DELETE USER HOME PAGE-->

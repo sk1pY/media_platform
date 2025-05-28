@@ -1,15 +1,15 @@
-<nav style="background-color:#D9F0FF; height: 60px;"
+<nav style="background-color: #0a53be; height: 60px;"
      class="navbar navbar-expand-lg navbar-light fixed-top custom-navbar">
     <div class="container-fluid " style="padding-left: 120px; padding-right: 120px;">
 
-            <a href="{{ route('index') }}" class="navbar-brand me-auto fw-bold fs-4">PROJEKT</a>
+            <a href="{{ route('index') }}" class="navbar-brand me-auto fw-bold fs-4 text-white">Media</a>
 
         {{--        SEARCH --}}
         <div class="d-flex justify-content-center top-50 start-20  ">
             <div class="input-group rounded" style="width: 500px;">
                 <input id="search"
                        type="search" class="form-control rounded" placeholder="Поиск" aria-label="Search"
-                       aria-describedby="search-addon" name="search">
+                        name="search">
             </div>
         </div>
         <div class="d-flex justify-content-center align-items-center ms-auto">
@@ -18,9 +18,10 @@
                 <a href="{{ route('login') }}" class="btn me-3 bg-primary p-2 rounded-3 text-white">Войти</a>
             @endguest
             @auth
+                    <i class="bi bi-bell-fill text-white fs-4 me-4  "></i>
                 <button type="button" class="btn bg-white rounded-4 text-start p-2 w-100 w-auto" data-bs-toggle="modal" data-bs-target="#createPost" data-bs-dismiss="modal">
                     <i class="bi bi-plus-square me-1"></i>
-                    <span class="text-black">Опубликовать пост</span>
+                    <span class="text-black">Опубликовать</span>
 
                 </button>
             @endauth
@@ -47,7 +48,7 @@
                     <div class="mb-3">
                         <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
                         <textarea name="description" class="form-control" id="exampleFormControlTextarea1"
-                                  rows="3"  value="{{old('description')}}"></textarea>
+                                  rows="3">{{old('description')}}</textarea>
                     </div>
                     <div class="mb-3">
                         Выберите категорию

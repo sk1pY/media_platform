@@ -1,7 +1,6 @@
 document.querySelectorAll('.bookmark-button').forEach(button => {
     button.addEventListener('click', function () {
         let postId = this.dataset.postId;
-
         let bookmarkButton = this;
         let url = this.dataset.url;
         axios.post(url, {post_id: postId})

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -29,7 +29,8 @@ class CategoryController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $validate['image'] = $request->hasFile('image') ? basename($request->file('image')->store('categoryImages', 'public')) : null;
+            $validate['image'] = $request->hasFile('image') ? basename($request->file('image')->store('categoryImages', 'public'))
+                : null;
         }
         Category::create($validate);
         return to_route('admin.categories.index')->with('success', 'Category created successfully');
