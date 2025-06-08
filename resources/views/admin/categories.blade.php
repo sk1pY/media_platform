@@ -1,6 +1,5 @@
-@extends('admin.layouts.index')
-
-@section('content')
+@extends('layouts.admin')
+@section('admin-content')
     <div class="container-fluid px-3">
         <h5 class="mt-3">Создать категорию</h5>
         <hr>
@@ -63,7 +62,7 @@
                                 <i type="submit" class="bi bi-x"></i>
                             </button>
                         </form>
-{{--                MODAL--}}
+                        {{--                MODAL--}}
                         <div class="modal fade" id="modal-{{ $category->id }}"
                              tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog">
@@ -80,13 +79,16 @@
                                         </div>
                                         <div class="modal-body">
                                             <label class="form-label">Название</label>
-                                            <input type="text" name="name" value="{{ $category->name }}" class="form-control mb-2">
+                                            <input type="text" name="name" value="{{ $category->name }}"
+                                                   class="form-control mb-2">
                                             <label class="form-label">Изображение</label>
                                             <input type="file" name="image" class="form-control">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="submit" class="btn btn-success btn-sm">Сохранить</button>
-                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Отмена</button>
+                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                    data-bs-dismiss="modal">Отмена
+                                            </button>
                                         </div>
                                     </form>
                                 </div>

@@ -1,11 +1,11 @@
-@extends('admin.layouts.index')
-@section('content')
+@extends('layouts.admin')
+@section('admin-content')
     <div class="p-3">
         <h4>Жалобы</h4>
         <hr>
         <table id="table" class="table table-sm table-bordered table-striped small text-center align-middle">
             <thead>
-            <tr >
+            <tr>
                 <th scope="col" class="col-1">#</th>
                 <th scope="col" class="col-3">Пост</th>
                 <th scope="col" class="col-3">Описание жалобы</th>

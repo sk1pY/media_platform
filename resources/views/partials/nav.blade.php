@@ -1,31 +1,32 @@
 <nav style="background-color: #0a53be; height: 60px;"
-     class="navbar navbar-expand-lg navbar-light fixed-top custom-navbar">
-    <div class="container-fluid " style="padding-left: 120px; padding-right: 120px;">
-
-            <a href="{{ route('index') }}" class="navbar-brand me-auto fw-bold fs-4 text-white">Media</a>
-
-        {{--        SEARCH --}}
-        <div class="d-flex justify-content-center top-50 start-20  ">
-            <div class="input-group rounded" style="width: 500px;">
-                <input id="search"
-                       type="search" class="form-control rounded" placeholder="Поиск" aria-label="Search"
-                        name="search">
+     class="navbar navbar-expand-lg navbar-light sticky-top p-0 m-0 rounded-2">
+    <div class="container">
+        <a href="{{ route('index') }}" class="navbar-brand me-auto fw-bold fs-4 text-white ms-3">Media</a>
+            {{--        SEARCH --}}
+            <div class="d-flex justify-content-center top-50 start-20  ">
+                <div class="input-group rounded" style="width: 500px;">
+                    <input id="search"
+                           type="search" class="form-control rounded" placeholder="Поиск" aria-label="Search"
+                           name="search" {{Request::is('profile*')?'disabled':''}}>
+                </div>
             </div>
-        </div>
-        <div class="d-flex justify-content-center align-items-center ms-auto">
-            @guest
-                <a href="{{ route('register') }}" class="btn  me-3 bg-white p-2  rounded-3">Регистрация</a>
-                <a href="{{ route('login') }}" class="btn me-3 bg-primary p-2 rounded-3 text-white">Войти</a>
-            @endguest
-            @auth
-                    <i class="bi bi-bell-fill text-white fs-4 me-4  "></i>
-                <button type="button" class="btn bg-white rounded-4 text-start p-2 w-100 w-auto" data-bs-toggle="modal" data-bs-target="#createPost" data-bs-dismiss="modal">
-                    <i class="bi bi-plus-square me-1"></i>
-                    <span class="text-black">Опубликовать</span>
+            {{--        SEARCH --}}
 
-                </button>
-            @endauth
-        </div>
+            <div class="d-flex justify-content-center align-items-center ms-auto">
+                @guest
+                    <a href="{{ route('register') }}" class="btn  me-3 bg-white p-2  rounded-3">Регистрация</a>
+                    <a href="{{ route('login') }}" class="btn me-3 bg-primary p-2 rounded-3 text-white">Войти</a>
+                @endguest
+                @auth
+                    <i class="bi bi-bell-fill text-white fs-4 me-4  "></i>
+                    <button type="button" class="btn bg-white rounded-4 text-start p-2 w-100 w-auto me-3"
+                            data-bs-toggle="modal" data-bs-target="#createPost" data-bs-dismiss="modal">
+                        <i class="bi bi-plus-square me-1"></i>
+                        <span class="text-black ">Опубликовать</span>
+
+                    </button>
+                @endauth
+            </div>
 
     </div>
 </nav>
@@ -38,7 +39,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('posts.store') }}" enctype="multipart/form-data" method="POST">
+                <form action="{{ route('profile.posts.store') }}" enctype="multipart/form-data" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label for="exampleFormControlInput1" class="form-label">Название</label>
@@ -53,7 +54,7 @@
                     <div class="mb-3">
                         Выберите категорию
                         @if (count($categories) > 0)
-                            <select name="category_id" class="form-select" >
+                            <select name="category_id" class="form-select">
                                 <option value="" selected>Без категории</option>
                                 @foreach ($categories as $category)
                                     <option value="{{$category->id}}">{{ $category->name }}</option>

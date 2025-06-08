@@ -1,6 +1,5 @@
-@extends('admin.layouts.index')
-
-@section('content')
+@extends('layouts.admin')
+@section('admin-content')
     <div class="container-fluid p-3">
 
         <div class="row mb-4">
@@ -9,7 +8,8 @@
                 <hr>
                 <form action="{{ route('admin.roles.store') }}" method="POST" class="d-flex gap-2">
                     @csrf
-                    <input type="text" name="name" placeholder="Название роли" class="form-control form-control-sm" required>
+                    <input type="text" name="name" placeholder="Название роли" class="form-control form-control-sm"
+                           required>
                     <button type="submit" class="btn btn-sm btn-primary">Добавить</button>
                 </form>
             </div>
@@ -18,7 +18,8 @@
                 <hr>
                 <form action="{{ route('admin.permissions.store') }}" method="POST" class="d-flex gap-2">
                     @csrf
-                    <input type="text" name="name" placeholder="Название разрешения" class="form-control form-control-sm" required>
+                    <input type="text" name="name" placeholder="Название разрешения"
+                           class="form-control form-control-sm" required>
                     <button type="submit" class="btn btn-sm btn-primary">Добавить</button>
                 </form>
             </div>
@@ -77,7 +78,8 @@
                             <td class="text-center">{{ $permission->id }}</td>
                             <td>{{ $permission->name }}</td>
                             <td class="text-center">
-                                <form action="{{ route('admin.permissions.destroy', $permission) }}" method="POST" class="d-inline">
+                                <form action="{{ route('admin.permissions.destroy', $permission) }}" method="POST"
+                                      class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm"
@@ -116,7 +118,7 @@
                                              data-permission-id="{{ $permission->id }}">
                                             <input class="form-check-input"
                                                    type="checkbox"
-                                                @checked($role->permissions->contains($permission))>
+                                                    @checked($role->permissions->contains($permission))>
                                             <label class="form-check-label small">
                                                 {{ $permission->name }}
                                             </label>

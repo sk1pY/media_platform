@@ -1,5 +1,5 @@
-@extends('admin.layouts.index')
-@section('content')
+@extends('layouts.admin')
+@section('admin-content')
     <div class="p-3">
         <h4>Пользователи</h4>
         <table id="table" class="table table-sm table-bordered table-striped mt-2 align-middle text-center">
@@ -20,25 +20,25 @@
                            class="text-decoration-none text-dark">{{$user -> name}}</a></td>
                     <td>
                         <select
-                            name="role"
-                            class="role-update form-select form-select-sm"
-                            data-url="{{route('admin.users.role.update',$user)}}">
+                                name="role"
+                                class="role-update form-select form-select-sm"
+                                data-url="{{route('admin.users.role.update',$user)}}">
                             @foreach($roles as $role)
                                 <option value="{{ $role->name }}"
-                                    {{ $user->hasRole($role->name) ? 'selected' : '' }}>
+                                        {{ $user->hasRole($role->name) ? 'selected' : '' }}>
                                     {{$role->name}}
                                 </option>
                             @endforeach
                         </select>
                     </td>
-                    <td >
+                    <td>
                         <div class="form-check form-switch ">
                             <input
-                                data-id="{{$user->id}}"
-                                data-url="{{route('admin.users.status.update',$user)}}"
+                                    data-id="{{$user->id}}"
+                                    data-url="{{route('admin.users.status.update',$user)}}"
 
-                                class="js-switch form-check-input" type="checkbox" role="switch"
-                                {{$user->status? "checked":""}}>
+                                    class="js-switch form-check-input" type="checkbox" role="switch"
+                                    {{$user->status? "checked":""}}>
                         </div>
                     </td>
                     <td>

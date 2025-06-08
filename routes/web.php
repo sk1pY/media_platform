@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ClaimController as AdminClaimController;
@@ -12,29 +11,38 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\Home\CommentController as HomeCommentController;
+use App\Http\Controllers\Home\PostController as HomePostController;
+use App\Http\Controllers\Home\UserController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SubscribeController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+
 
 
 //PUBLIC PAGE USER
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+
 //PROFILE
-Route::prefix('profile')->name('profile.')->group(function () {
-    Route::get('/', [UserController::class, 'index'])->name('index');
-    Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
-    Route::put('/{user}', [UserController::class, 'update'])->name('update');
-    Route::get('/posts', [PostController::class, 'profilePosts'])->name('posts');
-    Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
-    Route::get('/comments', [CommentController::class, 'allCommentsInProfile'])->name('comments.index');
+Route::prefix('profile')->name('profile.')->middleware('auth')->group(function () {
+    //INFO
+    Route::get('/', [UserController::class, 'edit'])->name('edit');
+    Route::patch('/', [UserController::class, 'update'])->name('update');
+    Route::delete('/', [UserController::class, 'destroy'])->name('destroy');
+    //POSTS
+    Route::resource('posts', HomePostController::class)->only(['index', 'store', 'update', 'destroy']);
+    //HIDDEN POSTS
+    Route::get('/hidden-posts', [HomePostController::class, 'hiddenPosts'])->name('posts.hidden');
+    //COMMENTS
+    Route::resource('comments', HomeCommentController::class)->only(['index', 'update', 'destroy']);
     //BOOKMARKS
     Route::resource('bookmarks', BookmarkController::class)->only(['index', 'store', 'destroy']);
-    //subscriptions
+    //SUBSCRIBTIONS
     Route::get('/subscriptions', [SubscribeController::class, 'index'])->name('subscriptions.index');
-    Route::get('/hidden-posts', [PostController::class, 'hidden_posts'])->name('hiddenPosts');
+
 
 });
 
@@ -48,12 +56,12 @@ Route::get('categories/{category:slug}', [CategoryController::class, 'show'])->n
 //POSTS
 Route::get('/', [PostController::class, 'index'])->name('index');
 Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
-Route::resource('posts', PostController::class)->only(['store', 'destroy', 'update']);
+Route::resource('posts', PostController::class)->only(['destroy', 'update']);
 Route::post('posts/{post}/hide', [PostController::class, 'hide'])->name('posts.hide');
 
 
 //COMMENTS
-Route::resource('posts.comments', CommentController::class)->only(['destroy', 'index', 'store', 'update']);
+Route::resource('posts.comments', CommentController::class)->only(['destroy', 'store', 'update']);
 Route::middleware('auth')->group(function () {
     //SUBSCRIBE
     Route::post('/subscribe', [SubscribeController::class, 'subscribe'])->name('subscribe');

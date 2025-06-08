@@ -13,7 +13,6 @@ document.querySelectorAll('.bookmark-button').forEach(button => {
                     if (response.data.bookmarkStore) {
                         icon.classList.remove('bi-bookmark');
                         icon.classList.add('bi-bookmark-fill');
-                        // const toastTrigger = document.getElementById('liveToastBtn')
                         toastBootstrap.show()
 
                     } else {

@@ -16,7 +16,7 @@ class BookmarkController extends Controller
     public function index()
     {
         $bookmarks = Bookmark::with('user', 'post')->get();
-        return view('dashboard.bookmarks', compact('bookmarks'));
+        return view('home.bookmarks', compact('bookmarks'));
     }
 
     /**

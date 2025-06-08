@@ -1,14 +1,15 @@
-<div id="card-{{$post->id}}" class="card border-0 mb-3 rounded-3">
+<div id="card-{{$post->id}}" class="card border-0 mb-3 rounded-3" >
     <div class="card-body">
         <div class="row align-items-center ">
-            <div class="col-auto ">
+            <div class="col-auto">
                 <img
                     src="{{ $post->user->image ? Storage::url('avatarImages/' . $post->user->image) : asset('default_images/defaultAvatar.jpg') }}"
                     class="rounded-circle" style="width: 45px; height: 45px;"
                     alt="{{ Storage::url('avatarImages/' . $post->user->image) }}">
             </div>
             <div class="col p-0">
-                <div><a class="fw-bold link-dark text-decoration-none "
+                <div>
+                    <a class="fw-bold link-dark text-decoration-none "
                         href="{{ route('users.show', $post->user) }}">
                         {{ $post->user->name }}
                     </a>
@@ -44,7 +45,6 @@
                     {{--                SUBSCRIBE BUTTON END--}}
 
                     {{--                3 POINTS BUTTON--}}
-
                     <div class="dropdown">
                         <a style="cursor: pointer; color: #595959;" class="custom-dropdown text-decoration-none "
                            data-bs-toggle="dropdown"><i class="bi bi-three-dots text-center"
@@ -69,11 +69,15 @@
                                 </li>
                             @endcan
                             @can('update',$post)
-                                <li><a data-bs-toggle="modal" data-bs-target="#update_post{{$post->id}}"
-                                       class="dropdown-item"
-                                       href="#">Изменить</a></li>
                                 <li>
-                                    <form action="{{ route('posts.destroy',$post) }}" method="post">
+                                    <a data-bs-toggle="modal" data-bs-target="#update_post{{$post->id}}"
+                                       class="dropdown-item"
+                                       href="#">Изменить</a>
+                                </li>
+                            @endcan
+                            @can('destroy',$post)
+                                <li>
+                                    <form action="{{ route('profile.posts.destroy',$post) }}" method="post">
                                         @csrf
                                         @method('delete')
                                         <input class="dropdown-item" type="submit" value="Удалить"
@@ -85,7 +89,7 @@
 
                     </div>
                 </div>
-                {{--          END  3 POINTS BUTTON--}}
+                    {{--          END  3 POINTS BUTTON--}}
 
             @endauth
         </div>
@@ -99,7 +103,7 @@
         <div class="card-img-container">
             <img
                 src="{{ $post->image?Storage::url('postImages/'.$post->image):asset('default_images/defaultImage.png') }}"
-                style="width: 100%; height: 350px"
+                style=" height: 350px"
                 alt="image_not_found"
                 class="card-img-top rounded-3">
         </div>
@@ -140,18 +144,7 @@
 
     </div>
 </div>
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <strong class="me-auto">Bootstrap</strong>
-            <small>11 mins ago</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            Hello, world! This is a toast message.
-        </div>
-    </div>
-</div>
+
 <!-- MODAL UPDATE POST-->
 <div class="modal fade" id="update_post{{ $post->id }}" tabindex="-1"
      aria-labelledby="staticBackdropLabel" aria-hidden="true">

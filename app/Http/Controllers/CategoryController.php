@@ -11,11 +11,12 @@ use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
-    public function show(Category $category)
+    public function show(Request $request,Category $category)
     {
+        $postQuery = Post::where('status', 1)->withCount(['comments', 'likes']);
+        $posts = $postQuery->filterBy($request)->get();
 
-        $posts = $category->posts()->orderBy('created_at', 'DESC')->withCount(['comments', 'likes'])->get();
-        return view('left_sidebar.category_show', compact('posts', 'category'));
+        return view('front.left_sidebar.category_show', compact('posts', 'category'));
     }
 
 
@@ -30,13 +31,8 @@ class CategoryController extends Controller
             'myFeed' => $query->wherein('user_id', $subscriptionsIds),
             default => null
         };
-//        $slugTitles = [
-//            'popular' => 'Популярное',
-//            'fresh' => 'Свежее за 24 часа',
-//            'myFeed' => 'Моя лента',
-//        ];
-//        $slug = $slugTitles[$slug];
-        $posts = $query->get();
-        return view('left_sidebar.special_category_show',compact('posts','slug'));
+
+        $posts = $query->filterBy($request)->get();
+        return view('front.left_sidebar.special_category_show',compact('posts','slug'));
     }
 }

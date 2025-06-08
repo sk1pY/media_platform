@@ -1,8 +1,7 @@
-@extends('dashboard.layouts.app')
-@section('content')
+@extends('layouts.home')
+@section('home-content')
     <h4>Скрытые посты</h4>
     <div class="col-9">
-
         @forelse($posts as $post)
             @include('partials.post_card')
         @empty
@@ -14,6 +13,4 @@
         {{-- END MAIN CARDS CONTENT --}}
     </div>
     {{-- MAIN CARDS CONTENT --}}
-
-
 @endsection

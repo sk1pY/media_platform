@@ -1,5 +1,5 @@
-@extends('admin.layouts.index')
-@section('content')
+@extends('layouts.admin')
+@section('admin-content')
     <div class="p-3">
         <h4>Посты</h4>
         <hr>
@@ -16,8 +16,8 @@
             @foreach($posts as $post)
                 <tr class="align-middle">
                     <td>
-                        <img style="width: 50px" alt="logo" src="{{ $post->image?Storage::url('postImages/'.$post->image):asset('default_images/defaultImage.png') }}"
-                             style="width: 30px; height: 30px;">
+                        <img style="width: 50px" alt="logo"
+                             src="{{ $post->image?Storage::url('postImages/'.$post->image):asset('default_images/defaultImage.png') }}">
                         <a class="text-decoration-none text-black" href="{{ route('posts.show', $post) }}">
                             {{ $post->title }}
                         </a>
@@ -28,10 +28,10 @@
                     <td class="text-center">
                         <div class="form-check form-switch ">
                             <input
-                                data-id="{{$post->id}}"
-                                data-url="{{route('admin.posts.update.status',$post->id)}}"
-                                class="js-switch form-check-input" type="checkbox" role="switch"
-                                {{$post->status? "checked":""}}>
+                                    data-id="{{$post->id}}"
+                                    data-url="{{route('admin.posts.update.status',$post->id)}}"
+                                    class="js-switch form-check-input" type="checkbox" role="switch"
+                                    {{$post->status? "checked":""}}>
                         </div>
                     </td>
                     <td class="text-center">
@@ -40,7 +40,8 @@
                                 data-bs-target="#update{{ $post->id }}">
                             <i type="submit" class="bi bi-pencil-square"></i>
                         </button>
-                        <form action="{{ route('admin.posts.destroy', $post->id) }}" method="post" style="display: inline;">
+                        <form action="{{ route('admin.posts.destroy', $post->id) }}" method="post"
+                              style="display: inline;">
                             @csrf
                             @method('delete')
                             <button class="btn btn-sm"
@@ -50,14 +51,15 @@
                         </form>
                     </td>
                 </tr>
-                <!-- Modal -->
+                <!-- Modal UPDATE -->
                 <div class="modal fade" id="update{{ $post->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
                      tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog ">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h6 class="modal-title" id="staticBackdropLabel">Изменить данные</h6>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <form action="{{ route('admin.posts.update', ['post' => $post->id]) }}" method="post"
@@ -73,7 +75,8 @@
                                               rows="3">{{ $post->description }}</textarea>
                                     <label for="category" class="form-label">Категория</label>
                                     <select class="form-control form-control-sm" name="category_id">
-                                        <option value="" {{ !$post->category_id ? 'selected' : '' }}>Без категории</option>
+                                        <option value="" {{ !$post->category_id ? 'selected' : '' }}>Без категории
+                                        </option>
                                         @foreach($categories as $cat)
                                             <option
                                                 value="{{ $cat->id }}" {{ $post->category && $post->category->id == $cat->id ? 'selected' : '' }}>
@@ -103,5 +106,6 @@
             {{ $posts->links('pagination::bootstrap-5') }}
         </div>
     </div>
+
 
 @endsection

@@ -16,7 +16,7 @@ class SubscribeController extends Controller
         $subscriptions = Subscribe::where('user_id', Auth::id())->pluck('author_id')->toArray();
         $authors = User::whereIn('id', $subscriptions)->get();
 
-        return view('dashboard.subscriptions', compact('authors'));
+        return view('home.subscriptions', compact('authors'));
     }
 
     public function subscribe(Request $request)

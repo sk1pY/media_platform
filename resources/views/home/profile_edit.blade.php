@@ -1,11 +1,11 @@
-@extends('dashboard.layouts.app')
-@section('content')
+@extends('layouts.home')
+@section('home-content')
 
     <div class=" border rounded-5 p-4 bg-white">
         <form action="{{ route('profile.update',$user) }}" enctype="multipart/form-data"
               method="POST">
             @csrf
-            @method('put')
+            @method('patch')
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Имя</label>
                 <input name="name" type="text" class="form-control" id="exampleFormControlInput1"
@@ -29,7 +29,7 @@
         </form>
     </div>
     {{--   ------------------------------------------------------------------------------------------------- --}}
-    <div class="mt-4 border rounded-5 p-3 w-25 bg-white ">
+    <div class="mt-4 border rounded-5 p-3 w-auto bg-white d-flex text-muted">
         <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#passwordChangeModal">
             Сменить пароль
         </button>
@@ -42,10 +42,10 @@
                 Удалить аккаунт
             </button>
         </div>
-        <div class=" text-white">
+        <div class="">
             <form action="{{route('logout')}}" id="logout-form" method="post">
                 @csrf
-                <button type="submit" class="btn" style="font-size: 1rem; text-decoration: none;"
+                <button type="submit" class="btn"
                         onclick="return confirm('Точно выйти из аккаунта?')">
                     Выйти из аккаунта
                 </button>

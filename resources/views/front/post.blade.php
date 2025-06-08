@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('content')
-    @include('partials/post_card')
+@section('app-content')
+    @include('partials.post_card')
     {{--        FILTER --}}
     @include('partials.filter')
     {{--        FILTER --}}
@@ -20,7 +20,7 @@
     {{--         COMMENTS SECTION --}}
     @foreach ($comments as $comment)
 
-        <div id="comment_section" class="card border-0 m-2 rounded-4 bg-white"
+        <div id="comment_section" class="card my-2 rounded-4 border-1"
              style="scroll-margin-top: 250px;">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
@@ -34,7 +34,7 @@
                                 {{ $comment->user->name }}
                             </a>
                             <div class="text-muted small">
-                                {{$comment->updated_at != $comment->created_at?'Изменено':''}}
+                                {{$comment->updated_at !== $comment->created_at?'Изменено':''}}
 
                                 {{ $comment->updated_at->diffForHumans() }}
                             </div>
@@ -65,47 +65,14 @@
                         </div>
 
                     </div>
-                    <!-- Modal  UPD comment-->
-                    <div class="modal fade" id="updateComment-{{$comment->id}}" tabindex="-1"
-                         aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form id="myForm" action="{{route('posts.comments.update',[$post,$comment])}}"
-                                          method="post">
-                                        @csrf
-                                        @method('put')
-                                        text comment
-                                        <textarea class="form-control" rows="4" cols="50" type="text" name="text">{{ old('text',$comment->text) }}
-                                        </textarea>
-
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                    </button>
-                                    <button form="myForm" type="submit" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
                 <div class=" d-flex flex-column ">
                     <div class="mt-2 me-3 ms-5">{{ $comment->text }}</div>
-
-
                     <div class="d-flex m-2 fs-6 comment ms-5">
                         <div class="like-comment"
                              data-comment-id="{{ $comment->id }}"
                              data-url="{{route('posts.comments.like')}}">
-                            <i class="bi text-danger {{in_array($comment->id,$likeCommentUser)?'bi-heart-fill':'bi-heart'}}"
+                            <i class="bi text-danger {{in_array($comment->id, $likeCommentUser, true)?'bi-heart-fill':'bi-heart'}}"
                                data-comment-id="{{ $comment->id }}"
                                style="cursor: pointer">
                             </i>
@@ -116,5 +83,37 @@
                 </div>
             </div>
         </div>
+        <!-- Modal  UPD comment-->
+        <div class="modal fade" id="updateComment-{{$comment->id}}" tabindex="-1"
+             aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Комментарий</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="myForm" action="{{route('posts.comments.update',[$post,$comment])}}"
+                              method="post">
+                            @csrf
+                            @method('put')
+                            <textarea class="form-control" rows="4" cols="50" type="text"
+                                      name="text">{{ old('text',$comment->text) }}</textarea>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть
+                        </button>
+                        <button form="myForm" type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     @endforeach
+    {{ $comments->links('pagination::bootstrap-5') }}
+
 @endsection

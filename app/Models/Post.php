@@ -44,6 +44,26 @@ class Post extends Model
         return $this->belongsToMany(User::class,'users_hidden_posts');
     }
 
+    public function scopeFilterBy($query, $request)
+    {
+        if ($request->filled('filter')) {
+            switch ($request->input('filter')) {
+                case 'popular':
+                    $query->orderBy('views', 'desc');
+                    break;
+                case 'recent':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                case 'old':
+                    $query->orderBy('created_at', 'asc');
+                    break;
+            }
+        } else {
+            $query->latest();
+        }
+        return $query;
+
+    }
 
 
 }

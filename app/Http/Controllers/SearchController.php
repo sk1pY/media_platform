@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Subscribe;
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +17,8 @@ class SearchController extends Controller
         $category_slug = $request->input('category_slug');
         $special_categories = ['popular', 'fresh', 'myFeed'];
         $query = Post::query();
-
+        $subscriptionsIds = Auth()->user()->subscribes()->pluck('user_id')->toArray();
+        $userId = $request->input('user_id');
         if (in_array($category_slug, $special_categories)) {
             match ($category_slug) {
                 'popular' => $query->orderBy('views', 'desc'),
@@ -23,7 +26,6 @@ class SearchController extends Controller
                 'myFeed' => $query->wherein('user_id', $subscriptionsIds),
                 default => null
             };
-            $posts = $query->where('title', 'like', '%' . $request->input('search') . '%')->get();
 
         } elseif ($category_slug) {
             $category = Category::where('slug', $category_slug)->first();
@@ -36,10 +38,14 @@ class SearchController extends Controller
                 $posts = collect();
             }
 
+        } elseif ($userId) {
+            $query = Post::where('user_id', $userId);
+            $posts = $query->where('title', 'like', '%' . $request->input('search') . '%')->latest()->get();
+            Log::info($posts);
         } else {
             $posts = $query->where('title', 'like', '%' . $request->input('search') . '%')->latest()->get();
-
         }
+
 
         $html = '';
         foreach ($posts as $post) {

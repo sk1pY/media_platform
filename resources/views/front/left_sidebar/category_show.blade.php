@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('content')
+@section('app-content')
 
     <input type="hidden" id="category-slug" value="{{$category->slug }}">
 
@@ -9,7 +9,10 @@
             <span class="fs-1">{{ $category->name }}</span>
         </div>
     </div>
-    <div class="" id="search-cards">
+    {{-- FILTER --}}
+    @include('partials.filter')
+    {{-- END FILTER --}}
+    <div  id="search-cards">
         @forelse($posts as $post)
             @include('partials.post_card')
         @empty

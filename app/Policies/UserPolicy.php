@@ -19,11 +19,7 @@ class UserPolicy
         $user->hasPermissionTo('subscribe_users');
     }
 
-    public function update(User $authUser, User $user)
-    {
 
-        return $authUser->id === $user->id;
-    }
 
 
 }

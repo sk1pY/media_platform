@@ -19,8 +19,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $categories = Category::get();
-        $postQuery = Post::where('status', 1)->withCount(['comments', 'likes'])->orderBy('created_at', 'desc');
-
+        $postQuery = Post::where('status', 1)->withCount(['comments', 'likes']);
         if (Auth::check()) {
             $hiddenPostIds = HiddenPost::where('user_id', Auth::id())->pluck('post_id')->toArray();
             $postQuery->wherenotin('id', $hiddenPostIds);
@@ -36,10 +35,38 @@ class PostController extends Controller
                 case 'old':
                     $postQuery->orderBy('created_at', 'asc');
             }
+        }else{
+            $postQuery->latest();
         }
 
+
         $posts = $postQuery->get();
-        return view('index', compact('posts', 'categories'));
+
+        return view('front.index', compact('posts', 'categories'));
+    }
+
+    public function hide(Request $request, Post $post)
+    {
+        $this->authorize('hidden_posts', $post);
+
+        if ($request['hidden']) {
+            $hiddenPost = HiddenPost::where(['user_id' => Auth::id(), 'post_id' => $post->id])->first();
+            if ($hiddenPost) {
+                $post->hiddenPosts()->detach(Auth::id());
+                return redirect()->back()->with('success', 'Пост успешно вернулся в ленту');
+
+            } else {
+                $post->hiddenPosts()->attach(Auth::id());
+                return back()->with('success', 'Пост успешно скрыт');
+
+            }
+        }
+    }
+
+    public function incrementViews(Post $post)
+    {
+        $post->increment('views');
+        return response()->json(['success' => true, 'views' => $post->views]);
     }
 
     /**
@@ -55,27 +82,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Post::class);
-
-        $validated = $request->validate([
-            'title' => 'required|max:100',
-            'description' => 'required|max:500',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'category_id' => 'nullable|numeric|exists:categories,id',
-        ]);
-
-        $validated['image'] = $request->hasfile('image') ?
-            basename($request->file('image')->store('postImages', 'public')) : null;
-
-        try {
-            Auth::user()->posts()->create($validated);
-        } catch (\Throwable $e) {
-            report($e);
-            return back()->with('error', 'Ошибка создания поста');
-        }
-
-        return to_route('index')->with('success', 'Пост успешно создан');
-
+        //
     }
 
     /**
@@ -87,29 +94,30 @@ class PostController extends Controller
             abort(404, 'error.error');
         }
 
-        $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->get();
+        $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->paginate(6);
 
-        $post = Post::withCount(['comments', 'likes'])->find($post->id);
+        $post->loadCount(['comments']);
+
         if ($request->filled('filter')) {
-            $query = Comment::query();
+            $queryComment = Comment::query();
 
             match ($request->input('filter')) {
-                'recent' => $query->latest(),
-                'old' => $query->oldest(),
-                'popular' => $query->orderBy('likes', 'desc'),
+                'recent' => $queryComment->latest(),
+                'old' => $queryComment->oldest(),
+                'popular' => $queryComment->orderBy('likes', 'desc'),
             };
 
-            $comments = $query->get();
+            $comments = $queryComment->paginate(6);
         }
 
 
-        return view('about_task', compact('post', 'comments'));
+        return view('front.post', compact('post', 'comments'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit()
     {
         //
     }
@@ -117,87 +125,17 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update()
     {
-        $this->authorize('update', $post);
-        $user = Auth::user();
-        $validated = $request->validate([
-            'title' => 'required|string|max:50',
-            'description' => 'required|string',
-            'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
 
-        if ($request->hasFile('image')) {
-            if ($post->image) {
-                Storage::disk('public')->delete($post->image);
-            }
-            $validated['image'] = $request->hasfile('image') ? basename($request->file('image')->store('postImages', 'public')) : null;
-
-        }
-        try {
-            $user->posts()->update($validated);
-            return redirect()->back()->with('success', 'Пост успешно обновлен.');
-
-        } catch (\Throwable $e) {
-            Log::error('<UNK> <UNK> <UNK>: ' . $e->getMessage());
-        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
-    {
-        $this->authorize('destroy', $post);
-
-        $post->delete();
-        return redirect()->back()->with('success', 'Пост успешно удален.');
-    }
-
-
-//    ----------------------------------------------------------------------------------
-
-    public function hide(Request $request, Post $post)
-    {
-        $this->authorize('hidden_posts', $post);
-
-        if ($request['hidden']) {
-            $hiddenPost = HiddenPost::where(['user_id' => Auth::id(), 'post_id' => $post->id])->first();
-            if ($hiddenPost) {
-                $post->hiddenPosts()->detach(Auth::id());
-                return redirect()->back()->with('success', 'Пост успешно вернулся в ленту');
-
-            } else {
-                $post->hiddenPosts()->attach(Auth::id());
-                return redirect()->back()->with('success', 'Пост успешно скрыт');
-
-            }
-        }
-    }
-
-    public function hidden_posts()
-    {
-        $postsIds = HiddenPost::where(['user_id' => Auth::id()])->pluck('post_id');
-        $posts = Post::whereIn('id', $postsIds)->withCount(['comments', 'likes'])->get();
-        $flag = true;
-        return view('dashboard.hidden_posts', compact('posts','flag'));
-    }
-
-    public function f(Request $request, Post $post)
+    public function destroy()
     {
 
     }
 
-    public function incrementViews(Post $post)
-    {
-        $post->increment('views');
-        return response()->json(['success' => true, 'views' => $post->views]);
-    }
-
-    public function profilePosts()
-    {
-        $posts = auth()->user()->posts()->with('comments', 'likes')->latest()->get();
-        $user = Auth::user();
-        return view('dashboard.posts', compact('posts', 'user'));
-    }
 }

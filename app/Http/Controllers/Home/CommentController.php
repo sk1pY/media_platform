@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Home;
 
+use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -14,24 +15,25 @@ class CommentController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+        $comments = $user->comments()->orderBy('created_at', 'DESC')->withCount(['likes'])->paginate(10);
+        return view('home.comments', compact('comments'));
+    }
 
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Post $post)
+    public function store(Request $request)
     {
-        $validated = $request->validate([
-            'text' => 'required|string|max:600',
-        ]);
-
-        $post->comments()->create([
-            'text' => $validated['text'],
-            'user_id' => Auth::id(),
-        ]);
-
-        return redirect()->route('posts.show', $post);
+        //
     }
 
     /**
@@ -43,9 +45,17 @@ class CommentController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post, Comment $comment)
+    public function update(Request $request, Comment $comment)
     {
         $this->authorize('update', $comment);
         $validated = $request->validate([
@@ -64,13 +74,11 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post, Comment $comment)
+    public function destroy(Comment $comment)
     {
-        if ($comment->post_id !== $post->id) {
-            abort(403);
-        }
-        $comment->delete();
-        return back()->with('success', 'success');
-    }
+        $this->authorize('delete', $comment);
 
+        $comment->delete();
+        return redirect()->back()->with('success', 'Успешно удален');
+    }
 }

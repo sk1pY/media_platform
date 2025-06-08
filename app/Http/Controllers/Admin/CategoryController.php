@@ -14,8 +14,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.category', compact('categories'));
+        $categories = Category::latest()->paginate(10);
+        return view('admin.categories', compact('categories'));
     }
 
     /**
@@ -24,16 +24,14 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validate = $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|unique:categories,name,' . $request['id'],
             'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
-        if ($request->hasFile('image')) {
-            $validate['image'] = $request->hasFile('image') ? basename($request->file('image')->store('categoryImages', 'public'))
-                : null;
-        }
+        $validate['image'] = $request->hasFile('image') ? basename($request->file('image')->store('categoryImages', 'public')) : null;
+
         Category::create($validate);
-        return to_route('admin.categories.index')->with('success', 'Category created successfully');
+        return back()->with('success', 'Category created successfully');
     }
 
     /**
@@ -51,7 +49,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validated = $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|unique:name,' . $category->id,
             'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
@@ -60,20 +58,14 @@ class CategoryController extends Controller
             if ($category->image) {
                 Storage::delete('categoryImages/' . $category->image);
             }
-            $path = $request->file('image')->store('categoryImages', 'public');
-            $fileName = basename($path);
-            $validated['image'] = $fileName;
+            $validated['image'] = basename($request->file('image')->store('categoryImages', 'public'));
         } else {
             $validated['image'] = $category->image;
         }
 
-        $category->update([
-            'name' => $request['name'],
-            'image' => $validated['image'],
-        ]);
+        $category->update([$validated]);
 
-
-        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully');
+        return back()->with('success', 'Category updated successfully');
     }
 
     /**
@@ -82,6 +74,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully');
+        return back()->with('success', 'Category deleted successfully');
     }
 }
