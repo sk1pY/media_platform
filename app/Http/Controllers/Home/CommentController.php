@@ -59,7 +59,7 @@ class CommentController extends Controller
     {
         $this->authorize('update', $comment);
         $validated = $request->validate([
-            'text' => 'required|string|max:600',
+            'text' => 'required|alpha|max:600',
         ]);
 
         $comment->update([

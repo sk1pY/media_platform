@@ -25,7 +25,7 @@
                 <input name="image_cover" type="file" class="form-control" id="exampleFormControlInput3">
             </div>
 
-            <input type="submit" value="Обновить" class="btn btn-primary">
+            <input type="submit" value="Обновить" class="btn text-white" style="background-color:#0a53be;">
         </form>
     </div>
     {{--   ------------------------------------------------------------------------------------------------- --}}

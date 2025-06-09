@@ -1,4 +1,4 @@
-<div id="card-{{$post->id}}" class="card border-0 mb-3 rounded-3" >
+<div id="card-{{$post->id}}" class="card border-0 mb-3 rounded-3 " >
     <div class="card-body">
         <div class="row align-items-center ">
             <div class="col-auto">
@@ -10,7 +10,7 @@
             <div class="col p-0">
                 <div>
                     <a class="fw-bold link-dark text-decoration-none "
-                        href="{{ route('users.show', $post->user) }}">
+                       href="{{ route('users.show', $post->user) }}">
                         {{ $post->user->name }}
                     </a>
                 </div>
@@ -71,8 +71,7 @@
                             @can('update',$post)
                                 <li>
                                     <a data-bs-toggle="modal" data-bs-target="#update_post{{$post->id}}"
-                                       class="dropdown-item"
-                                       href="#">Изменить</a>
+                                       class="dropdown-item">Изменить</a>
                                 </li>
                             @endcan
                             @can('destroy',$post)
@@ -89,7 +88,7 @@
 
                     </div>
                 </div>
-                    {{--          END  3 POINTS BUTTON--}}
+                {{--          END  3 POINTS BUTTON--}}
 
             @endauth
         </div>
@@ -99,7 +98,9 @@
             </a>
         </div>
 
-        <p class="card-text">{{ substr($post->description, 0, 250) }}...</p>
+        <p class="card-text">{{ $flag_description_substr ?? false ? Str::limit($post->description, 200) : $post->description }}
+        </p>
+
         <div class="card-img-container">
             <img
                 src="{{ $post->image?Storage::url('postImages/'.$post->image):asset('default_images/defaultImage.png') }}"
@@ -155,7 +156,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('posts.update', $post) }}" method="POST"
+                <form action="{{ route('profile.posts.update', $post) }}" method="POST"
                       enctype="multipart/form-data">
                     @csrf
                     @method('put')

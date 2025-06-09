@@ -1,6 +1,5 @@
 @extends('layouts.home')
 @section('home-content')
-    <h4>Мои комментарии</h4>
     <div class="bg-white p-3 rounded-3">
         <table id="table" class="table table-sm table-bordered  small">
             <thead>

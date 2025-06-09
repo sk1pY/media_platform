@@ -16,7 +16,7 @@
         margin: 0;
         padding: 0;
         overflow-y: scroll;
-
+        background-color:#F2F2F2
     }
 
     a {
@@ -29,13 +29,15 @@
 </style>
 <body>
 @include('partials.alert.validation')
+
+@include('partials.alert.auth')
 @include('partials.alert.error')
 @include('partials.alert.success')
 @include('partials.alert.toast')
 @if (Request::is('admin*'))
         @yield('content')
 @else
-    <div class="container">
+    <div class="container" >
         @if (!Request::is('admin*'))
             @include('partials.nav')
         @endif

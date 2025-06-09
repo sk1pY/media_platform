@@ -42,7 +42,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $validated = $request->validate([
-            'name' => 'sometimes|filled|unique:users,name,' . $user->id,
+            'name' => 'sometimes|alpha_num|filled|unique:users,name,' . $user->id,
             'image' => 'sometimes|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'image_cover' => 'sometimes|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);

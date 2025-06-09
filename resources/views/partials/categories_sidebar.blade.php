@@ -39,9 +39,9 @@
         border-color: #0a53be #0a53be #fff !important;
     }
 </style>
-<div class="scroll-wrapper rounded-3">
+<div class="scroll-wrapper  ">
         <div class="scroll-inner">
-            <div class="mb-3" >
+            <div class="mb-3 rounded-3 bg-white" >
                 <ul class="nav flex-column nav-tabs ">
                     <li class="nav-item  m-1">
                         <a style="font-size: 1.1rem;" class="rounded-pill text-dark nav-link {{ request()->routeIs('specialCategories.show') && request()->route('slug') === 'popular' ? 'active' : '' }}"

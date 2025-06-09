@@ -45,8 +45,8 @@ class PostController extends Controller
         $this->authorize('create', Post::class);
 
         $validated = $request->validate([
-            'title' => 'required|max:100',
-            'description' => 'required|max:500',
+            'title' => 'required|max:100|alpha_dash|unique:posts,title',
+            'description' => 'required|max:2200',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'category_id' => 'nullable|numeric|exists:categories,id',
         ]);
@@ -86,9 +86,8 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $this->authorize('update', $post);
-        $user = Auth::user();
         $validated = $request->validate([
-            'title' => 'required|string|max:50',
+            'title' => 'required|alpha_dash|max:50',
             'description' => 'required|string',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -101,8 +100,8 @@ class PostController extends Controller
 
         }
         try {
-            $user->posts()->update($validated);
-            return redirect()->back()->with('success', 'Пост успешно обновлен.');
+            $post->update($validated);
+            return back()->with('success', 'Пост успешно обновлен.');
 
         } catch (\Throwable $e) {
             Log::error('<UNK> <UNK> <UNK>: ' . $e->getMessage());

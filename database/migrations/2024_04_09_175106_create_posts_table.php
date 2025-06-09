@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description',1000);
+            $table->text('description',2200);
             $table->string('slug');
             $table->string('image')->default('public/default_images/default.png')->nullable();
             $table->foreignId('category_id')->nullable()->constrained()->cascadeOnDelete();

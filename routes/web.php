@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 
 //PUBLIC PAGE USER
-Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+Route::get('/users/{user:name}', [UserController::class, 'show'])->name('users.show');
 
 //PROFILE
 Route::prefix('profile')->name('profile.')->middleware('auth')->group(function () {

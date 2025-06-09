@@ -2,8 +2,8 @@
 @section('app-content')
     <input type="hidden" id="user-id" value="{{$user->id }}">
 
-    <section class="h-100 gradient-custom-2">
-        <div class="container">
+    <section class="h-100 gradient-custom-2 ">
+        <div class="container ">
             <div class="card">
                 <div class="border-0 text-white d-flex flex-column z-1 overflow-hidden"
                      style=" height: 250px;">
@@ -46,7 +46,7 @@
 
             </div>
 
-            <div class="card-body p-4 text-black">
+            <div class="card-body  text-black mt-3">
                 {{--        FILTER --}}
                 @include('partials.filter')
                 {{--        FILTER --}}

@@ -3,12 +3,9 @@
     <h4>Скрытые посты</h4>
     <div class="col-9">
         @forelse($posts as $post)
-            @include('partials.post_card')
+            @include('partials.post_card',['flag_description_substr'=> true])
         @empty
-            <h3>
-                Посты отсутсвуют
-                <i class="bi bi-emoji-frown"></i>
-            </h3>
+            <h4>Пусто</h4>
         @endforelse
         {{-- END MAIN CARDS CONTENT --}}
     </div>

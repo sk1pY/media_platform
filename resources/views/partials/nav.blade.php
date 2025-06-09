@@ -1,3 +1,10 @@
+<style>
+    .modal-open .modal-backdrop {
+        backdrop-filter: blur(5px);
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 1 !important;
+    }
+</style>
 <nav style="background-color: #0a53be; height: 60px;"
      class="navbar navbar-expand-lg navbar-light sticky-top p-0 m-0 rounded-2">
     <div class="container">

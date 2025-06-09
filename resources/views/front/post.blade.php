@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('app-content')
-    @include('partials.post_card')
+{{--    POST CARD--}}
+    @include('partials.post_card',['flag_description_substr'=> false])
+{{--POST CARD--}}
     {{--        FILTER --}}
     @include('partials.filter')
     {{--        FILTER --}}

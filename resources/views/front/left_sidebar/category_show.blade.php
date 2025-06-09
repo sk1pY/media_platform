@@ -14,7 +14,7 @@
     {{-- END FILTER --}}
     <div  id="search-cards">
         @forelse($posts as $post)
-            @include('partials.post_card')
+            @include('partials.post_card',['flag_description_substr' => true])
         @empty
             <div class="col">
                 <h3>Ничего не найдено</h3>
