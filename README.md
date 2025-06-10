@@ -31,9 +31,14 @@ cd media_platform
 # Запускаем установку
 bash setup.sh
 ```
-## ⚙️ Почта
-mailpit
+## ⚙️ Дополнительное
+### Почта
 http://localhost:8025/
+
+### Админ акк
+логин: admin@admin.com
+
+пароль: admin
 
 ## Скриншоты
 ![Главная страница](docs/screenshots/1.png)
