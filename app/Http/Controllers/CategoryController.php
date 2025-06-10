@@ -13,7 +13,7 @@ class CategoryController extends Controller
 {
     public function show(Request $request,Category $category)
     {
-        $postQuery = Post::where('status', 1)->withCount(['comments', 'likes']);
+        $postQuery = $category->posts()->where('status', 1)->withCount(['comments', 'likes']);
         $posts = $postQuery->filterBy($request)->get();
 
         return view('front.left_sidebar.category_show', compact('posts', 'category'));
