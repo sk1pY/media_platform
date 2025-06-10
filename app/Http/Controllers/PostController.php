@@ -94,26 +94,25 @@ class PostController extends Controller
             abort(404, 'error.error');
         }
 
-        $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->paginate(6);
-
+        $commentsQuery = $post->comments();
+        //кол-во коментов под постом
         $post->loadCount(['comments']);
 
         if ($request->filled('filter')) {
-            $queryComment = Comment::query();
-
             match ($request->input('filter')) {
-                'recent' => $queryComment->latest(),
-                'old' => $queryComment->oldest(),
-                'popular' => $queryComment->orderBy('likes', 'desc'),
+
+                'recent' => $commentsQuery->latest(),
+                'old' => $commentsQuery->oldest(),
+                'popular' => $commentsQuery->orderBy('like', 'desc'),
+                default => $commentsQuery->latest(),
             };
 
-            $comments = $queryComment->paginate(6);
         }
-
-
+        $comments = $commentsQuery->paginate(6);
 
         return view('front.post', compact('post', 'comments'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
