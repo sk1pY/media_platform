@@ -45,7 +45,7 @@ echo "8. Собираем (Vite)"
 $sail npm run build
 
 echo "9. миграции"
-$sail artisan migrate:fresh
+$sail artisan migrate
 
 echo "10. Сеем "
 $sail artisan db:seed
