@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('app-content')
-{{--    POST CARD--}}
+    {{--    POST CARD--}}
     @include('partials.post_card',['flag_description_substr'=> false])
-{{--POST CARD--}}
+    {{--POST CARD--}}
     {{--        FILTER --}}
     @include('partials.filter')
     {{--        FILTER --}}
@@ -17,6 +17,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Отправить</button>
             </form>
+            {{-- Comment Form --}}
         @endauth
     @endcan
     {{--         COMMENTS SECTION --}}
@@ -52,7 +53,7 @@
                                     <i class="bi bi-pencil-square"></i></button>
                             @endcan
                             @can('delete', $comment)
-                                <form action="{{ route('posts.comments.destroy', [$post,$comment]) }}" method="POST"
+                                <form action="{{ route('profile.comments.destroy',$comment) }}" method="POST"
                                       class="m-0">
                                     @csrf
                                     @method('DELETE')
@@ -97,7 +98,7 @@
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="myForm" action="{{route('posts.comments.update',[$post,$comment])}}"
+                        <form id="myForm" action="{{route('profile.comments.update',$comment)}}"
                               method="post">
                             @csrf
                             @method('put')

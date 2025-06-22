@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CategoryStoreRequest;
 use App\Models\Category;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,17 +23,14 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryStoreRequest $request):RedirectResponse
     {
-        $validate = $request->validate([
-            'name' => 'required|alpha|unique:categories,name,' . $request['id'],
-            'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
-        ]);
+        $validate = $request->validated();
 
         $validate['image'] = $request->hasFile('image') ? basename($request->file('image')->store('categoryImages', 'public')) : null;
 
         Category::create($validate);
-        return back()->with('success', 'Category created successfully');
+        return back()->with('success', 'Post created successfully');
     }
 
     /**
@@ -65,7 +64,7 @@ class CategoryController extends Controller
 
         $category->update([$validated]);
 
-        return back()->with('success', 'Category updated successfully');
+        return back()->with('success', 'Post updated successfully');
     }
 
     /**
@@ -74,6 +73,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return back()->with('success', 'Category deleted successfully');
+        return back()->with('success', 'Post deleted successfully');
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Actions\Post\FilterPosts;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Home\UserUpdateRequest;
 use App\Models\Post;
 use App\Models\Subscribe;
 use App\Models\User;
@@ -15,17 +17,21 @@ class UserController extends Controller
 
     public function index()
     {
-
+        //
     }
 
 
-    public function show(User $user)
+    public function show(
+        User        $user,
+        FilterPosts $filterPosts,
+        Request     $request)
     {
-        if (!$user->status) {
-            abort(404, 'error.error');
-        }
+        abort_if(!$user->status, 404);
 
-        $posts = $user->posts()->filterBy(request())->withcount('comments')->get();
+        $postQuery = $user->posts()->withcount('comments');
+        $filter = $request->get('filter');
+        $filterPosts->execute($postQuery, $filter);
+        $posts = $postQuery->get();
         $countSubAuthors = Subscribe::where('author_id', $user->id)->count();
         return view('front.user_page', compact('user', 'posts', 'countSubAuthors'));
 
@@ -38,14 +44,10 @@ class UserController extends Controller
 
     }
 
-    public function update(Request $request)
+    public function update(UserUpdateRequest $request)
     {
         $user = Auth::user();
-        $validated = $request->validate([
-            'name' => 'sometimes|alpha_num|filled|unique:users,name,' . $user->id,
-            'image' => 'sometimes|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'image_cover' => 'sometimes|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+        $validated = $request->validated();
         if ($request->hasFile('image')) {
             if ($user->image) {
                 Storage::disk('public')->delete($user->image);

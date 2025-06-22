@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
     //COMMENTS
     Route::get('/posts/{post}/comments', [v1Comment::class, 'index']);
     Route::post('/posts/{post}/comments', [v1Comment::class, 'store']);
-    //Category
+    //Post
     Route::get('/categories', [v1Category::class, 'index']);
     //SEARCH
     //LIKES

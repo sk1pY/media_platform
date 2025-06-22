@@ -1,6 +1,8 @@
 <?php
+
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\Admin\ClaimController as AdminClaimController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
@@ -20,9 +22,6 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SubscribeController;
 use Illuminate\Support\Facades\Route;
 
-
-
-
 //PUBLIC PAGE USER
 Route::get('/users/{user:name}', [UserController::class, 'show'])->name('users.show');
 
@@ -39,7 +38,7 @@ Route::prefix('profile')->name('profile.')->middleware('auth')->group(function (
     //COMMENTS
     Route::resource('comments', HomeCommentController::class)->only(['index', 'update', 'destroy']);
     //BOOKMARKS
-    Route::resource('bookmarks', BookmarkController::class)->only(['index', 'store', 'destroy']);
+    Route::resource('bookmarks', BookmarkController::class)->only(['index', 'store']);
     //SUBSCRIBTIONS
     Route::get('/subscriptions', [SubscribeController::class, 'index'])->name('subscriptions.index');
 
@@ -55,13 +54,14 @@ Route::get('categories/{category:slug}', [CategoryController::class, 'show'])->n
 
 //POSTS
 Route::get('/', [PostController::class, 'index'])->name('index');
-Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
-Route::resource('posts', PostController::class)->only(['destroy', 'update']);
+//Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+Route::resource('posts', PostController::class)->only(['destroy', 'update','show']);
 Route::post('posts/{post}/hide', [PostController::class, 'hide'])->name('posts.hide');
 
 
 //COMMENTS
-Route::resource('posts.comments', CommentController::class)->only(['destroy', 'store', 'update']);
+Route::post('posts/{post}/comments', CommentController::class)->name('posts.comments.store');
+
 Route::middleware('auth')->group(function () {
     //SUBSCRIBE
     Route::post('/subscribe', [SubscribeController::class, 'subscribe'])->name('subscribe');
@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
     //LIKES
     Route::post('/like-post', [LikeController::class, 'likePost'])->name('posts.like');
     //CLAIM STORE
-    Route::post('/posts/{post}/claims', [AdminClaimController::class, 'store'])->name('posts.claims.store');
+    Route::post('/posts/{post}/claims', ClaimController::class)->name('posts.claims.store');
     //VIEW
     Route::post('/posts/{post:slug}/increment-views', [PostController::class, 'incrementViews'])->name('posts.incrementViews');
 });
@@ -95,9 +95,9 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     Route::resource('posts', AdminPostController::class);
     Route::put('/posts/{post}/update-status', [AdminPostController::class, 'update_status'])->name('posts.update.status');
     //COMMENTS
-    Route::resource('comments', AdminCommentController::class);
+    Route::resource('comments', AdminCommentController::class)->only(['index', 'destroy']);
     //CLAIMS
-    Route::resource('claims', AdminClaimController::class);
+    Route::resource('claims', AdminClaimController::class)->only(['index', 'update', 'destroy']);
 });
 
 

@@ -8,10 +8,11 @@ use App\Models\Subscribe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    public function show(Request $request,Category $category)
+    public function show(Request $request,Category $category):view
     {
         $postQuery = $category->posts()->where('status', 1)->withCount(['comments', 'likes']);
         $posts = $postQuery->filterBy($request)->get();
@@ -20,7 +21,7 @@ class CategoryController extends Controller
     }
 
 
-    public function specialCategories(Request $request, $slug)
+    public function specialCategories(Request $request, $slug):view
     {
         $query = Post::query();
         $user = Auth::user();

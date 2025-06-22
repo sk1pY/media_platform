@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Post\FilterPosts;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\HiddenPost;
 use App\Models\Post;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(
+        Request     $request,
+        FilterPosts $filterPosts)
     {
         $categories = Category::get();
         $postQuery = Post::where('status', 1)->withCount(['comments', 'likes']);
@@ -24,21 +29,9 @@ class PostController extends Controller
             $hiddenPostIds = HiddenPost::where('user_id', Auth::id())->pluck('post_id')->toArray();
             $postQuery->wherenotin('id', $hiddenPostIds);
         }
-        if ($request->filled('filter')) {
-            switch ($request->input('filter')) {
-                case 'popular':
-                    $postQuery->orderBy('views', 'desc');
-                    break;
-                case 'recent':
-                    $postQuery->orderBy('created_at', 'desc');
-                    break;
-                case 'old':
-                    $postQuery->orderBy('created_at', 'asc');
-            }
-        }else{
-            $postQuery->latest();
-        }
 
+        $filter = $request->get('filter');
+        $filterPosts->execute($postQuery, $filter);
 
         $posts = $postQuery->get();
 
@@ -63,7 +56,7 @@ class PostController extends Controller
         }
     }
 
-    public function incrementViews(Post $post)
+    public function incrementViews(Post $post): JsonResponse
     {
         $post->increment('views');
         return response()->json(['success' => true, 'views' => $post->views]);
@@ -88,25 +81,21 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, Post $post)
+    public function show(Request $request, Post $post): View
     {
-        if (!$post->status) {
-            abort(404, 'error.error');
-        }
+        abort_if(!$post->status, 404);
 
-        $commentsQuery = $post->comments();
+        $commentsQuery = $post->comments()->latest();
         //кол-во коментов под постом
         $post->loadCount(['comments']);
 
         if ($request->filled('filter')) {
             match ($request->input('filter')) {
-
                 'recent' => $commentsQuery->latest(),
                 'old' => $commentsQuery->oldest(),
                 'popular' => $commentsQuery->orderBy('like', 'desc'),
                 default => $commentsQuery->latest(),
             };
-
         }
         $comments = $commentsQuery->paginate(6);
 

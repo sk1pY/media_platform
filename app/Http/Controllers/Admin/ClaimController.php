@@ -31,24 +31,10 @@ class ClaimController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Post $post)
+    public function store()
     {
 
-        $this->authorize('complain', $post);
-
-        $validate = $request->validate([
-            'title' => 'required',
-        ]);
-
-
-        Claim::create([
-            'title' => $validate['title'],
-            'user_id' => Auth::id(),
-            'post_id' => $post->id,
-            'status' => 'На рассмотрениии',
-        ]);
-
-        return redirect()->route('index')->with('success','жалоба отправлена');
+       //
     }
 
     /**

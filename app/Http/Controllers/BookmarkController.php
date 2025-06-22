@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
 use App\Models\Post;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class BookmarkController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index():view
     {
         $bookmarks = Bookmark::with('user', 'post')->get();
         return view('home.bookmarks', compact('bookmarks'));
@@ -22,7 +24,7 @@ class BookmarkController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create():void
     {
         //
     }
@@ -30,7 +32,7 @@ class BookmarkController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store()
+    public function store():JsonResponse
     {
         $postId = request('post_id');
         $post = Post::find($postId);
@@ -74,9 +76,8 @@ class BookmarkController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Bookmark $bookmark)
+    public function destroy()
     {
-        $bookmark->delete();
-        return to_route('profile.bookmarks.index');
+       //
     }
 }

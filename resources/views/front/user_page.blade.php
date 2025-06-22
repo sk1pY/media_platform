@@ -54,7 +54,7 @@
                     <div id="search-cards">
                         {{-- MAIN CARDS CONTENT --}}
                         @foreach ($posts as $post)
-                            @include('partials.post_card')
+                            @include('partials.post_card',['flag_description_substr' => true])
                         @endforeach
                         {{-- END MAIN CARDS CONTENT --}}
                     </div>

@@ -3,17 +3,20 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Home\CommentUpdateRequest;
 use App\Models\Comment;
 use App\Models\Post;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index():View
     {
         $user = Auth::user();
         $comments = $user->comments()->orderBy('created_at', 'DESC')->withCount(['likes'])->paginate(10);
@@ -55,18 +58,11 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comment $comment)
+    public function update(CommentUpdateRequest $request, Comment $comment):RedirectResponse
     {
-        $this->authorize('update', $comment);
-        $validated = $request->validate([
-            'text' => 'required|alpha|max:600',
-        ]);
-
-        $comment->update([
-            'text' => $validated['text'],
-            'updated_at' => now(),
-        ]);
-
+        $validated = $request->validated();
+        $validated['updated_at'] = now();
+        $comment->update($validated);
 
         return back()->with('success', 'success');
     }
@@ -74,11 +70,11 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy(Comment $comment):RedirectResponse
     {
         $this->authorize('delete', $comment);
 
         $comment->delete();
-        return redirect()->back()->with('success', 'Успешно удален');
+        return back()->with('success', 'Успешно удален');
     }
 }

@@ -50,7 +50,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item m-1">
+                        <li class="nav-item m-1 ">
                             <a href="{{ route('profile.posts.index')}}"
                                class="btn btn-light rounded-pill text-dark nav-link {{ request()->routeIs('profile.posts.index')  ? 'active' : '' }}">Управление
                                 постами</a>
