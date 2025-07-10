@@ -37,6 +37,7 @@ class BookmarkController extends Controller
         $postId = request('post_id');
         $post = Post::find($postId);
         $this->authorize('bookmark', $post);
+
         $bookmark = Bookmark::where(['user_id' => auth()->id(), 'post_id' => $postId])->first();
         if ($bookmark) {
             $bookmark->delete();

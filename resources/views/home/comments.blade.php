@@ -17,7 +17,7 @@
                            href="{{ route('posts.show', $comment->post) }}">{{ $comment->text }}</a>
                     </td>
                     <td>
-                        {{ $comment->like }}
+                        {{ $comment->likes }}
                     </td>
                     <td class="text-center d-flex">
                         <button class="btn btn-sm"

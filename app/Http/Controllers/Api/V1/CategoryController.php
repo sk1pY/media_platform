@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class CategoryController extends Controller
 {
@@ -27,10 +29,25 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Category $category)
     {
-        //
+        $posts = $category->posts()->latest()->get();
+        return response()->json($posts);
     }
+    public function specialCategoriesShow($category)
+    {
+       $query = Post::query();
+        match ($category) {
+            'popular' => $query->orderBy('views', 'desc'),
+            'fresh' => $query->where('created_at', '>', Carbon::now()->subDay(1))->latest(),
+          //  'myFeed' => $query->wherein('user_id', $subscriptionsIds),
+            default => null
+        };
+
+        $posts = $query->get();
+        return response()->json($posts);
+    }
+
 
     /**
      * Update the specified resource in storage.

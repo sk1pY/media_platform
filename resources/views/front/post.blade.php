@@ -79,7 +79,7 @@
                                data-comment-id="{{ $comment->id }}"
                                style="cursor: pointer">
                             </i>
-                            <span class="like-count">{{ $comment->like }}</span>
+                            <span class="like-count">{{ $comment->likes }}</span>
 
                         </div>
                     </div>

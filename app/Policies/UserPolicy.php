@@ -16,10 +16,14 @@ class UserPolicy
 
     public function subscribe(User $user)
     {
-        $user->hasPermissionTo('subscribe_users');
+      return  $user->hasPermissionTo('subscribe_users');
     }
 
 
+    public function delete(User $user, User $targetUser)
+    {
+      return  $user->id === $targetUser->id;
+    }
 
 
 }

@@ -39,10 +39,8 @@ Route::prefix('profile')->name('profile.')->middleware('auth')->group(function (
     Route::resource('comments', HomeCommentController::class)->only(['index', 'update', 'destroy']);
     //BOOKMARKS
     Route::resource('bookmarks', BookmarkController::class)->only(['index', 'store']);
-    //SUBSCRIBTIONS
+    //SUBSCRIPTIONS
     Route::get('/subscriptions', [SubscribeController::class, 'index'])->name('subscriptions.index');
-
-
 });
 
 //SEARCH
@@ -54,8 +52,8 @@ Route::get('categories/{category:slug}', [CategoryController::class, 'show'])->n
 
 //POSTS
 Route::get('/', [PostController::class, 'index'])->name('index');
-//Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
-Route::resource('posts', PostController::class)->only(['destroy', 'update','show']);
+Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+Route::resource('posts', PostController::class)->only(['destroy', 'update']);
 Route::post('posts/{post}/hide', [PostController::class, 'hide'])->name('posts.hide');
 
 
@@ -78,7 +76,6 @@ Route::middleware('auth')->group(function () {
 //ADMIN_PANEL
 Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
-
     Route::get('/roles-permissions', [RolePermissionController::class, 'index'])->name('roles_and_permissions.index');
     Route::resource('roles', RoleController::class)->only(['store', 'destroy']);
     Route::resource('permissions', PermissionController::class)->only(['store', 'destroy']);

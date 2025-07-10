@@ -5,8 +5,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Services\LikeService;
 use Illuminate\Http\Request;
 use App\Models\Like;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use Illuminate\Support\Facades\Log;
@@ -16,48 +18,27 @@ use Illuminate\Support\Facades\Log;
 class LikeController extends Controller
 {
 
-    public function likePost(Request $request): \Illuminate\Http\JsonResponse
+    public function likePost(Request $request, LikeService $likeService): \Illuminate\Http\JsonResponse
     {
 
         $postId = $request->input('post_id');
-        $userId = Auth::id();
         $post = Post::find($postId);
-        $this->authorize('like', $post);
 
-        $like = Like::where(['user_id' => $userId, 'likeable_type' => Post::class, 'likeable_id' => $postId])->first();
+        // $this->authorize('like', $post);
 
-        if ($like) {
-            $post->likes()->where('user_id', $userId)->delete();
-            $post->decrement('likes');
-            return response()->json(['success' => true, 'likes' => $post->likes, 'liked' => false]);
-        }
-
-        $post->likes()->create(['user_id' => $userId]);
-        $post->increment('likes');
-
-        return response()->json(['success' => true, 'likes' => $post->likes, 'liked' => true]);
+        $result = $likeService->toggleLike($post, Auth::id());
+        return response()->json($result);
     }
 
-    public function likeComment(Request $request)
+    public function likeComment(Request $request, LikeService $likeService): \Illuminate\Http\JsonResponse
     {
-        Log::info($request->input('comment_id'));
+        //  Log::info($request->input('comment_id'));
         $commentId = request('comment_id');
-        $userId = Auth::id();
         $comment = Comment::find($commentId);
 
-        $like = Like::where(['user_id' => $userId, 'likeable_type' => Comment::class, 'likeable_id' => $commentId])->first();
+        $result = $likeService->toggleLike($comment, Auth::id());
 
-            if ($like) {
-                $comment->likes()->where('user_id', $userId)->delete();
-                $comment->decrement('like');
-                return response()->json(['success' => true, 'likes' => $comment->like, 'liked' => false]);
-            } else {
-                $comment->increment('like');
-                $comment->likes()->create(['user_id' => $userId]);
-                return response()->json(['success' => true, 'likes' => $comment->like, 'liked' => true]);
-            }
-
-        return response()->json(['success' => false]);
+        return response()->json($result);
     }
 }
 

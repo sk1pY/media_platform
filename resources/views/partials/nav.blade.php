@@ -9,34 +9,78 @@
      class="navbar navbar-expand-lg navbar-light sticky-top p-0 m-0 rounded-2">
     <div class="container">
         <a href="{{ route('index') }}" class="navbar-brand me-auto fw-bold fs-4 text-white ms-3">Media</a>
-            {{--        SEARCH --}}
-            <div class="d-flex justify-content-center top-50 start-20  ">
-                <div class="input-group rounded" style="width: 500px;">
-                    <input id="search"
-                           type="search" class="form-control rounded" placeholder="Поиск" aria-label="Search"
-                           name="search" {{Request::is('profile*')?'disabled':''}}>
-                </div>
+        {{--        SEARCH --}}
+        <div class="d-flex justify-content-center top-50 start-20  ">
+            <div class="input-group rounded" style="width: 500px;">
+                <input id="search"
+                       type="search" class="form-control rounded" placeholder="Поиск" aria-label="Search"
+                       name="search" {{Request::is('profile*')?'disabled':''}}>
             </div>
-            {{--        SEARCH --}}
+        </div>
+        {{--        SEARCH --}}
 
-            <div class="d-flex justify-content-center align-items-center ms-auto">
-                @guest
-                    <a href="{{ route('register') }}" class="btn  me-3 bg-white p-2  rounded-3">Регистрация</a>
-                    <a href="{{ route('login') }}" class="btn me-3 bg-primary p-2 rounded-3 text-white">Войти</a>
-                @endguest
-                @auth
-                    <i class="bi bi-bell-fill text-white fs-4 me-4  "></i>
-                    <button type="button" class="btn bg-white rounded-4 text-start p-2 w-100 w-auto me-3"
-                            data-bs-toggle="modal" data-bs-target="#createPost" data-bs-dismiss="modal">
-                        <i class="bi bi-plus-square me-1"></i>
-                        <span class="text-black ">Опубликовать</span>
+        <div class="d-flex justify-content-center align-items-center ms-auto">
+            @guest
+                <a href="{{ route('register') }}" class="btn  me-3 bg-white p-2  rounded-3">Регистрация</a>
+                <a href="{{ route('login') }}" class="btn me-3 bg-primary p-2 rounded-3 text-white">Войти</a>
+            @endguest
+            @auth
 
-                    </button>
-                @endauth
-            </div>
+                <button type="button" class="btn btn-primary position-relative">
+                    <i class="bi bi-bell-fill text-white " data-bs-toggle="offcanvas"
+                       data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">
+                    </i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ auth()->user()->unreadNotifications->count() }}
+    <span class="visually-hidden">unread messages</span>
+  </span>
+                </button>
+                <ul>
+
+
+                </ul>
+                <button type="button" class="btn bg-white rounded-4 text-start p-2 w-100 w-auto me-3"
+                        data-bs-toggle="modal" data-bs-target="#createPost" data-bs-dismiss="modal">
+                    <i class="bi bi-plus-square me-1"></i>
+                    <span class="text-black ">Опубликовать</span>
+
+                </button>
+            @endauth
+        </div>
 
     </div>
 </nav>
+{{--SIDE--}}
+@auth
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+         id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            @php
+                $notifications = auth()->user()->unreadNotifications;
+                auth()->user()->unreadNotifications->markAsRead();
+            @endphp
+
+            <ul class="list-group list-group-flush">
+                @foreach (auth()->user()->notifications as $notification)
+
+                    <li class="list-group-item">
+                        <img
+                            src="{{ Auth::user()->image ? Storage::url('avatarImages/' . $notification->data['follower_image']) : asset('default_images/defaultAvatar.jpg') }}"
+                            alt="..." class="object-fit-cover rounded" style="height: 40px; width: 40px;">
+                        <a href="{{ route('users.show', ['user' => $notification->data['follower_name']]) }}">
+                            {{ $notification->data['follower_name'] }}
+                        </a> подписался на вас.
+                        <span>{{$notification->created_at->diffForHumans()}}</span>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+@endauth
 {{-- MODAL WINDOW --}}
 <div class="modal fade" id="createPost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

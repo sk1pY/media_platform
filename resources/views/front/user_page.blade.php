@@ -8,7 +8,7 @@
                 <div class="border-0 text-white d-flex flex-column z-1 overflow-hidden"
                      style=" height: 250px;">
                     <img class=" border-0 rounded"
-                         src="{{ $user->image_cover ? Storage::url('profileСoverImages/' . $user->image_cover) : asset('default_images/defaultImage.png') }}"
+                         src="{{ $user->image_cover ? Storage::url('profileCoverImages/' . $user->image_cover) : asset('default_images/defaultImage.png') }}"
                          style="height: 250px" alt="123">
                 </div>
 

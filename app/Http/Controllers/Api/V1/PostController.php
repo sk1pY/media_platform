@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Home\PostUpdateRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -29,7 +32,7 @@ class PostController extends Controller
             });
         });
 
-        $posts = $query->with('category')->orderBy($sortColumn, $sortDirection)->paginate(10);
+        $posts = $query->with('category')->orderBy($sortColumn, $sortDirection)->get();
 
         return response()->json($posts);
     }
@@ -44,24 +47,20 @@ class PostController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-
         if ($request->hasFile('image')) {
-
             $path = $request->file('image')->store('postImages', 'public');
             $fileName = basename($path);
         }
-        Post::create([
+        $post = Post::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'category_id' => $request->input('category_id'),
-            'likes' => 0,
-            'views' => 0,
             'user_id' => $user->id,
             'image' => $fileName
         ]);
 
 
-        return response()->json(['message' => 'Good'], 201);
+        return response()->json(['message' => 'Good', $post], 201);
 
 
     }
@@ -77,14 +76,12 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(PostUpdateRequest $request, Post $post)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'category_id' => 'required|integer',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        // В методе контроллера
+        Log::info('Request data:', $request->all());
+
+        $validated = $request->validated();
 
 
         if ($request->hasFile('image')) {
@@ -93,10 +90,10 @@ class PostController extends Controller
             }
 
             $path = $request->file('image')->store('postImages', 'public');
-            $validatedData['image'] = basename($path);
+            $validated['image'] = basename($path);
         }
 
-         $post->update($validatedData);
+        $post->update($validated);
 
         return response()->json(['message' => 'Post updated successfully', 'post' => $post], 200);
 
@@ -107,6 +104,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('destroy', $post);
+
         $post->delete();
         return response()->json(['message' => 'Post deleted successfully']);
     }
