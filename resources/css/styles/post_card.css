@@ -1,0 +1,7 @@
+.medium-zoom-overlay {
+    z-index: 9998 !important;
+}
+.medium-zoom-image--opened {
+    z-index: 9999 !important;
+    position: relative;
+}

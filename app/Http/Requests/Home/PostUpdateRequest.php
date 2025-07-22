@@ -23,6 +23,7 @@ class PostUpdateRequest extends FormRequest
     {
         return [
             'title' => 'required|alpha_dash|max:50',
+            'short_description' => 'required|string',
             'description' => 'required|string',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];

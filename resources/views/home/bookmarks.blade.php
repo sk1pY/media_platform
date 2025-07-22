@@ -1,13 +1,12 @@
 @extends('layouts.home')
 @section('home-content')
-    <h4>Закладки</h4>
-
-    <div class="col-9">
-
         @forelse($bookmarks as $bookmark)
-            @include('partials.post_card',['post' => $bookmark->post,'flag_description_substr'=> true])
+            @include('partials.post_card',['post' => $bookmark->post])
         @empty
-            <h4>Пусто</h4>
-        @endforelse
-    </div>
+            <div class="d-flex flex-column align-items-center justify-content-center h-75">
+                <span class="text-muted fs-3 ">Закладки отсутствуют</span>
+
+            </div>
+    @endforelse
+
 @endsection

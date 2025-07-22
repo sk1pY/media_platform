@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('short_description',50);
             $table->text('description',2200);
             $table->string('slug');
             $table->string('image')->default('public/default_images/default.png')->nullable();

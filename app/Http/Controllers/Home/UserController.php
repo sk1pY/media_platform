@@ -63,4 +63,17 @@ class UserController extends Controller
         return to_route('index');
 
     }
+
+    public function topUsers()
+    {
+        $top_users_full = Subscribe::get()
+            ->groupBy('author_id')
+            ->map(function ($item,$author_id){
+                $user = User::find($author_id);
+                $user->sub_count = $item->count();
+                return $user;
+            })->sortByDesc('sub_count')->values();
+
+        return view('front.top_users', compact('top_users_full'));
+    }
 }

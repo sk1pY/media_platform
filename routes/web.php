@@ -23,6 +23,7 @@ use App\Http\Controllers\SubscribeController;
 use Illuminate\Support\Facades\Route;
 
 //PUBLIC PAGE USER
+Route::get('/users/top-users', [UserController::class, 'topUsers'])->name('users.topUsers');
 Route::get('/users/{user:name}', [UserController::class, 'show'])->name('users.show');
 
 //PROFILE
@@ -52,15 +53,15 @@ Route::get('categories/{category:slug}', [CategoryController::class, 'show'])->n
 
 //POSTS
 Route::get('/', [PostController::class, 'index'])->name('index');
-Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+Route::get('posts/{post:slug}',  [PostController::class, 'show'])->name('posts.show');
 Route::resource('posts', PostController::class)->only(['destroy', 'update']);
 Route::post('posts/{post}/hide', [PostController::class, 'hide'])->name('posts.hide');
 
 
-//COMMENTS
-Route::post('posts/{post}/comments', CommentController::class)->name('posts.comments.store');
 
 Route::middleware('auth')->group(function () {
+    //COMMENTS
+    Route::post('posts/{post}/comments', CommentController::class)->name('posts.comments.store');
     //SUBSCRIBE
     Route::post('/subscribe', [SubscribeController::class, 'subscribe'])->name('subscribe');
     Route::post('/like-comment', [LikeController::class, 'likeComment'])->name('posts.comments.like');
@@ -87,7 +88,7 @@ Route::name('admin.')->prefix('admin')->middleware(['role:admin'])->group(functi
     Route::resource('users', AdminUserController::class);
     Route::put('/users/{user}/update-status', [AdminUserController::class, 'updateUserStatus'])->name('users.status.update');
     //CATEGORY
-    Route::resource('categories', AdminCategoryController::class);
+    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->only('index', 'store', 'update', 'destroy');
     //POSTS
     Route::resource('posts', AdminPostController::class);
     Route::put('/posts/{post}/update-status', [AdminPostController::class, 'update_status'])->name('posts.update.status');

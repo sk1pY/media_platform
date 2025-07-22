@@ -3,7 +3,7 @@
     <h4>Скрытые посты</h4>
     <div class="col-9">
         @forelse($posts as $post)
-            @include('partials.post_card',['flag_description_substr'=> true])
+            @include('partials.post_card')
         @empty
             <h4>Пусто</h4>
         @endforelse

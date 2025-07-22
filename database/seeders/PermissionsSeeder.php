@@ -34,5 +34,12 @@ class PermissionsSeeder extends Seeder
         $guestRole = Role::where(['name' => 'guest'])->first();
         $guestRole->givePermissionTo();
 
+        $permissionsManager = Permission::where('name','!=','admin_panel')->get();
+        $managerRole = Role::where(['name' => 'manager'])->first();
+        $managerRole->givePermissionTo($permissionsManager);
+
+        $userBlocked = Role::where(['name' => 'user_blocked'])->first();
+        $userBlocked->givePermissionTo('delete_posts','update_posts','subscribe_users','bookmark_posts');
+
     }
 }

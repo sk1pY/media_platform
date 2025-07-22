@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Subscribe;
 use App\Models\User;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -22,7 +23,9 @@ class DatabaseSeeder extends Seeder
             CategoriesSeeder::class,
             PostsSeeder::class,
             CommentsSeeder::class,
-            PostLikeSeeder::class,
+            LikePostSeeder::class,
+            LikeCommentSeeder::class,
+            SubscribesSeeder::class,
         ]);
 
     }

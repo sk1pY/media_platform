@@ -1,10 +1,3 @@
-<style>
-    .modal-open .modal-backdrop {
-        backdrop-filter: blur(5px);
-        background-color: rgba(0, 0, 0, 0.5);
-        opacity: 1 !important;
-    }
-</style>
 <nav style="background-color: #0a53be; height: 60px;"
      class="navbar navbar-expand-lg navbar-light sticky-top p-0 m-0 rounded-2">
     <div class="container">
@@ -26,7 +19,7 @@
             @endguest
             @auth
 
-                <button type="button" class="btn btn-primary position-relative">
+                <button type="button" class="btn btn-primary position-relative m-4">
                     <i class="bi bi-bell-fill text-white " data-bs-toggle="offcanvas"
                        data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">
                     </i>
@@ -35,17 +28,34 @@
     <span class="visually-hidden">unread messages</span>
   </span>
                 </button>
-                <ul>
-
-
-                </ul>
                 <button type="button" class="btn bg-white rounded-4 text-start p-2 w-100 w-auto me-3"
                         data-bs-toggle="modal" data-bs-target="#createPost" data-bs-dismiss="modal">
                     <i class="bi bi-plus-square me-1"></i>
-                    <span class="text-black ">Опубликовать</span>
-
+                    <span class="text-black ">Написать</span>
                 </button>
-            @endauth
+                    <a href="{{ route('users.show', Auth()->user()) }}" class="card-title mb-0">
+
+
+                    </a>
+                    <div class="dropdown">
+
+                        <button class="btn btn-secondary dropdown-toggle bg-transparent border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img
+                                src="{{ Auth::user()->image ? Storage::url('avatarImages/' . Auth::user()->image) : asset('default_images/defaultAvatar.jpg') }}"
+                                alt="..." class="object-fit-cover rounded-circle" style="height: 40px; width: 40px;">
+
+                        </button>
+                        <ul class="dropdown-menu text-center">
+                            <li><a class="dropdown-item " href="{{route('profile.edit')}}">Мой профиль</a></li>
+                            <li><a class="dropdown-item " href="{{route('profile.bookmarks.index')}}"> Закладки</a></li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="post" class="dropdown-item    ">
+                                    @csrf
+                                    <button type="submit" class="btn btn-light rounded-pill text-dark nav-link w-100">Выйти
+                                    </button>
+                                </form>
+                        </ul>
+                    </div>
+                @endauth
         </div>
 
     </div>
@@ -55,7 +65,7 @@
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
          id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5>
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Уведомления</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
@@ -81,48 +91,6 @@
         </div>
     </div>
 @endauth
-{{-- MODAL WINDOW --}}
-<div class="modal fade" id="createPost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="exampleModalLabel">Новый пост</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('profile.posts.store') }}" enctype="multipart/form-data" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Название</label>
-                        <input name="title" type="text" class="form-control" id="exampleFormControlInput1"
-                               placeholder="Заголовок" value="{{old('title')}}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Описание</label>
-                        <textarea name="description" class="form-control" id="exampleFormControlTextarea1"
-                                  rows="3">{{old('description')}}</textarea>
-                    </div>
-                    <div class="mb-3">
-                        Выберите категорию
-                        @if (count($categories) > 0)
-                            <select name="category_id" class="form-select">
-                                <option value="" selected>Без категории</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{$category->id}}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                        @endif
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleFormControlInput2" class="form-label">Фото поста</label>
-                        <input name="image" type="file" class="form-control" id="exampleFormControlInput2">
-                    </div>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <input type="submit" value="Создать" class="btn btn-primary">
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-{{-- END MODAL WINDOW --}}
+
+@include('partials.modal.create_post')
 

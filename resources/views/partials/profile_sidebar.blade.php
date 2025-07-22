@@ -1,12 +1,4 @@
-<style>
-    .nav-tabs .nav-link.active {
-        background-color: #0a53be !important;
-        color: white !important;
-        border-color: #0a53be #0a53be #fff !important;
-    }
-</style>
 @auth
-
     <div class="card border-0 rounded-3">
         <div class="card-body p-0">
             <div class="d-flex align-items-center flex-column mt-3">

@@ -23,8 +23,9 @@ class PostStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|max:100|alpha_dash|unique:posts,title',
-            'description' => 'required|max:2200',
+            'title' => 'required|max:100|unique:posts,title',
+            'short_description' => 'required|string',
+            'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'category_id' => 'nullable|numeric|exists:categories,id',
         ];

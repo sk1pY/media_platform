@@ -1,15 +1,18 @@
 @extends('layouts.app')
 @section('app-content')
     {{--    POST CARD--}}
-    @include('partials.post_card',['flag_description_substr'=> false])
+    @include('partials.post_card',['post_show'=> true])
     {{--POST CARD--}}
     {{--        FILTER --}}
-    @include('partials.filter')
+    <div id="comment_section">
+        @include('partials.filter')
+    </div>
+
     {{--        FILTER --}}
     @can('create_comments')
         @auth
             {{-- Comment Form --}}
-            <form action="{{ route('posts.comments.store',$post) }}" method="POST">
+            <form  action="{{ route('posts.comments.store',$post) }}" method="POST">
                 @csrf
                 <div class="mb-3 mt-3">
                     <textarea class="form-control" id="comment-text" name="text" rows="3"
@@ -22,8 +25,7 @@
     @endcan
     {{--         COMMENTS SECTION --}}
     @foreach ($comments as $comment)
-
-        <div id="comment_section" class="card my-2 rounded-4 border-1"
+        <div id="comment-{{$comment->id}}"  class="card my-2 rounded-4 border-1 "
              style="scroll-margin-top: 250px;">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
@@ -46,7 +48,6 @@
                     </div>
                     <div class="row">
                         <div class="d-flex align-items-center ">
-
                             @can('update',$comment)
                                 <button type="button" class="btn " data-bs-toggle="modal"
                                         data-bs-target="#updateComment-{{$comment->id}}">
@@ -69,7 +70,7 @@
 
                     </div>
                 </div>
-                <div class=" d-flex flex-column ">
+                <div  class=" d-flex flex-column">
                     <div class="mt-2 me-3 ms-5">{{ $comment->text }}</div>
                     <div class="d-flex m-2 fs-6 comment ms-5">
                         <div class="like-comment"
@@ -117,6 +118,6 @@
         </div>
 
     @endforeach
-    {{ $comments->links('pagination::bootstrap-5') }}
+{{--    {{ $comments->links('pagination::bootstrap-5') }}--}}
 
 @endsection

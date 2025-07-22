@@ -29,7 +29,7 @@ class UserUpdateService
     protected function updateAvatar(User $user, $image): string
     {
         if ($image) {
-            Storage::disk('public')->delete($user->image);
+            Storage::disk('public')->delete('/avatarImages'.$user->image);
         }
         return basename($image->store('avatarImages', 'public'));
     }
@@ -37,7 +37,7 @@ class UserUpdateService
     protected function updateCover(User $user, $image_cover): string
     {
         if ($image_cover) {
-            Storage::disk('public')->delete($user->image_cover);
+            Storage::disk('public')->delete('/profileCoverImages'.$user->image_cover);
         }
         return basename($image_cover->store('profileCoverImages', 'public'));
     }

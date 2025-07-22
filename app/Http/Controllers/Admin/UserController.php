@@ -67,6 +67,7 @@ class UserController extends Controller
 
         if($status == 0){
             $user->posts()->update(['status'=> 0]);
+            $user->syncRoles('user_blocked');
         }
         return response()->json(['success' => 'User status updated successfully.','status' => $status]);
     }

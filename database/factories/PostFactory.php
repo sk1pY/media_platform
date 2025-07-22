@@ -17,23 +17,13 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-        $sourcePath = database_path('seeders/postImages');
-        $destinationPath = storage_path('app/public/postImages');
-
-        if (!File::exists($destinationPath)) {
-            File::makeDirectory($destinationPath, 0755, true);
-        }
-        $files = File::files($sourcePath);
-        foreach ($files as $file) {
-            $destination = $destinationPath . '/' . basename($file);
-            File::copy($file->getPathname(), $destination);
-        }
-
+        $files = File::files(database_path('seeders/postImages'));
 
         $title = $this->faker->sentence(5);
         return [
             'title' => $title,
             'slug' => Str::slug($title),
+            'short_description' => $this->faker->text(30),
             'description' => $this->faker->paragraph(15, true),
             'image' => $files ? $files[array_rand($files)]->getFilename() : null,
             'category_id' => $this->faker->numberBetween(1, 10),

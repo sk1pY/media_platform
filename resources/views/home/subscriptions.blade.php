@@ -28,8 +28,9 @@
                 </div>
             </div>
         @empty
-            <h3 class="text-center">Пусто</h3>
-
+            <div class="d-flex flex-column align-items-center justify-content-center h-75">
+                <span class="text-muted fs-3 ">Пидписки отсутствуют</span>
+            </div>
         @endforelse
     </div>
 

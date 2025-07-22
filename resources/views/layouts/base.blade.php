@@ -24,10 +24,12 @@
         text-decoration: none;
     }
 
-
-
 </style>
 <body>
+
+
+
+
 @include('partials.alert.validation')
 
 @include('partials.alert.auth')

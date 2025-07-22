@@ -6,13 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
+use Tonysm\RichTextLaravel\Models\Traits\HasRichText;
 
 
 class Post extends Model
 {
-    use HasFactory,Searchable;
+    use HasFactory;
     protected $fillable = [
-        'title','slug','description','category_id','user_id','image','likes','status'];
+        'title','slug','short_description','description','category_id','user_id','image','likes','status'];
+
     protected  static function booted()
     {
         self::creating(function ($post){

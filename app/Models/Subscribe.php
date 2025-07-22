@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use PharIo\Manifest\Author;
 
 class Subscribe extends Model
 {
@@ -12,6 +13,8 @@ class Subscribe extends Model
         'author_id',
         'user_id',
     ];
+
+
 
 
 }

@@ -69,6 +69,7 @@ class CategoryFactory extends Factory
         $name = $this->faker->unique()->randomElement($categories);
         return [
             'name' => $name,
+            'description' => $this->faker->words(10, true),
             'slug' => Str::slug($name),
             'image' => $files ? $files[array_rand($files)]->getFilename() : null,
         ];

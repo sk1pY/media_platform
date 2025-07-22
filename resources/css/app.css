@@ -1,2 +1,6 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import 'bootstrap-icons/font/bootstrap-icons.css';
+@import 'trix/dist/trix.css';
+@import 'medium-zoom/dist/style.css';
+
+@import "styles/base.css";

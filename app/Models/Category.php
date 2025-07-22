@@ -10,7 +10,7 @@ class Category extends Model
 {
 
     use HasFactory;
-    protected $fillable = ['name','image','slug'];
+    protected $fillable = ['name','image','slug','description'];
 
     protected static function booted(){
         self::creating(function ($category){

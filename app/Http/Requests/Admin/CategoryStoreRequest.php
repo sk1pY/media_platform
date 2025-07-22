@@ -27,8 +27,9 @@ class CategoryStoreRequest extends FormRequest
             'name' => [
                 'required',
                 'alpha',
-                Rule::unique('categories')->ignore($this->input('id')),
+                'unique:categories,name',
             ],
+            'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
         ];
     }

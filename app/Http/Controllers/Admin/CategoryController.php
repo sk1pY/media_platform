@@ -23,14 +23,14 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CategoryStoreRequest $request):RedirectResponse
+    public function store(CategoryStoreRequest $request)
     {
         $validate = $request->validated();
 
         $validate['image'] = $request->hasFile('image') ? basename($request->file('image')->store('categoryImages', 'public')) : null;
 
         Category::create($validate);
-        return back()->with('success', 'Post created successfully');
+        return to_route('admin.categories.index')->with('success', 'Category created successfully');
     }
 
     /**
@@ -45,14 +45,13 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryStoreRequest $request, Category $category)
     {
-        $validated = $request->validate([
-            'name' => 'required|alpha|unique:name,' . $category->id,
-            'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
-        ]);
-
-
+//        $validated = $request->validate([
+//            'name' => 'required|alpha|unique:name,' . $category->id,
+//            'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+//        ]);'
+        $validated = $request->validated();
         if ($request->hasFile('image')) {
             if ($category->image) {
                 Storage::delete('categoryImages/' . $category->image);
@@ -62,7 +61,7 @@ class CategoryController extends Controller
             $validated['image'] = $category->image;
         }
 
-        $category->update([$validated]);
+        $category->update($validated);
 
         return back()->with('success', 'Post updated successfully');
     }

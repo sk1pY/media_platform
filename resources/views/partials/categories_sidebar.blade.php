@@ -1,44 +1,4 @@
 {{-- CATEGORIES --}}
-<style>
-    .category-link:hover {
-        background-color: white;
-    }
-
-    .scroll-wrapper {
-        position: sticky;
-        top: 0;
-        max-height: calc(100vh - 100px);
-        overflow: hidden;
-        z-index: 10;
-    }
-
-    .scroll-inner {
-        max-height: inherit;
-        overflow-y: hidden;
-    }
-
-    .scroll-wrapper:hover .scroll-inner {
-        overflow-y: auto;
-    }
-
-    .scroll-inner::-webkit-scrollbar {
-        width: 5px;
-    }
-
-    .scroll-inner::-webkit-scrollbar-thumb {
-        background-color: lightgrey;
-        border-radius: 4px;
-    }
-
-    .scroll-inner::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-    .nav-tabs .nav-link.active {
-        background-color: #0a53be !important;
-        color: white !important;
-        border-color: #0a53be #0a53be #fff !important;
-    }
-</style>
 <div class="scroll-wrapper  ">
         <div class="scroll-inner">
             <div class="mb-3 rounded-3 bg-white" >

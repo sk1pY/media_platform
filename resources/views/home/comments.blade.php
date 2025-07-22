@@ -1,6 +1,6 @@
 @extends('layouts.home')
 @section('home-content')
-    <div class="bg-white p-3 rounded-3">
+        <div class="bg-white p-3 rounded-3">
         <table id="table" class="table table-sm table-bordered  small">
             <thead>
             <tr class="align-middle">
@@ -9,8 +9,9 @@
                 <th scope="col" class="col-1 text-center">Удалить</th>
             </tr>
             </thead>
-            <tbody class="tablecontents">
             @foreach ($comments as $comment)
+
+            <tbody class="tablecontents">
                 <tr class="align-middle ">
                     <td>
                         <a class="text-decoration-none text-dark "
@@ -66,9 +67,11 @@
                         </div>
                     </div>
                 </div>
-            @endforeach
+
             </tbody>
+                @endforeach
         </table>
+
         {{ $comments->links('pagination::bootstrap-5') }}
     </div>
 

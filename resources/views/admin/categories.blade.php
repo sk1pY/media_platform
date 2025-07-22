@@ -12,6 +12,10 @@
                 <label for="name" class="form-label">Название</label>
                 <input id="name" name="name" type="text" class="form-control">
             </div>
+            <div class="col-12">
+                <label for="description" class="form-label">Описание</label>
+                <input id="name" name="description" type="text" class="form-control">
+            </div>
 
             <div class="col-12">
                 <label for="image" class="form-label">Изображение</label>
@@ -80,6 +84,10 @@
                                         <div class="modal-body">
                                             <label class="form-label">Название</label>
                                             <input type="text" name="name" value="{{ $category->name }}"
+                                                   class="form-control mb-2">
+                                            <label class="form-label">Описание</label>
+
+                                            <input type="text" name="description" value="{{ $category->description }}"
                                                    class="form-control mb-2">
                                             <label class="form-label">Изображение</label>
                                             <input type="file" name="image" class="form-control">

@@ -2,51 +2,35 @@
 @section('app-content')
     <input type="hidden" id="user-id" value="{{$user->id }}">
 
-    <section class="h-100 gradient-custom-2 ">
-        <div class="container ">
-            <div class="card">
-                <div class="border-0 text-white d-flex flex-column z-1 overflow-hidden"
-                     style=" height: 250px;">
-                    <img class=" border-0 rounded"
-                         src="{{ $user->image_cover ? Storage::url('profileCoverImages/' . $user->image_cover) : asset('default_images/defaultImage.png') }}"
-                         style="height: 250px" alt="123">
-                </div>
+    <section class="h-100 gradient-custom-2">
+        <div class="container">
+            <div class="card text-white border-0 rounded-4 overflow-hidden shadow-lg mb-4">
+                <img src="{{ $user->image_cover ? Storage::url('profileCoverImages/' . $user->image_cover) : asset('default_images/defaultImage.png') }}"
+                     class="card-img" alt="..." style="object-fit: cover; height: 250px;">
 
+                <div class="card-img-overlay d-flex flex-column justify-content-end p-4"
+                     style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1));">
+
+                    <div class="d-flex align-items-center">
+                        <img src="{{ $user->image ? Storage::url('avatarImages/' . $user->image) : asset('default_images/defaultAvatar.jpg') }}"
+                             alt="Иконка {{ $user->name }}" class="img-fluid rounded-circle me-3"
+                             style="width: 70px; height: 70px; object-fit: cover; border: 3px solid white;">
+
+                        <div>
+                            <h4 class="card-title mb-0">{{ $user->name }}</h4>
+                        </div>
+                        <div class="ms-auto">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="p-4 text-black bg-body-tertiary">
-                <div class="d-flex justify-content-between text-center">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <img
-                            src="{{ $user->image ? Storage::url('avatarImages/' . $user->image) : asset('default_images/defaultAvatar.jpg') }}"
-                            alt="111" class=" border rounded-4"
-                            style="width: 90px; height: 90px;">
-                        <h5 class="align-center ms-2">{{ $user->name }}</h5>
-                    </div>
-                    <div class="d-flex">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <p class="mb-1 h5">{{ count($posts) }}</p>
-                            </div>
-                            <div class="ms-1">
-                                <p class="small text-muted mb-0 ">Публикации</p>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center ms-2">
-                            <div>
-                                <p class="mb-1 h5 mb-0">{{ $countSubAuthors }}</p>
-                            </div>
-                            <div class="ms-1">
-                                <p class="small text-muted mb-0">Подписчиков</p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
+            <div >
+                <span>@ {{ $user->name }} </span>
+                <span>{{$countSubAuthors}} подписчика </span>
 
             </div>
 
-            <div class="card-body  text-black mt-3">
+            <div class="text-black mt-3">
                 {{--        FILTER --}}
                 @include('partials.filter')
                 {{--        FILTER --}}

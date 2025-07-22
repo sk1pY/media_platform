@@ -44,7 +44,7 @@ class UserFactory extends Factory
 
 
         return [
-            'name' => fake()->firstName(),
+            'name' => strtolower(fake()->unique()->firstName()),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'image' => $files ? $files[array_rand($files)]->getFilename() : null,

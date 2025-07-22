@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,10 +18,12 @@ class CommentFactory extends Factory
      */
     public function definition(): array
     {
+        $userCount = User::count();
+        $postCount = Post::count();
         return [
             'text' => $this->faker->realText(),
-            'user_id' => $this->faker->numberBetween(1, 10),
-            'post_id' => $this->faker->numberBetween(1, 25),
+            'user_id' => $this->faker->numberBetween(1, $userCount),
+            'post_id' => $this->faker->numberBetween(1, $postCount),
         ];
     }
 }

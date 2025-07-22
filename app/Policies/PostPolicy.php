@@ -22,13 +22,13 @@ class PostPolicy
 
     public function update(User $user, Post $post)
     {
-        return $user->id === $post->user_id;
+        return  $user->hasRole(['manager','admin']) ||  $user->id === $post->user_id;
     }
 
     public function destroy(User $user, Post $post)
     {
         if ($user->hasPermissionTo('delete_posts')) {
-            return $user->id === $post->user_id;
+            return  $user->hasRole(['manager','admin']) ||  $user->id === $post->user_id;
         }
     }
 

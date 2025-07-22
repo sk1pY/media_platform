@@ -93,13 +93,14 @@ class PostController extends Controller
             match ($request->input('filter')) {
                 'recent' => $commentsQuery->latest(),
                 'old' => $commentsQuery->oldest(),
-                'popular' => $commentsQuery->orderBy('like', 'desc'),
+                'popular' => $commentsQuery->orderBy('likes', 'desc'),
                 default => $commentsQuery->latest(),
             };
         }
-        $comments = $commentsQuery->paginate(6);
+        $comments = $commentsQuery->get();
+        $postShowFlag = true;
 
-        return view('front.post', compact('post', 'comments'));
+        return view('front.post', compact('post', 'comments', 'postShowFlag'));
     }
 
 

@@ -1,5 +1,8 @@
+import "./libs/trix";
 import './bootstrap.js';
-
+import 'trix'
+import mediumZoom from 'medium-zoom'
+mediumZoom('[data-zoomable]')
 
 if (window.location.pathname.startsWith('/admin')) {
     Promise.all([
@@ -18,4 +21,5 @@ if (window.location.pathname.startsWith('/admin')) {
     import('./components/view.js');
     import('./components/bookmark.js');
     import('./components/search.js');
+    import('./components/validate.js');
 }
