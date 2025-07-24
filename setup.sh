@@ -1,16 +1,9 @@
 #!/bin/bash
-
 echo "1. Копируем .env.example -> .env"
 cp .env.example .env
 sed -i 's/^#\s*\(DB_[A-Z_]*=.*\)/\1/' .env
 
-echo "2. Запускаем контейнеры Sail"
-docker-compose up -d
-
-echo "3. Устанавливаем зависимости Composer"
-docker-compose exec composer install
-
-echo "4. Настраиваем Mailpit в .env"
+echo "2. Настраиваем Mailpit"
 sed -i '/^MAIL_MAILER=/c\MAIL_MAILER=smtp' .env
 sed -i '/^MAIL_HOST=/c\MAIL_HOST=mailpit' .env
 sed -i '/^MAIL_PORT=/c\MAIL_PORT=1025' .env
@@ -20,30 +13,48 @@ sed -i '/^MAIL_ENCRYPTION=/c\MAIL_ENCRYPTION=null' .env
 sed -i '/^MAIL_FROM_ADDRESS=/c\MAIL_FROM_ADDRESS=demo@example.com' .env
 sed -i '/^MAIL_FROM_NAME=/c\MAIL_FROM_NAME="Demo App"' .env
 
-echo "5 Настройка БД"
+echo "3. Настраиваем MYSQL"
 sed -i '/^DB_CONNECTION=/c\DB_CONNECTION=mysql' .env
 sed -i '/^DB_HOST=/c\DB_HOST=mysql' .env
 sed -i '/^DB_PORT=/c\DB_PORT=3306' .env
 sed -i '/^DB_DATABASE=/c\DB_DATABASE=media_platform' .env
-sed -i '/^DB_USERNAME=/c\DB_USERNAME=root' .env
+sed -i '/^DB_USERNAME=/c\DB_USERNAME=laravel' .env
 sed -i '/^DB_PASSWORD=/c\DB_PASSWORD=root' .env
 
-echo "6. Генерируем ключ приложения"
-docker-compose artisan key:generate
+echo "4. Запускаем контейнеры Sail"
+docker-compose up -d
 
-echo "7. миграции"
+echo "5. Ждем запуска MySQL..."
+until docker-compose exec php nc -z -w 1 mysql 3306; do
+    echo "Ожидание MySQL..."
+    sleep 2
+done
+
+echo "5. Устанавливаем зависимости Composer"
+docker-compose exec composer git config --global --add safe.directory /var/www/laravel
+docker-compose exec composer composer install --no-interaction
+
+echo "7. Устанавливаем права"
+docker-compose exec php mkdir -p storage/logs bootstrap/cache
+docker-compose exec php chown -R www-data:www-data storage bootstrap/cache
+docker-compose exec php chmod -R 775 storage bootstrap/cache
+
+echo "7. Генерируем ключ приложения"
+docker-compose exec php php artisan key:generate
+
+echo "8. миграции"
 docker-compose exec php php artisan migrate --force
 
-echo "8. Сеем "
+echo "9. Сеем "
 docker-compose exec php php artisan db:seed
 
-echo "9. Создаем символическую ссылку для storage"
+echo "10. Создаем символическую ссылку для storage"
 docker-compose exec php php artisan storage:link
 
-echo "10. Устанавливаем зависимости npm"
+echo "11. Устанавливаем зависимости npm"
 docker-compose exec node npm install
 
-echo "11. Собираем (Vite)"
+echo "12. Собираем (Vite)"
 docker-compose exec node npm run build
 
 

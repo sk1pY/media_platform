@@ -2,4 +2,4 @@ FROM composer:latest
 
 WORKDIR /var/www/laravel
 
-ENTRYPOINT ["composer", "--ignore-platform-reqs"]
+CMD ["tail", "-f", "/dev/null"]
