@@ -20,13 +20,24 @@
                             <h4 class="card-title mb-0">{{ $user->name }}</h4>
                         </div>
                         <div class="ms-auto">
+                            @can('subscribe_users')
+                                @if ($user->id !== auth()->id())
+                                    <div class="d-flex sub-button me-3" style="height: 35px; cursor: pointer;"
+                                         data-author-id="{{ $user->id }}"
+                                         data-url="{{route('subscribe')}}">
+                                        <button
+                                            class=" btn btn-sm rounded-4  ms-3 {{in_array($user->id, $subAuthors, true)?'btn-outline-secondary':'btn-secondary '}}">
+                                            {{in_array($user->id, $subAuthors, true)?'Отписаться':'Подписаться'}}</button>
+                                    </div>
+                                @endif
+                            @endcan
+
                         </div>
                     </div>
                 </div>
             </div>
             <div >
-                <span>@ {{ $user->name }} </span>
-                <span>{{$countSubAuthors}} подписчика </span>
+
 
             </div>
 

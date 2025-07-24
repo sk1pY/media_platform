@@ -35,7 +35,7 @@
                         @if ($post->user->id !== auth()->id())
                             <div class="d-flex sub-button me-3" style="height: 35px; cursor: pointer;"
                                  data-author-id="{{ $post->user->id }}"
-                                 data-url="{{route('subscribe')}}" +>
+                                 data-url="{{route('subscribe')}}">
                                 <button
                                     class=" btn btn-sm rounded-4  ms-3 {{in_array($post->user->id, $subAuthors, true)?'btn-outline-secondary':'btn-secondary '}}">
                                     {{in_array($post->user->id, $subAuthors, true)?'Отписаться':'Подписаться'}}</button>
