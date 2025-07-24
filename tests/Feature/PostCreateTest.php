@@ -19,9 +19,7 @@ class PostCreateTest extends TestCase
     use RefreshDatabase;
     use WithoutMiddleware;
 
-    /**
-     * A basic feature test example.
-     */
+
     public function test_store_post(): void
     {
         Storage::fake('public');

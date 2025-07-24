@@ -1,14 +1,11 @@
 <?php
 
 namespace Tests\Feature;
-
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
-// use Illuminate\Foundation\Testing\WithFaker; // Not used in this test
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
