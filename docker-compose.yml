@@ -21,6 +21,9 @@ services:
             - "3316:3306"
         env_file:
             - env/mysql.env
+        volumes:
+            -  db_data:/var/lib/mysql
+        restart: always
     mailpit:
         image: axllent/mailpit
         ports:
@@ -36,4 +39,12 @@ services:
             - "5173:5173"
         command: tail -f /dev/null
 
+    composer:
+        build:
+            context: dockerfiles
+            dockerfile: composer.dockerfile
+        volumes:
+            - ./:/var/www/laravel
 
+volumes:
+    db_data:
