@@ -30,6 +30,7 @@ class LikeService
             $likeable->likes()->create(['user_id' => $userId]);
             $likeable->increment('likes');
             $liked = true;
+
         }
         $count = $likeable->likes()->count();
 

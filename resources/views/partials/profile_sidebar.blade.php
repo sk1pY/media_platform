@@ -79,9 +79,8 @@
 
                     </li>
                     <li class="nav-item m-1">
-                        <a href="#" class="btn btn-light disabled rounded-pill text-dark nav-link "> Лента
+                        <a href="{{ route('profile.notifications.index') }}" class="btn btn-light rounded-pill text-dark nav-link "> Лента
                             активности пользователя</a>
-
                     </li>
                     <li class="nav-item m-1">
                         <form id="logout-form" action="{{ route('logout') }}" method="post" class="d-inline">

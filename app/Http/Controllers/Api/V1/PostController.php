@@ -79,7 +79,7 @@ class PostController extends Controller
     public function update(PostUpdateRequest $request, Post $post)
     {
         // В методе контроллера
-        Log::info('Request data:', $request->all());
+        //Log::info('Request data:', $request->all());
 
         $validated = $request->validated();
 

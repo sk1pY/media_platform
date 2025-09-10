@@ -1,7 +1,6 @@
 {{--        FILTER --}}
 <div class="mb-2">
     <form  id="filterForm" method="get">
-
         <select class="form-select w-auto text-decoration-none rounded-3 border-1" id="rating" name="filter" form="filterForm"
                 onchange="this.form.submit()">
             <option value="">Выберите фильтр</option>

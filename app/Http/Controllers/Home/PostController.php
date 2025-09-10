@@ -87,7 +87,6 @@ class PostController extends Controller
                 Storage::disk('public')->delete($post->image);
             }
             $validated['image'] = $request->hasfile('image') ? basename($request->file('image')->store('postImages', 'public')) : null;
-
         }
         $post->update($validated);
         return back()->with('success', 'Пост успешно обновлен');

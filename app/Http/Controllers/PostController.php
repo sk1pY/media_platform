@@ -33,7 +33,7 @@ class PostController extends Controller
         $filter = $request->get('filter');
         $filterPosts->execute($postQuery, $filter);
 
-        $posts = $postQuery->get();
+        $posts = $postQuery->paginate(5);
 
         return view('front.index', compact('posts', 'categories'));
     }

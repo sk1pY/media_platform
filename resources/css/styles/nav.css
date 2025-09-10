@@ -3,3 +3,17 @@
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 1 !important;
 }
+
+.notification.unread {
+    background-color: #f0f8ff;
+    font-weight: bold;
+}
+
+.notification.read {
+    background-color: #fff;
+    font-weight: normal;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}

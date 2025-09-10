@@ -42,6 +42,8 @@ Route::prefix('profile')->name('profile.')->middleware('auth')->group(function (
     Route::resource('bookmarks', BookmarkController::class)->only(['index', 'store']);
     //SUBSCRIPTIONS
     Route::get('/subscriptions', [SubscribeController::class, 'index'])->name('subscriptions.index');
+    //Notifications
+    Route::get('/notiifications',[UserController::class,'notifications'])->name('notifications.index');
 });
 
 //SEARCH

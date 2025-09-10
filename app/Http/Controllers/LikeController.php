@@ -4,7 +4,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewLike;
+use App\Events\NewSubscriber;
 use App\Models\Comment;
+use App\Models\User;
 use App\Services\LikeService;
 use Illuminate\Http\Request;
 use App\Models\Like;
@@ -13,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use Illuminate\Support\Facades\Log;
 
-// Добавлено для использования модели Task
 
 class LikeController extends Controller
 {
@@ -27,6 +29,14 @@ class LikeController extends Controller
         // $this->authorize('like', $post);
 
         $result = $likeService->toggleLike($post, Auth::id());
+
+        $user = User::find(Auth::user()->id);
+        $author = $post->user;
+
+        if ($result['liked']) {
+            event(new NewLike($user, $author, $post));
+        }
+
         return response()->json($result);
     }
 

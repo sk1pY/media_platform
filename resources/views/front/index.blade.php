@@ -12,5 +12,7 @@
         @endforelse
     </div>
     {{--    END POSTS--}}
-
+    <div class="mt-4">
+        {{ $posts->links('pagination::bootstrap-5') }}
+    </div>
 @endsection

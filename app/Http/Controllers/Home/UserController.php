@@ -76,4 +76,12 @@ class UserController extends Controller
 
         return view('front.top_users', compact('top_users_full'));
     }
+
+    public function notifications()
+    {
+        $notifications = auth()->user()->notifications()->latest()->take(5)->get();
+
+        return view('home.notifications', compact('notifications'));
+
+    }
 }

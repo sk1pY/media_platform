@@ -61,8 +61,11 @@ class AppServiceProvider extends ServiceProvider
 
                 $bookmarkPostUser = $user->bookmarks()->pluck('post_id')->toArray();
                 $subAuthors = Subscribe::where('user_id', $user->id)->pluck('author_id')->toArray();
+                $notifications = $user->notifications()->latest()->take(5)->get();
+              //  dd($notifications);
 
             } else {
+                $notifications = [];
                 $likedPostUser = [];
                 $bookmarkPostUser = [];
                 $subAuthors = [];
@@ -71,6 +74,7 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $view->with([
+                'notifications' => $notifications,
                 'likedPostUser' => $likedPostUser,
                 'bookmarkPostUser' => $bookmarkPostUser,
                 'subAuthors' => $subAuthors,

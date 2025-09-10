@@ -2,23 +2,27 @@
 
 namespace App\Notifications;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
 
-class NewFollowerNotification extends Notification
+class NewSubscriberNotification extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($user)
-    {
-        $this->user = $user;
 
+
+    public User $subscriber;
+    public User $subscribedTo;
+    public function __construct(User $subscriber,User $subscribedTo)
+    {
+        $this->subscriber = $subscriber;
+        $this->subscribedTo = $subscribedTo;
     }
 
     /**
@@ -28,7 +32,7 @@ class NewFollowerNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['mail','database'];
     }
 
     /**
@@ -37,29 +41,17 @@ class NewFollowerNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
+                    ->line($this->subscriber->name.' following to you')
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
+    public function toArray($notifiable)
     {
         return [
-            //
-        ];
-    }
-
-    public function toDatabase($notifiable)
-    {
-        return [
-            'follower_id' => $this->user->id,
-            'follower_name' => $this->user->name,
-            'follower_image' => $this->user->image,
+            'subscriber_id' => $this->subscriber->id,
+            'subscriber_name' => $this->subscriber->name,
+            'message' => 'Your apartment was created successfully.',
         ];
     }
 }
