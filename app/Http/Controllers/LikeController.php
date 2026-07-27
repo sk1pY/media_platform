@@ -29,7 +29,6 @@ class LikeController extends Controller
         // $this->authorize('like', $post);
 
         $result = $likeService->toggleLike($post, Auth::id());
-
         $user = User::find(Auth::user()->id);
         $author = $post->user;
 

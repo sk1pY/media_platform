@@ -14,28 +14,26 @@ class LikeService
 
     public function toggleLike(Model $likeable, $userId)
     {
-        $type = get_class($likeable);
-
-        $like = Like::where([
-            'user_id' => $userId,
-            'likeable_type' => $type,
-            'likeable_id' => $likeable->id])->first();
-
+        $like = $likeable->likes()->where('user_id', $userId)->first();
 
         if ($like) {
-            $likeable->likes()->where('user_id', $userId)->delete();
-            $likeable->decrement('likes');
+            $like->delete();
+            $likeable->decrement('likes'); // Обновило запись в БД
             $liked = false;
         } else {
             $likeable->likes()->create(['user_id' => $userId]);
-            $likeable->increment('likes');
+            $likeable->increment('likes'); // Обновило запись в БД
             $liked = true;
-
         }
-        $count = $likeable->likes()->count();
 
 
-        return ['success' => true, 'liked' => $liked, 'likes' => $count];
+        $likeable->refresh();
+
+        return [
+            'success' => true,
+            'liked'   => $liked,
+            'likes'   => (int) $likeable->likes
+        ];
     }
 
 
